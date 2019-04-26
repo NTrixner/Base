@@ -8,6 +8,7 @@ import { ApiModule, Configuration, ConfigurationParameters } from './api';
 import { BASE_PATH } from './api';
 
 import { HttpClientModule } from '@angular/common/http';
+import {environment} from "../environments/environment";
 
 
 @NgModule({
@@ -20,7 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
     ApiModule,
     HttpClientModule
   ],
-  providers: [ { provide: BASE_PATH, useValue: 'http://localhost:8080' } ],
+  providers: [ { provide: BASE_PATH, useValue: environment.serverUrl} ],
   bootstrap: [ AppComponent ]
   })
 export class AppModule { }
