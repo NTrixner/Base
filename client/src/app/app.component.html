@@ -5,6 +5,10 @@
   </h1>
   <p>{{subtitle}}</p>
 </div>
-<h2>The test message is {{ this.message }} </h2>
+<p>The test message is {{ this.message }} </p>
+<p>{{dbMessage}}</p>
+<ul *ngFor="let msg of messages; let i = index">
+  <li>{{i}}: {{msg.message}}</li>
+</ul>
 
 <router-outlet></router-outlet>

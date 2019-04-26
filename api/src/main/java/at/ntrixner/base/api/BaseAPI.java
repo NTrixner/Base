@@ -3,12 +3,15 @@ package at.ntrixner.base.api;
 import at.ntrixner.base.dto.MessageDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 
 
 @Api("/base")
@@ -42,4 +45,34 @@ public interface BaseAPI {
     @GET
     @Path("/appName")
     MessageDTO getAppName();
+
+    @ApiOperation(
+            value = "/{id}",
+            httpMethod = "GET",
+            response = MessageDTO.class,
+            notes = "Returns a message with a certain id"
+    )
+    @GET
+    @Path("/message/{id}")
+    MessageDTO getMessage(@PathParam("id") @ApiParam(required = true) Long id);
+
+    @ApiOperation(
+            value = "/db",
+            httpMethod = "GET",
+            response = MessageDTO.class,
+            notes = "Returns the message created with this startup"
+    )
+    @GET
+    @Path("/db")
+    MessageDTO getDB();
+
+    @ApiOperation(
+            value = "/messages",
+            httpMethod = "GET",
+            response = MessageDTO[].class,
+            notes = "Returns all Messages in the database"
+    )
+    @GET
+    @Path("/messages")
+    MessageDTO[] getAll();
 }
