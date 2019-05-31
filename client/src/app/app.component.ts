@@ -8,11 +8,15 @@ import { DefaultService } from './api';
 })
 export class AppComponent{
   title = 'Base Application';
+  subtitle:string;
   message: string;
    constructor(private apiService: DefaultService)
    {
     apiService.getTestMessage().subscribe(data =>{
       this.message = data.message;
     });
+    apiService.getAppName().subscribe(data =>{
+      this.subtitle = 'The name of this Application is ' + data.message;
+    })
    }
 }

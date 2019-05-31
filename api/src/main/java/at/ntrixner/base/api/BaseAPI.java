@@ -35,4 +35,14 @@ public interface BaseAPI {
     @GET
     @Path("/test")
     MessageDTO getTestMessage();
+
+    @ApiOperation(
+            value = "/appName",
+            httpMethod = "GET",
+            response = MessageDTO.class,
+            notes = "Returns the name of the Application"
+    )
+    @GET
+    @Path("/appName")
+    MessageDTO getAppName();
 }

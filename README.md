@@ -8,8 +8,13 @@ This application uses [spring boot](https://spring.io/) web as a backend with ei
 * Rename and refactor paths, packages, controller names etc.
 * In "api", run "mvn clean install"
 * In "client", run "npm install"
-* In "client", run "ng serve"
+* In "client", run "ng serve -c development"
 * In "server", run "mvn clean install"
 * In "server", run "mvn spring-boot:run"
 
 Now you can develop your new Use Cases by adding new REST methods to the API, running "mvn clean install" in api, applying the changes to the server and implementing them in the client.
+
+
+## Production
+* Change "spring.profiles.active" to "prod" in server/src/main/resources/application.properties
+* Run "ng build -c production" in client/

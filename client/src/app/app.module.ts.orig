@@ -13,7 +13,6 @@ import { InternalComponent } from './components/internal/internal.component';
 
 import { LoggedOutHttpInterceptor } from './loggedOutHttp.interceptor';
 import { LoginPageComponent } from './components/login-page/login-page.component';
-import {environment} from '../environments/environment';
 
 @NgModule({
   declarations: [
