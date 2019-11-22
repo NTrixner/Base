@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "page": 0,
-  "pageSize": 1,
+  "pageSize": 2,
   "orderField": "id",
   "orderDirection": "ASC"
 }
