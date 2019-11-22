@@ -19,7 +19,7 @@
         <validation-api.version>2.0.1.Final</validation-api.version>
     </properties>
     <modules>
-        <module>api-definitions</module>
+        <module>api</module>
         <module>server</module>
         <module>client</module>
     </modules>
