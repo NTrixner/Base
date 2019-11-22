@@ -1,0 +1,11 @@
+GET http://localhost:8080/userlist
+Content-Type: application/json
+
+{
+  "page": 0,
+  "pageSize": 1,
+  "orderField": "id",
+  "orderDirection": "ASC"
+}
+
+###
