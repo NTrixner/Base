@@ -75,7 +75,7 @@ public class UserController implements UserApi, UserlistApi {
 
     @Override
     public ResponseEntity<Void> loginUser(@Valid LoginDto loginDto) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override

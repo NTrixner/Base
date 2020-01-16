@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  * A request for Pagination
  */
 @ApiModel(description = "A request for Pagination")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2019-11-22T12:43:10.739+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-16T18:47:35.988+01:00[Europe/Berlin]")
 
 public class PaginationRequestDto   {
   @JsonProperty("page")

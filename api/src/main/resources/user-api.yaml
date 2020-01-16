@@ -12,6 +12,8 @@ info:
     description: Basic User API for other APIs
 servers:
 - url: 'http://localhost:8080'
+security:
+    - auth: []
 paths:
     '/user/{userId}':
         get:
@@ -31,8 +33,6 @@ paths:
                     description: User not authorized to access User data
                 '404':
                     description: User not found
-            security:
-            - auth: []
             description: Returns a specific user
             operationId: getUserById
         parameters:
@@ -61,8 +61,6 @@ paths:
             description: 'Return a paginated list of all users. If the provided pagination is not correct, the first 20 users will be returned instead.'
             parameters: []
             operationId: listUsers
-            security:
-            - auth: []
             requestBody:
                 content:
                     application/json:
@@ -88,6 +86,7 @@ paths:
                         schema:
                             $ref: '#/components/schemas/LoginDto'
             description: Logs a user in with username and password
+            security: []
         parameters: []
     /user/registration/register:
         post:
@@ -104,6 +103,7 @@ paths:
                             $ref: '#/components/schemas/RegistrationDto'
             description: 'Registers a new user by putting in username, email and password'
             operationId: registerUser
+            security: []
         parameters: []
     /user/logout:
         post:
@@ -115,8 +115,6 @@ paths:
                     description: Bad Request
             operationId: logoutUser
             description: Logs the current user out and destroys the current session
-            security:
-            - auth: []
         parameters: []
     '/user/registration/confirmRegistration/{registrationQuery}':
         post:
@@ -128,6 +126,7 @@ paths:
                     description: Bad Request
             operationId: confirmRegistration
             description: Confirms the registration of a new user by activating via a link that was sent via email.
+            security: []
         parameters:
         - schema:
               type: string
@@ -150,8 +149,6 @@ paths:
                     description: Unauthorized
             operationId: getUserCount
             description: Returns the amount of users that currently exist.
-            security:
-            - auth: []
         parameters: []
     /user:
         get:
@@ -168,8 +165,6 @@ paths:
                     description: Unauthorized
             description: Returns the current user
             operationId: getCurrentUser
-            security:
-            - auth: []
     /user/forgotPassword:
         get:
             summary: Your GET endpoint
@@ -180,6 +175,7 @@ paths:
                     description: User/Mail combination not found
             description: Call if the user forgot their password and want to get sent a mail with a password change link
             operationId: forgotPassword
+            security: []
             requestBody:
                 content:
                     application/json:
@@ -198,6 +194,7 @@ paths:
                     description: Not Found
             description: Resets a password based on a password reset request
             operationId: resetPasswordRequest
+            security: []
             requestBody:
                 content:
                     application/json:
@@ -205,6 +202,11 @@ paths:
                             $ref: '#/components/schemas/PasswordResetDto'
         parameters: []
 components:
+    securitySchemes:
+        auth:
+            type: http
+            scheme: Bearer
+            bearerFormat: JWT
     schemas:
         UserDto:
             title: UserDto
@@ -300,8 +302,3 @@ components:
                     - ASC
                     - DESC
             description: A request for Pagination
-    securitySchemes:
-        auth:
-            type: http
-            scheme: Bearer
-            description: SESSIONID
