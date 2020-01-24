@@ -90,9 +90,9 @@ paths:
                             required:
                                 - username
                                 - password
-                    description: Logs a user in with username and password
-                    security: []
-            parameters: []
+            description: Logs a user in with username and password
+            security: []
+        parameters: []
     /user/registration/register:
         post:
             summary: ''

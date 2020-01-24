@@ -27,8 +27,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
 import java.util.Optional;
-
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T14:05:54.448+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T16:19:38.798+01:00[Europe/Berlin]")
 
 @Validated
 @Api(value = "user", description = "the user API")
@@ -39,9 +38,9 @@ public interface UserApi {
     }
 
     @ApiOperation(value = "", nickname = "confirmRegistration", notes = "Confirms the registration of a new user by activating via a link that was sent via email.", tags = {})
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK"),
-        @ApiResponse(code = 400, message = "Bad Request") })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Bad Request")})
     @RequestMapping(value = "/user/registration/confirmRegistration/{registrationQuery}",
         method = RequestMethod.POST)
     default ResponseEntity<Void> confirmRegistration(@ApiParam(value = "The registration query parameter that was sent via mail to the new user's address",required=true) @PathVariable("registrationQuery") String registrationQuery) {
@@ -66,9 +65,9 @@ public interface UserApi {
     @ApiOperation(value = "Your GET endpoint", nickname = "getCurrentUser", notes = "Returns the current user", response = UserDto.class, authorizations = {
         @Authorization(value = "auth")
     }, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = UserDto.class),
-        @ApiResponse(code = 401, message = "Unauthorized") })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = UserDto.class),
+            @ApiResponse(code = 403, message = "Unauthorized")})
     @RequestMapping(value = "/user",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
@@ -90,11 +89,10 @@ public interface UserApi {
     @ApiOperation(value = "Get a specific user", nickname = "getUserById", notes = "Returns a specific user", response = UserDto.class, authorizations = {
         @Authorization(value = "auth")
     }, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = UserDto.class),
-        @ApiResponse(code = 401, message = "User not logged in"),
-        @ApiResponse(code = 403, message = "User not authorized to access User data"),
-        @ApiResponse(code = 404, message = "User not found") })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = UserDto.class),
+            @ApiResponse(code = 403, message = "Not authorized"),
+            @ApiResponse(code = 404, message = "User not found")})
     @RequestMapping(value = "/user/{userId}",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
@@ -114,9 +112,8 @@ public interface UserApi {
 
 
     @ApiOperation(value = "", nickname = "registerUser", notes = "Registers a new user by putting in username, email and password", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 201, message = "Created"),
-        @ApiResponse(code = 401, message = "Unauthorized") })
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Created")})
     @RequestMapping(value = "/user/registration/register",
         consumes = { "application/json" },
         method = RequestMethod.POST)

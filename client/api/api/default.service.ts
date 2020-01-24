@@ -28,7 +28,7 @@ import {Configuration} from '../configuration';
 
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class DefaultService {
 
@@ -301,10 +301,6 @@ export class DefaultService {
         );
     }
 
-    public loginUser(username: string, password: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-
-    public loginUser(username: string, password: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-
     public loginUser(username: string, password: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling loginUser.');
@@ -356,7 +352,29 @@ export class DefaultService {
         );
     }
 
-    public logoutUser(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public loginUser(username: string, password: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public loginUser(username: string, password: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+
+    /**
+     * Logs the current user out and destroys the current session
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public logoutUser(observe?: 'body', reportProgress?: boolean): Observable<any>;
+
+    public logoutUser(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+
+    public logoutUser(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+
+    /**
+     * Registers a new user by putting in username, email and password
+     * @param registrationDto
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public registerUser(registrationDto?: RegistrationDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
+
+    public logoutUser(observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -384,39 +402,6 @@ export class DefaultService {
         );
     }
 
-    /**
-     * Logs the current user out and destroys the current session
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public logoutUser(observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public logoutUser(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public logoutUser(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-
-    /**
-     * Registers a new user by putting in username, email and password
-     * @param registrationDto
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public registerUser(registrationDto?: RegistrationDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
-
-    /**
-     * @param consumes string[] mime-types
-     * @return true: consumes contains 'multipart/form-data', false: otherwise
-     */
-    private canConsumeForm(consumes: string[]): boolean {
-        const form = 'multipart/form-data';
-        for (const consume of consumes) {
-            if (form === consume) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public registerUser(registrationDto?: RegistrationDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public registerUser(registrationDto?: RegistrationDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
     public registerUser(registrationDto?: RegistrationDto, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -449,10 +434,27 @@ export class DefaultService {
         );
     }
 
+    public registerUser(registrationDto?: RegistrationDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public registerUser(registrationDto?: RegistrationDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+
+    /**
+     * @param consumes string[] mime-types
+     * @return true: consumes contains 'multipart/form-data', false: otherwise
+     */
+    private canConsumeForm(consumes: string[]): boolean {
+        const form = 'multipart/form-data';
+        for (const consume of consumes) {
+            if (form === consume) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Your GET endpoint
      * Resets a password based on a password reset request
-     * @param passwordResetDto 
+     * @param passwordResetDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
