@@ -4,6 +4,7 @@ import eu.trixner.base.dto.ForgotPasswordDto;
 import eu.trixner.base.dto.PasswordResetDto;
 import eu.trixner.base.dto.RegistrationDto;
 import eu.trixner.base.dto.UserDto;
+import eu.trixner.base.server.model.PasswordResetRequest;
 import eu.trixner.base.server.model.UserRegistrationRequest;
 import eu.trixner.base.server.service.UserService;
 import eu.trixner.base.user.UserApi;
@@ -71,11 +72,24 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<Void> forgotPassword(@Valid ForgotPasswordDto forgotPasswordDto) {
-        return null;
+        PasswordResetRequest req = userService.requestPasswordReset(forgotPasswordDto.getUsername(), forgotPasswordDto.getEmail());
+        if (req == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentContextPath();
+            String uri = builder.build().toUriString();
+            log.info("Password reset request sent, reset password under {}/user/forgotPassword/resetPassword with token {}", uri, req.getToken());
+            return ResponseEntity.ok().build();
+        }
     }
 
     @Override
-    public ResponseEntity<Void> resetPasswordRequest(@Valid PasswordResetDto passwordResetDto) {
-        return null;
+    public ResponseEntity<Void> resetPasswordRequest(@Valid PasswordResetDto dto) {
+        try {
+            userService.resetPassword(dto.getToken(), dto.getNewPassword());
+            return ResponseEntity.ok().build();
+        } catch (NullPointerException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

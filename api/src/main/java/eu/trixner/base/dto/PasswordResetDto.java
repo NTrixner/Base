@@ -3,92 +3,90 @@ package eu.trixner.base.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * PasswordResetDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T18:52:57.850+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T19:56:14.402+01:00[Europe/Berlin]")
 
-public class PasswordResetDto   {
-  @JsonProperty("newPassword")
-  private String newPassword;
+public class PasswordResetDto {
+    @JsonProperty("newPassword")
+    private String newPassword;
 
-  @JsonProperty("requestId")
-  private UUID requestId;
+    @JsonProperty("token")
+    private String token;
 
-  public PasswordResetDto newPassword(String newPassword) {
-    this.newPassword = newPassword;
-    return this;
-  }
+    public PasswordResetDto newPassword(String newPassword) {
+        this.newPassword = newPassword;
+        return this;
+    }
 
-  /**
-   * Get newPassword
-   * @return newPassword
-  */
+    /**
+     * Get newPassword
+     *
+     * @return newPassword
+     */
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
   public String getNewPassword() {
-    return newPassword;
+      return newPassword;
   }
 
-  public void setNewPassword(String newPassword) {
-    this.newPassword = newPassword;
-  }
-
-  public PasswordResetDto requestId(UUID requestId) {
-    this.requestId = requestId;
-    return this;
-  }
-
-  /**
-   * Get requestId
-   * @return requestId
-  */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-  @Valid
-
-  public UUID getRequestId() {
-    return requestId;
-  }
-
-  public void setRequestId(UUID requestId) {
-    this.requestId = requestId;
-  }
-
-
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
     }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
+
+    public PasswordResetDto token(String token) {
+        this.token = token;
+        return this;
+    }
+
+    /**
+     * Get token
+     *
+     * @return token
+     */
+    @ApiModelProperty(value = "")
+
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
     }
     PasswordResetDto passwordResetDto = (PasswordResetDto) o;
-    return Objects.equals(this.newPassword, passwordResetDto.newPassword) &&
-        Objects.equals(this.requestId, passwordResetDto.requestId);
+        return Objects.equals(this.newPassword, passwordResetDto.newPassword) &&
+                Objects.equals(this.token, passwordResetDto.token);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(newPassword, requestId);
+      return Objects.hash(newPassword, token);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PasswordResetDto {\n");
-    
-    sb.append("    newPassword: ").append(toIndentedString(newPassword)).append("\n");
-    sb.append("    requestId: ").append(toIndentedString(requestId)).append("\n");
+
+      sb.append("    newPassword: ").append(toIndentedString(newPassword)).append("\n");
+      sb.append("    token: ").append(toIndentedString(token)).append("\n");
     sb.append("}");
     return sb.toString();
   }
