@@ -24,8 +24,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
 import java.util.Optional;
-
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T14:05:54.448+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T16:19:38.798+01:00[Europe/Berlin]")
 
 @Validated
 @Api(value = "userlist", description = "the userlist API")
@@ -38,9 +37,9 @@ public interface UserlistApi {
     @ApiOperation(value = "Your GET endpoint", nickname = "getUserCount", notes = "Returns the amount of users that currently exist.", response = Integer.class, authorizations = {
         @Authorization(value = "auth")
     }, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = Integer.class),
-        @ApiResponse(code = 401, message = "Unauthorized") })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = Integer.class),
+            @ApiResponse(code = 403, message = "Unauthorized")})
     @RequestMapping(value = "/userlist/num",
         produces = { "application/json" }, 
         method = RequestMethod.GET)
@@ -53,10 +52,9 @@ public interface UserlistApi {
     @ApiOperation(value = "Your GET endpoint", nickname = "listUsers", notes = "Return a paginated list of all users. If the provided pagination is not correct, the first 20 users will be returned instead.", response = UserListDto.class, authorizations = {
         @Authorization(value = "auth")
     }, tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK", response = UserListDto.class),
-        @ApiResponse(code = 401, message = "User not logged in"),
-        @ApiResponse(code = 403, message = "User not authorized to access User data") })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = UserListDto.class),
+            @ApiResponse(code = 403, message = "Unauthorized")})
     @RequestMapping(value = "/userlist",
         produces = { "application/json" }, 
         consumes = { "application/json", "application/xml" },
