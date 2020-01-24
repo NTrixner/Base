@@ -27,10 +27,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/UserDto'
                             examples: {}
-                '401':
-                    description: User not logged in
                 '403':
-                    description: User not authorized to access User data
+                    description: Not authorized
                 '404':
                     description: User not found
             description: Returns a specific user
@@ -54,10 +52,8 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/UserListDto'
                             examples: {}
-                '401':
-                    description: User not logged in
                 '403':
-                    description: User not authorized to access User data
+                    description: Unauthorized
             description: 'Return a paginated list of all users. If the provided pagination is not correct, the first 20 users will be returned instead.'
             parameters: []
             operationId: listUsers
@@ -71,7 +67,7 @@ paths:
                             $ref: '#/components/schemas/PaginationRequestDto'
                 description: The Pagination Request. Is ignored if null.
         parameters: []
-    /user/login:
+    /auth/login:
         post:
             summary: ''
             responses:
@@ -82,20 +78,27 @@ paths:
             operationId: loginUser
             requestBody:
                 content:
-                    application/json:
+                    application/x-www-form-urlencoded:
                         schema:
-                            $ref: '#/components/schemas/LoginDto'
-            description: Logs a user in with username and password
-            security: []
-        parameters: []
+                            type: object
+                            properties:
+                                username:
+                                    type: string
+                                password:
+                                    type: string
+                                    format: password
+                            required:
+                                - username
+                                - password
+                    description: Logs a user in with username and password
+                    security: []
+            parameters: []
     /user/registration/register:
         post:
             summary: ''
             responses:
                 '201':
                     description: Created
-                '401':
-                    description: Unauthorized
             requestBody:
                 content:
                     application/json:
@@ -105,14 +108,14 @@ paths:
             operationId: registerUser
             security: []
         parameters: []
-    /user/logout:
+    /auth/logout:
         post:
             summary: ''
             responses:
-                '200':
-                    description: OK
-                '400':
-                    description: Bad Request
+                '302':
+                    description: Logged out
+                '403':
+                    description: Unauthorized
             operationId: logoutUser
             description: Logs the current user out and destroys the current session
         parameters: []
@@ -145,7 +148,7 @@ paths:
                         application/json:
                             schema:
                                 type: integer
-                '401':
+                '403':
                     description: Unauthorized
             operationId: getUserCount
             description: Returns the amount of users that currently exist.
@@ -161,7 +164,7 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/UserDto'
-                '401':
+                '403':
                     description: Unauthorized
             description: Returns the current user
             operationId: getCurrentUser
@@ -235,18 +238,6 @@ components:
             required:
             - username
             - email
-            - password
-        LoginDto:
-            title: LoginDto
-            type: object
-            properties:
-                username:
-                    type: string
-                password:
-                    type: string
-                    format: password
-            required:
-            - username
             - password
         ForgotPasswordDto:
             title: ForgotPasswordDto

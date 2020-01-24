@@ -1,6 +1,10 @@
 package eu.trixner.base.server.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -15,10 +19,10 @@ import java.util.Collections;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 @Entity
 public class User extends BaseEntity implements UserDetails {
-    @Column(unique=true)
+    @Column(unique = true)
     private String username;
     @Column
     private String password;

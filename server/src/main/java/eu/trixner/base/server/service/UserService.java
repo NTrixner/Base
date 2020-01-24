@@ -24,13 +24,13 @@ public class UserService implements UserDetailsService {
     private UserListMapper userListMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserMapper userMapper, UserListMapper userListMapper){
+    public UserService(UserRepository userRepository, UserMapper userMapper, UserListMapper userListMapper) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userListMapper = userListMapper;
     }
 
-    public UserListDto getUsers(Pageable paginationInfo){
+    public UserListDto getUsers(Pageable paginationInfo) {
         return userListMapper.mapPageToUserList(userRepository.findAll(paginationInfo).map(userMapper::userToUserDto));
     }
 
@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
         return dto;
     }
 
-    public Long countUsers(){
+    public Long countUsers() {
         return userRepository.count();
     }
 
@@ -50,10 +50,9 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s)
-    {
+    public UserDetails loadUserByUsername(String s) {
         User u = userRepository.findByUsernameIgnoreCase(s);
-        if(u == null)
+        if (u == null)
             throw new UsernameNotFoundException("User " + s + " was not found");
         return u;
     }

@@ -1,6 +1,11 @@
 package eu.trixner.base.server.controller;
 
-import eu.trixner.base.dto.*;
+import eu.trixner.base.dto.ForgotPasswordDto;
+import eu.trixner.base.dto.PaginationRequestDto;
+import eu.trixner.base.dto.PasswordResetDto;
+import eu.trixner.base.dto.RegistrationDto;
+import eu.trixner.base.dto.UserDto;
+import eu.trixner.base.dto.UserListDto;
 import eu.trixner.base.server.service.UserService;
 import eu.trixner.base.server.utils.PaginationUtils;
 import eu.trixner.base.user.UserApi;
@@ -20,7 +25,7 @@ public class UserController implements UserApi, UserlistApi {
     UserService userService;
 
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -52,35 +57,20 @@ public class UserController implements UserApi, UserlistApi {
     @Override
     public ResponseEntity<UserDto> getUserById(String userId) {
         UserDto dto = userService.findUser(UUID.fromString(userId));
-        if(dto == null){
+        if (dto == null) {
             return (ResponseEntity<UserDto>) ResponseEntity.notFound();
-        }
-        else{
+        } else {
             return ResponseEntity.ok(dto);
         }
     }
 
-
     @Override
     public ResponseEntity<UserListDto> listUsers(@Valid PaginationRequestDto body) {
-        if(body == null){
+        if (body == null) {
             return ResponseEntity.ok(userService.getAllUsers());
-        }
-        else{
+        } else {
             return ResponseEntity.ok(userService.getUsers(PaginationUtils.getPageRequest(body)));
         }
-
-
-    }
-
-    @Override
-    public ResponseEntity<Void> loginUser(@Valid LoginDto loginDto) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public ResponseEntity<Void> logoutUser() {
-        return null;
     }
 
     @Override

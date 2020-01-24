@@ -6,26 +6,24 @@ import org.springframework.data.domain.Sort;
 
 public class PaginationUtils {
 
-    private PaginationUtils(){
+    private PaginationUtils() {
         //Empty Constructor
     }
 
-    public static PageRequest getPageRequest(PaginationRequestDto dto){
+    public static PageRequest getPageRequest(PaginationRequestDto dto) {
         PageRequest pr;
         Sort s = null;
-        if(dto.getOrderField() != null){
-            if(PaginationRequestDto.OrderDirectionEnum.ASC.equals((dto.getOrderDirection()))){
+        if (dto.getOrderField() != null) {
+            if (PaginationRequestDto.OrderDirectionEnum.ASC.equals((dto.getOrderDirection()))) {
                 s = Sort.by(dto.getOrderField()).ascending();
-            }
-            else if(PaginationRequestDto.OrderDirectionEnum.DESC.equals((dto.getOrderDirection()))){
+            } else if (PaginationRequestDto.OrderDirectionEnum.DESC.equals((dto.getOrderDirection()))) {
                 s = Sort.by(dto.getOrderField()).descending();
             }
         }
 
-        if(s == null){
+        if (s == null) {
             pr = PageRequest.of(dto.getPage(), dto.getPageSize());
-        }
-        else{
+        } else {
             pr = PageRequest.of(dto.getPage(), dto.getPageSize(), s);
         }
         return pr;
