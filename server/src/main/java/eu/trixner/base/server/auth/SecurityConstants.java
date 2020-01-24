@@ -1,6 +1,12 @@
 package eu.trixner.base.server.auth;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public class SecurityConstants {
+
+    @Value("${jwt.token.expiration}")
+    public static final int JWT_TOKEN_EXPIRATION = 90000;
+
     public static final String AUTH_LOGIN_URL = "/auth/login";
     public static final String AUTH_LOGOUT_URL = "/auth/logout";
 

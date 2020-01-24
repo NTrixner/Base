@@ -13,26 +13,13 @@ Content-Type: application/json
 POST http://localhost:8080/auth/login
 Content-Type: application/x-www-form-urlencoded
 
-username=USER&password=user
+username=Krampus&password=asdf1234
 
 
 ###
 
 GET http://localhost:8080/userlist
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1Nzk4Nzc1OTYsInJvbCI6WyJVU0VSIl19.ZLsFH6_AcOcaG-w5IChhiqGgr6S0Qn3IqM2HUTmvmwo9qdLeHFovDVtYDu6n7QDJPhk7ti5xiuSX11PkKpyJjg
-Content-Type: application/json
-
-{
-  "page": 0,
-  "pageSize": 2,
-  "orderField": "id",
-  "orderDirection": "ASC"
-}
-
-###
-
-GET http://localhost:8080/userlist
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1Nzk4NzcwNTAsInJvbCI6WyJVU0VSIl19.HuhNDRjsP6ROF8NhlKdVPMRxlcD9ahz5Mr4t8XF-vU2jUFZh7tULlgrohq2v4KCUU-7IMEFXETa83I7Lyox5zw
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6IktyYW1wdXMiLCJleHAiOjE1Nzk4ODg1NTUsInJvbCI6WyJVU0VSIl19.rIOs548DjkmvmgZs1yWksl1G_CN4M_--X8o0vgh0mhx8XqmKE6o50PBQePy6MLnv-v_XRT2BceuRT6nUgsocnQ
 Content-Type: application/json
 
 {
@@ -45,12 +32,11 @@ Content-Type: application/json
 ###
 
 POST http://localhost:8080/auth/logout
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1ODA3Mzk4ODAsInJvbCI6WyJVU0VSIl19.J4WasqYqGes7PHQ2sASCS0qkZWSwALbExgLFwKGm9U7gjW8MqhAGD8TfdBX8IfIi-7t9R_Ia0cm4UOQcwUVGhw
-
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1Nzk4ODU0MDMsInJvbCI6WyJVU0VSIl19.q_tbmeEN3epooL1LHZVHsjl0hv5O4ATDQQA9zC_VdNS1UjeU6cO6XNeg0MC-jAZvRg5ITuJ9cKQ7YThrLr_naA
 ###
 
 GET http://localhost:8080/userlist
-Authorization: eeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1ODA3Mzk4ODAsInJvbCI6WyJVU0VSIl19.J4WasqYqGes7PHQ2sASCS0qkZWSwALbExgLFwKGm9U7gjW8MqhAGD8TfdBX8IfIi-7t9R_Ia0cm4UOQcwUVGhw
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1Nzk4ODU0MDMsInJvbCI6WyJVU0VSIl19.q_tbmeEN3epooL1LHZVHsjl0hv5O4ATDQQA9zC_VdNS1UjeU6cO6XNeg0MC-jAZvRg5ITuJ9cKQ7YThrLr_naA
 Content-Type: application/json
 
 {
@@ -58,6 +44,22 @@ Content-Type: application/json
   "pageSize": 2,
   "orderField": "id",
   "orderDirection": "ASC"
+}
+
+###
+
+GET http://localhost:8080/userlist/num
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1Nzk4ODMxNDUsInJvbCI6WyJVU0VSIl19.cAlVwBDud42GIvrwrO30xp1vkUc7nYkoIn6yty8iOzFD4c4-Fg5m7C5yaCH_FEkUHadOwbCELCIpxHYlaPbfzg
+
+###
+
+POST http://localhost:8080/user/registration/register
+Content-Type: application/json
+
+{
+  "username": "Krampus",
+  "email": "n.trixner@gmx.at",
+  "password": "asdf1234"
 }
 
 ###

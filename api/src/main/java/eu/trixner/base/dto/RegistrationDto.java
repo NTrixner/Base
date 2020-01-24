@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * RegistrationDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T16:19:38.798+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T18:52:57.850+01:00[Europe/Berlin]")
 
 public class RegistrationDto   {
   @JsonProperty("username")

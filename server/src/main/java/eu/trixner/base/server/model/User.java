@@ -23,14 +23,16 @@ import java.util.Collections;
 @Entity
 public class User extends BaseEntity implements UserDetails {
     @Column(unique = true)
-    private String username;
+    private String username = "";
     @Column
-    private String password;
+    private String password = "";
     @Column
-    private String email;
+    private String email = "";
     @Column
     @Enumerated(EnumType.STRING)
-    private UserType userType;
+    private UserType userType = UserType.USER;
+    @Column
+    private Boolean isActivated = false;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -44,7 +46,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return isActivated;
     }
 
     @Override
@@ -54,6 +56,6 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isActivated;
     }
 }

@@ -15,58 +15,6 @@ servers:
 security:
     - auth: []
 paths:
-    '/user/{userId}':
-        get:
-            summary: Get a specific user
-            responses:
-                '200':
-                    description: OK
-                    headers: {}
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/UserDto'
-                            examples: {}
-                '403':
-                    description: Not authorized
-                '404':
-                    description: User not found
-            description: Returns a specific user
-            operationId: getUserById
-        parameters:
-        - schema:
-              type: string
-          name: userId
-          in: path
-          description: 'The user ID of the user, or null for the currently logged in user'
-          required: true
-    /userlist:
-        get:
-            summary: Your GET endpoint
-            responses:
-                '200':
-                    description: OK
-                    headers: {}
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/UserListDto'
-                            examples: {}
-                '403':
-                    description: Unauthorized
-            description: 'Return a paginated list of all users. If the provided pagination is not correct, the first 20 users will be returned instead.'
-            parameters: []
-            operationId: listUsers
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/PaginationRequestDto'
-                    application/xml:
-                        schema:
-                            $ref: '#/components/schemas/PaginationRequestDto'
-                description: The Pagination Request. Is ignored if null.
-        parameters: []
     /auth/login:
         post:
             summary: ''
@@ -93,6 +41,42 @@ paths:
             description: Logs a user in with username and password
             security: []
         parameters: []
+    /auth/logout:
+        post:
+            summary: ''
+            responses:
+                '302':
+                    description: Logged out
+                '403':
+                    description: Unauthorized
+            operationId: logoutUser
+            description: Logs the current user out and destroys the current session
+        parameters: []
+    '/user/{userId}':
+        get:
+            summary: Get a specific user
+            responses:
+                '200':
+                    description: OK
+                    headers: {}
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserDto'
+                            examples: {}
+                '403':
+                    description: Not authorized
+                '404':
+                    description: User not found
+            description: Returns a specific user
+            operationId: getUserById
+        parameters:
+            - schema:
+                  type: string
+              name: userId
+              in: path
+              description: 'The user ID of the user, or null for the currently logged in user'
+              required: true
     /user/registration/register:
         post:
             summary: ''
@@ -108,19 +92,8 @@ paths:
             operationId: registerUser
             security: []
         parameters: []
-    /auth/logout:
-        post:
-            summary: ''
-            responses:
-                '302':
-                    description: Logged out
-                '403':
-                    description: Unauthorized
-            operationId: logoutUser
-            description: Logs the current user out and destroys the current session
-        parameters: []
-    '/user/registration/confirmRegistration/{registrationQuery}':
-        post:
+    '/user/registration/confirmRegistration/{token}':
+        get:
             summary: ''
             responses:
                 '200':
@@ -133,26 +106,10 @@ paths:
         parameters:
         - schema:
               type: string
-          name: registrationQuery
+          name: token
           in: path
           required: true
-          description: "The registration query parameter that was sent via mail to the new user's address"
-    /userlist/num:
-        get:
-            summary: Your GET endpoint
-            tags: []
-            responses:
-                '200':
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                type: integer
-                '403':
-                    description: Unauthorized
-            operationId: getUserCount
-            description: Returns the amount of users that currently exist.
-        parameters: []
+          description: "The registration token that was sent via mail to the new user's address"
     /user:
         get:
             summary: Your GET endpoint
@@ -203,6 +160,49 @@ paths:
                     application/json:
                         schema:
                             $ref: '#/components/schemas/PasswordResetDto'
+        parameters: []
+    /userlist:
+        get:
+            summary: Your GET endpoint
+            responses:
+                '200':
+                    description: OK
+                    headers: {}
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UserListDto'
+                            examples: {}
+                '403':
+                    description: Unauthorized
+            description: 'Return a paginated list of all users. If the provided pagination is not correct, the first 20 users will be returned instead.'
+            parameters: []
+            operationId: listUsers
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PaginationRequestDto'
+                    application/xml:
+                        schema:
+                            $ref: '#/components/schemas/PaginationRequestDto'
+                description: The Pagination Request. Is ignored if null.
+        parameters: []
+    /userlist/num:
+        get:
+            summary: Your GET endpoint
+            tags: []
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: integer
+                '403':
+                    description: Unauthorized
+            operationId: getUserCount
+            description: Returns the amount of users that currently exist.
         parameters: []
 components:
     securitySchemes:

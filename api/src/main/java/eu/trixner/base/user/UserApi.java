@@ -27,7 +27,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
 import java.util.Optional;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T16:19:38.798+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T18:52:57.850+01:00[Europe/Berlin]")
 
 @Validated
 @Api(value = "user", description = "the user API")
@@ -41,18 +41,18 @@ public interface UserApi {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK"),
             @ApiResponse(code = 400, message = "Bad Request")})
-    @RequestMapping(value = "/user/registration/confirmRegistration/{registrationQuery}",
-        method = RequestMethod.POST)
-    default ResponseEntity<Void> confirmRegistration(@ApiParam(value = "The registration query parameter that was sent via mail to the new user's address",required=true) @PathVariable("registrationQuery") String registrationQuery) {
+    @RequestMapping(value = "/user/registration/confirmRegistration/{token}",
+            method = RequestMethod.GET)
+    default ResponseEntity<Void> confirmRegistration(@ApiParam(value = "The registration token that was sent via mail to the new user's address", required = true) @PathVariable("token") String token) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
 
 
-    @ApiOperation(value = "Your GET endpoint", nickname = "forgotPassword", notes = "Call if the user forgot their password and want to get sent a mail with a password change link", tags={  })
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "Mail was sent"),
-        @ApiResponse(code = 404, message = "User/Mail combination not found") })
+    @ApiOperation(value = "Your GET endpoint", nickname = "forgotPassword", notes = "Call if the user forgot their password and want to get sent a mail with a password change link", tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Mail was sent"),
+            @ApiResponse(code = 404, message = "User/Mail combination not found")})
     @RequestMapping(value = "/user/forgotPassword",
         consumes = { "application/json" },
         method = RequestMethod.GET)
@@ -63,14 +63,14 @@ public interface UserApi {
 
 
     @ApiOperation(value = "Your GET endpoint", nickname = "getCurrentUser", notes = "Returns the current user", response = UserDto.class, authorizations = {
-        @Authorization(value = "auth")
-    }, tags={  })
+            @Authorization(value = "auth")
+    }, tags = {})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = UserDto.class),
             @ApiResponse(code = 403, message = "Unauthorized")})
     @RequestMapping(value = "/user",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
+            produces = {"application/json"},
+            method = RequestMethod.GET)
     default ResponseEntity<UserDto> getCurrentUser() {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -87,15 +87,15 @@ public interface UserApi {
 
 
     @ApiOperation(value = "Get a specific user", nickname = "getUserById", notes = "Returns a specific user", response = UserDto.class, authorizations = {
-        @Authorization(value = "auth")
-    }, tags={  })
+            @Authorization(value = "auth")
+    }, tags = {})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = UserDto.class),
             @ApiResponse(code = 403, message = "Not authorized"),
             @ApiResponse(code = 404, message = "User not found")})
     @RequestMapping(value = "/user/{userId}",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
+            produces = {"application/json"},
+            method = RequestMethod.GET)
     default ResponseEntity<UserDto> getUserById(@ApiParam(value = "The user ID of the user, or null for the currently logged in user",required=true) @PathVariable("userId") String userId) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -111,12 +111,12 @@ public interface UserApi {
     }
 
 
-    @ApiOperation(value = "", nickname = "registerUser", notes = "Registers a new user by putting in username, email and password", tags={  })
+    @ApiOperation(value = "", nickname = "registerUser", notes = "Registers a new user by putting in username, email and password", tags = {})
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Created")})
     @RequestMapping(value = "/user/registration/register",
-        consumes = { "application/json" },
-        method = RequestMethod.POST)
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
     default ResponseEntity<Void> registerUser(@ApiParam(value = ""  )  @Valid @RequestBody RegistrationDto registrationDto) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
