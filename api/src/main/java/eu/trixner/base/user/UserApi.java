@@ -27,7 +27,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
 import java.util.Optional;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T18:52:57.850+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T19:56:14.402+01:00[Europe/Berlin]")
 
 @Validated
 @Api(value = "user", description = "the user API")
@@ -54,9 +54,9 @@ public interface UserApi {
             @ApiResponse(code = 200, message = "Mail was sent"),
             @ApiResponse(code = 404, message = "User/Mail combination not found")})
     @RequestMapping(value = "/user/forgotPassword",
-        consumes = { "application/json" },
-        method = RequestMethod.GET)
-    default ResponseEntity<Void> forgotPassword(@ApiParam(value = ""  )  @Valid @RequestBody ForgotPasswordDto forgotPasswordDto) {
+            consumes = {"application/json"},
+            method = RequestMethod.GET)
+    default ResponseEntity<Void> forgotPassword(@ApiParam(value = "") @Valid @RequestBody ForgotPasswordDto forgotPasswordDto) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
@@ -117,13 +117,13 @@ public interface UserApi {
     @RequestMapping(value = "/user/registration/register",
             consumes = {"application/json"},
             method = RequestMethod.POST)
-    default ResponseEntity<Void> registerUser(@ApiParam(value = ""  )  @Valid @RequestBody RegistrationDto registrationDto) {
+    default ResponseEntity<Void> registerUser(@ApiParam(value = "") @Valid @RequestBody RegistrationDto registrationDto) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
 
 
-    @ApiOperation(value = "Your GET endpoint", nickname = "resetPasswordRequest", notes = "Resets a password based on a password reset request", tags={  })
+    @ApiOperation(value = "Your GET endpoint", nickname = "resetPasswordRequest", notes = "Resets a password based on a password reset request", tags = {})
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "OK"),
         @ApiResponse(code = 400, message = "Bad Request"),

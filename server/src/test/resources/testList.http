@@ -13,13 +13,13 @@ Content-Type: application/json
 POST http://localhost:8080/auth/login
 Content-Type: application/x-www-form-urlencoded
 
-username=Krampus&password=asdf1234
+username=user&password=abc
 
 
 ###
 
 GET http://localhost:8080/userlist
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6IktyYW1wdXMiLCJleHAiOjE1Nzk4ODg1NTUsInJvbCI6WyJVU0VSIl19.rIOs548DjkmvmgZs1yWksl1G_CN4M_--X8o0vgh0mhx8XqmKE6o50PBQePy6MLnv-v_XRT2BceuRT6nUgsocnQ
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1Nzk4OTMwODIsInJvbCI6WyJVU0VSIl19.ujSadu_sP4wor7xWGT7TAYb0ASTIXV0MjkR1uC2aEmD3leQGRhhs-HvN3SRXImo7-_cForTMmNnE9qPhB4NP5w
 Content-Type: application/json
 
 {
@@ -60,6 +60,25 @@ Content-Type: application/json
   "username": "Krampus",
   "email": "n.trixner@gmx.at",
   "password": "asdf1234"
+}
+
+###
+GET http://localhost:8080/user/forgotPassword
+Content-Type: application/json
+
+{
+  "username": "user",
+  "email": "user@test.com"
+}
+
+###
+
+GET http://localhost:8080/user/forgotPassword/resetPassword
+Content-Type: application/json
+
+{
+  "token": "kxw3Ixh1",
+  "newPassword": "abc"
 }
 
 ###

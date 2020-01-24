@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * UserListDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T18:52:57.850+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T19:56:14.402+01:00[Europe/Berlin]")
 
 public class UserListDto   {
   @JsonProperty("pageSize")

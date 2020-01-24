@@ -2,8 +2,10 @@ package eu.trixner.base.server.service;
 
 import eu.trixner.base.dto.RegistrationDto;
 import eu.trixner.base.dto.UserDto;
+import eu.trixner.base.server.model.PasswordResetRequest;
 import eu.trixner.base.server.model.User;
 import eu.trixner.base.server.model.UserRegistrationRequest;
+import eu.trixner.base.server.repository.PasswordResetRequestRepository;
 import eu.trixner.base.server.repository.UserRegistrationRequestRepository;
 import eu.trixner.base.server.repository.UserRepository;
 import eu.trixner.base.server.service.mapper.UserMapper;
@@ -35,17 +37,24 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     private UserRegistrationRequestRepository userRegistrationRequestRepository;
     private UserMapper userMapper;
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private PasswordResetRequestRepository passwordResetRequestRepository;
 
     @Value("${user.registration.requestExpiration}")
     private int registrationExpiryDuration;
 
+    @Value("${user.passwordReset.requestExpiration}")
+    private int passwordResetExpiryDuration;
+
     @Autowired
     public UserService(UserRepository userRepository,
                        UserMapper userMapper,
-                       UserRegistrationRequestRepository userRegistrationRequestRepository) {
+                       UserRegistrationRequestRepository userRegistrationRequestRepository,
+                       PasswordResetRequestRepository passwordResetRequestRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userRegistrationRequestRepository = userRegistrationRequestRepository;
+        this.passwordResetRequestRepository = passwordResetRequestRepository;
     }
 
     @Override
@@ -78,18 +87,7 @@ public class UserService implements UserDetailsService {
         UserRegistrationRequest newRequest = new UserRegistrationRequest();
         newRequest.setUser(newUser);
 
-        boolean tokenExists = true;
-        String token = "";
-        while (tokenExists) {
-            RandomStringGenerator randomStringGenerator =
-                    new RandomStringGenerator.Builder()
-                            .withinRange('0', 'z')
-                            .filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS)
-                            .build();
-            token = randomStringGenerator.generate(8);
-            tokenExists = this.userRegistrationRequestRepository.existsByToken(token);
-        }
-        newRequest.setToken(token);
+        newRequest.setToken(getToken(token -> userRegistrationRequestRepository.existsByToken(token)));
         newRequest.setExpiresAt(new Date(System.currentTimeMillis() + registrationExpiryDuration));
 
         newRequest = this.userRegistrationRequestRepository.save(newRequest);
@@ -113,6 +111,38 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    public PasswordResetRequest requestPasswordReset(String username, String email) {
+        User user = userRepository.findByUsernameAndEmail(username, email);
+        if (user == null) {
+            return null;
+        }
+        PasswordResetRequest request = new PasswordResetRequest();
+        request.setUser(user);
+        request.setExpiresAt(new Date(System.currentTimeMillis() + passwordResetExpiryDuration));
+        request.setMailSent(false);
+        request.setToken(getToken(token -> this.passwordResetRequestRepository.existsByToken(token)));
+
+        request = passwordResetRequestRepository.save(request);
+        return request;
+    }
+
+    @Transactional
+    public void resetPassword(String token, String newPassword) {
+        PasswordResetRequest request = passwordResetRequestRepository.findByToken(token);
+        if (request == null) {
+            throw new NullPointerException();
+        }
+        User user = request.getUser();
+        user.setPassword(passwordEncoder().encode(newPassword));
+        userRepository.save(user);
+        int deleted = passwordResetRequestRepository.deleteByUser_Id(user.getId());
+        log.info("{} Password reset requests were deleted", deleted);
+    }
+
+    /**
+     * Scheduled Tasks
+     */
+
     @Scheduled(fixedRateString = "${user.registration.requestCleanupRate}")
     @Transactional
     public void cleanUpRegistrationRequests() {
@@ -123,7 +153,41 @@ public class UserService implements UserDetailsService {
         log.info("{} User Registration requests were deleted", deleted);
     }
 
+    @Scheduled(fixedRateString = "${user.passwordReset.requestCleanupRate}")
+    @Transactional
+    public void cleanUpPasswordResetRequests() {
+        int deleted = passwordResetRequestRepository.deleteByExpiresAtIsBefore(new Date());
+        log.info("{} Password reset requests were deleted", deleted);
+    }
+
+    /**
+     * Getters
+     */
+
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return passwordEncoder;
+    }
+
+    /**
+     * Utils
+     */
+    public String getToken(TokenDuplicateChecker tokenDuplicateChecker) {
+        boolean tokenExists = true;
+        String token = "";
+        while (tokenExists) {
+            RandomStringGenerator randomStringGenerator =
+                    new RandomStringGenerator.Builder()
+                            .withinRange('0', 'z')
+                            .filteredBy(CharacterPredicates.LETTERS, CharacterPredicates.DIGITS)
+                            .build();
+            token = randomStringGenerator.generate(8);
+            tokenExists = tokenDuplicateChecker.tokenExists(token);
+        }
+        return token;
+    }
+
+    public interface TokenDuplicateChecker {
+        Boolean tokenExists(String token);
     }
 }
+

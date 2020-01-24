@@ -257,9 +257,8 @@ components:
             properties:
                 newPassword:
                     type: string
-                requestId:
+                token:
                     type: string
-                    format: uuid
             required:
             - newPassword
             - requestId
