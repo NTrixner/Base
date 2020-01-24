@@ -1,21 +1,17 @@
 package eu.trixner.base.dto;
 
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import eu.trixner.base.dto.UserDto;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import org.openapitools.jackson.nullable.JsonNullable;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import java.util.Objects;
 
 /**
  * UserListDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-16T18:47:35.988+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T14:05:54.448+01:00[Europe/Berlin]")
 
 public class UserListDto   {
   @JsonProperty("pageSize")

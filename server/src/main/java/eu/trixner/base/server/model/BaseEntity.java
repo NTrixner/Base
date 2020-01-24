@@ -1,6 +1,7 @@
 package eu.trixner.base.server.model;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.GeneratedValue;

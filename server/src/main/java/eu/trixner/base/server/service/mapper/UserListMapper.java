@@ -12,13 +12,12 @@ public class UserListMapper {
 
     private static final String USERNAME = "username";
 
-    public UserListDto mapPageToUserList(Page<UserDto> page)
-    {
+    public UserListDto mapPageToUserList(Page<UserDto> page) {
         UserListDto dto = new UserListDto();
         dto.setItems(page.get().collect(Collectors.toList()));
-        if(page.getSort().isSorted()
+        if (page.getSort().isSorted()
                 && page.getSort().getOrderFor(USERNAME) != null
-                && page.getSort().getOrderFor(USERNAME).getDirection() != null){
+                && page.getSort().getOrderFor(USERNAME).getDirection() != null) {
             dto.setOrdering(page.getSort().getOrderFor(USERNAME).getDirection().name());
         }
         dto.setPagePos(page.getNumber());

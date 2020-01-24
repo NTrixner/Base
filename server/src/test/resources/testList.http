@@ -9,3 +9,55 @@ Content-Type: application/json
 }
 
 ###
+
+POST http://localhost:8080/auth/login
+Content-Type: application/x-www-form-urlencoded
+
+username=USER&password=user
+
+
+###
+
+GET http://localhost:8080/userlist
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1Nzk4Nzc1OTYsInJvbCI6WyJVU0VSIl19.ZLsFH6_AcOcaG-w5IChhiqGgr6S0Qn3IqM2HUTmvmwo9qdLeHFovDVtYDu6n7QDJPhk7ti5xiuSX11PkKpyJjg
+Content-Type: application/json
+
+{
+  "page": 0,
+  "pageSize": 2,
+  "orderField": "id",
+  "orderDirection": "ASC"
+}
+
+###
+
+GET http://localhost:8080/userlist
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1Nzk4NzcwNTAsInJvbCI6WyJVU0VSIl19.HuhNDRjsP6ROF8NhlKdVPMRxlcD9ahz5Mr4t8XF-vU2jUFZh7tULlgrohq2v4KCUU-7IMEFXETa83I7Lyox5zw
+Content-Type: application/json
+
+{
+  "page": 0,
+  "pageSize": 2,
+  "orderField": "id",
+  "orderDirection": "ASC"
+}
+
+###
+
+POST http://localhost:8080/auth/logout
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1ODA3Mzk4ODAsInJvbCI6WyJVU0VSIl19.J4WasqYqGes7PHQ2sASCS0qkZWSwALbExgLFwKGm9U7gjW8MqhAGD8TfdBX8IfIi-7t9R_Ia0cm4UOQcwUVGhw
+
+###
+
+GET http://localhost:8080/userlist
+Authorization: eeyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1ODA3Mzk4ODAsInJvbCI6WyJVU0VSIl19.J4WasqYqGes7PHQ2sASCS0qkZWSwALbExgLFwKGm9U7gjW8MqhAGD8TfdBX8IfIi-7t9R_Ia0cm4UOQcwUVGhw
+Content-Type: application/json
+
+{
+  "page": 0,
+  "pageSize": 2,
+  "orderField": "id",
+  "orderDirection": "ASC"
+}
+
+###

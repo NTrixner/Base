@@ -1,5 +1,5 @@
 export * from './forgotPasswordDto';
-export * from './loginDto';
+export * from './inlineObject';
 export * from './paginationRequestDto';
 export * from './passwordResetDto';
 export * from './registrationDto';

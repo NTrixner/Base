@@ -1,7 +1,8 @@
 package eu.trixner.base.server.auth;
 
 public class SecurityConstants {
-    public static final String AUTH_LOGIN_URL = "/user/login";
+    public static final String AUTH_LOGIN_URL = "/auth/login";
+    public static final String AUTH_LOGOUT_URL = "/auth/logout";
 
     // Signing key for HS512 algorithm
     // You can use the page http://www.allkeysgenerator.com/ to generate all kinds of keys

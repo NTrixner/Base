@@ -4,6 +4,9 @@ import eu.trixner.base.server.auth.SecurityConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +25,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
+    @Value("${jwt.token.expiration}")
+    private int jwtTokenExpiration;
+
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
@@ -36,6 +44,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String password = request.getParameter("password");
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 
+        log.info("Login try from IP {} with username {}", request.getRemoteAddr(), username);
+
         return authenticationManager.authenticate(authenticationToken);
     }
 
@@ -43,6 +53,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain filterChain, Authentication authentication) {
         UserDetails user = ((UserDetails) authentication.getPrincipal());
+
+        log.info("User {} successfully logged in!", user.getUsername());
 
         List<String> roles = user.getAuthorities()
                 .stream()
@@ -57,15 +69,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setIssuer(SecurityConstants.TOKEN_ISSUER)
                 .setAudience(SecurityConstants.TOKEN_AUDIENCE)
                 .setSubject(user.getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + 864000000))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtTokenExpiration))
                 .claim("rol", roles)
                 .compact();
+
+        TokenHandler.getTokens().put(token, authentication);
 
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        log.info("Unsuccessful login try from {} with username {}", request.getRemoteAddr(), request.getParameter("username"));
         super.unsuccessfulAuthentication(request, response, failed);
     }
 }

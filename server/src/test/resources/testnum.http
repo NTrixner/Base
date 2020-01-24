@@ -1,11 +1,6 @@
-POST http://localhost:8080/user/login
-Content-Type: application/x-www-form-urlencoded
-
-username=USER&password=user
-
-###
 
 
 GET http://localhost:8080/userlist/num
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1ODA3MzU1MjAsInJvbCI6WyJVU0VSIl19.9xSh2hg-rOn5P4RYy7yqLtGtSAZnOsoD5jkeRoaxFGJvCH1EtN8ICSktOita27YX8EFq-Qg7xxFozrpu9_I_Ag
 
 ###
