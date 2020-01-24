@@ -9,7 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { UserDto } from './userDto';
+import {UserDto} from './userDto';
 
 
 export interface UserListDto { 

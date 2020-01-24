@@ -1,7 +1,8 @@
 package eu.trixner.base.server.service.mapper;
 
-import eu.trixner.base.dto.UserDto;
 import eu.trixner.base.dto.UserListDto;
+import eu.trixner.base.server.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +12,16 @@ import java.util.stream.Collectors;
 public class UserListMapper {
 
     private static final String USERNAME = "username";
+    private UserMapper userMapper;
 
-    public UserListDto mapPageToUserList(Page<UserDto> page) {
+    @Autowired
+    public UserListMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
+    public UserListDto mapPageToUserList(Page<User> page) {
         UserListDto dto = new UserListDto();
-        dto.setItems(page.get().collect(Collectors.toList()));
+        dto.setItems(page.get().map(userMapper::userToUserDto).collect(Collectors.toList()));
         if (page.getSort().isSorted()
                 && page.getSort().getOrderFor(USERNAME) != null
                 && page.getSort().getOrderFor(USERNAME).getDirection() != null) {

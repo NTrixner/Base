@@ -24,7 +24,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
 import java.util.Optional;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T16:19:38.798+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T18:52:57.850+01:00[Europe/Berlin]")
 
 @Validated
 @Api(value = "userlist", description = "the userlist API")
@@ -35,14 +35,14 @@ public interface UserlistApi {
     }
 
     @ApiOperation(value = "Your GET endpoint", nickname = "getUserCount", notes = "Returns the amount of users that currently exist.", response = Integer.class, authorizations = {
-        @Authorization(value = "auth")
-    }, tags={  })
+            @Authorization(value = "auth")
+    }, tags = {})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = Integer.class),
             @ApiResponse(code = 403, message = "Unauthorized")})
     @RequestMapping(value = "/userlist/num",
-        produces = { "application/json" }, 
-        method = RequestMethod.GET)
+            produces = {"application/json"},
+            method = RequestMethod.GET)
     default ResponseEntity<Integer> getUserCount() {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
@@ -50,15 +50,15 @@ public interface UserlistApi {
 
 
     @ApiOperation(value = "Your GET endpoint", nickname = "listUsers", notes = "Return a paginated list of all users. If the provided pagination is not correct, the first 20 users will be returned instead.", response = UserListDto.class, authorizations = {
-        @Authorization(value = "auth")
-    }, tags={  })
+            @Authorization(value = "auth")
+    }, tags = {})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = UserListDto.class),
             @ApiResponse(code = 403, message = "Unauthorized")})
     @RequestMapping(value = "/userlist",
-        produces = { "application/json" }, 
-        consumes = { "application/json", "application/xml" },
-        method = RequestMethod.GET)
+            produces = {"application/json"},
+            consumes = {"application/json", "application/xml"},
+            method = RequestMethod.GET)
     default ResponseEntity<UserListDto> listUsers(@ApiParam(value = "The Pagination Request. Is ignored if null."  )  @Valid @RequestBody PaginationRequestDto paginationRequestDto) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {

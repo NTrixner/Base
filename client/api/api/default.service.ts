@@ -51,42 +51,33 @@ export class DefaultService {
     }
 
     /**
-     * Logs a user in with username and password
-     * @param username
-     * @param password
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public loginUser(username: string, password: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-
-
-    /**
      * Confirms the registration of a new user by activating via a link that was sent via email.
-     * @param registrationQuery The registration query parameter that was sent via mail to the new user\&#39;s address
+     * @param token The registration token that was sent via mail to the new user\&#39;s address
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public confirmRegistration(registrationQuery: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public confirmRegistration(registrationQuery: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public confirmRegistration(registrationQuery: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public confirmRegistration(registrationQuery: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-        if (registrationQuery === null || registrationQuery === undefined) {
-            throw new Error('Required parameter registrationQuery was null or undefined when calling confirmRegistration.');
+    public confirmRegistration(token: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+
+    public confirmRegistration(token: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+
+    public confirmRegistration(token: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+
+    public confirmRegistration(token: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling confirmRegistration.');
         }
 
         let headers = this.defaultHeaders;
 
         // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-        ];
+        const httpHeaderAccepts: string[] = [];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
 
-        return this.httpClient.post<any>(`${this.configuration.basePath}/user/registration/confirmRegistration/${encodeURIComponent(String(registrationQuery))}`,
-            null,
+        return this.httpClient.get<any>(`${this.configuration.basePath}/user/registration/confirmRegistration/${encodeURIComponent(String(token))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -97,9 +88,18 @@ export class DefaultService {
     }
 
     /**
+     * Logs a user in with username and password
+     * @param username
+     * @param password
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public loginUser(username: string, password: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+
+    /**
      * Your GET endpoint
      * Call if the user forgot their password and want to get sent a mail with a password change link
-     * @param forgotPasswordDto 
+     * @param forgotPasswordDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -301,6 +301,10 @@ export class DefaultService {
         );
     }
 
+    public loginUser(username: string, password: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+
+    public loginUser(username: string, password: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+
     public loginUser(username: string, password: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling loginUser.');
@@ -352,28 +356,6 @@ export class DefaultService {
         );
     }
 
-    public loginUser(username: string, password: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public loginUser(username: string, password: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-
-    /**
-     * Logs the current user out and destroys the current session
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public logoutUser(observe?: 'body', reportProgress?: boolean): Observable<any>;
-
-    public logoutUser(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-
-    public logoutUser(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-
-    /**
-     * Registers a new user by putting in username, email and password
-     * @param registrationDto
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public registerUser(registrationDto?: RegistrationDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
-
     public logoutUser(observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -383,8 +365,7 @@ export class DefaultService {
             headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
         }
         // to determine the Accept header
-        const httpHeaderAccepts: string[] = [
-        ];
+        const httpHeaderAccepts: string[] = [];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
@@ -401,6 +382,27 @@ export class DefaultService {
             }
         );
     }
+
+    /**
+     * Logs the current user out and destroys the current session
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public logoutUser(observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public logoutUser(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public logoutUser(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+
+    /**
+     * Registers a new user by putting in username, email and password
+     * @param registrationDto
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public registerUser(registrationDto?: RegistrationDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
+
+    public registerUser(registrationDto?: RegistrationDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+
+    public registerUser(registrationDto?: RegistrationDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
 
     public registerUser(registrationDto?: RegistrationDto, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
@@ -434,8 +436,14 @@ export class DefaultService {
         );
     }
 
-    public registerUser(registrationDto?: RegistrationDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public registerUser(registrationDto?: RegistrationDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    /**
+     * Your GET endpoint
+     * Resets a password based on a password reset request
+     * @param passwordResetDto
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public resetPasswordRequest(passwordResetDto?: PasswordResetDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
 
     /**
      * @param consumes string[] mime-types
@@ -450,15 +458,6 @@ export class DefaultService {
         }
         return false;
     }
-
-    /**
-     * Your GET endpoint
-     * Resets a password based on a password reset request
-     * @param passwordResetDto
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public resetPasswordRequest(passwordResetDto?: PasswordResetDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
     public resetPasswordRequest(passwordResetDto?: PasswordResetDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
     public resetPasswordRequest(passwordResetDto?: PasswordResetDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
     public resetPasswordRequest(passwordResetDto?: PasswordResetDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
