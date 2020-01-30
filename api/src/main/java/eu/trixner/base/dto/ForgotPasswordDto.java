@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * ForgotPasswordDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T19:25:34.506+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T20:57:15.380+01:00[Europe/Berlin]")
 
 public class ForgotPasswordDto   {
   @JsonProperty("username")

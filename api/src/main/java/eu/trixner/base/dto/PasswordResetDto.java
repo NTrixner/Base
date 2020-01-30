@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * PasswordResetDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T19:25:34.506+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T20:57:15.380+01:00[Europe/Berlin]")
 
 public class PasswordResetDto {
     @JsonProperty("newPassword")
@@ -80,16 +80,16 @@ public class PasswordResetDto {
         return Objects.hash(newPassword, token);
     }
 
-  @Override
-  public String toString() {
-      StringBuilder sb = new StringBuilder();
-      sb.append("class PasswordResetDto {\n");
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("class PasswordResetDto {\n");
 
-      sb.append("    newPassword: ").append(toIndentedString(newPassword)).append("\n");
-      sb.append("    token: ").append(toIndentedString(token)).append("\n");
-      sb.append("}");
-      return sb.toString();
-  }
+        sb.append("    newPassword: ").append(toIndentedString(newPassword)).append("\n");
+        sb.append("    token: ").append(toIndentedString(token)).append("\n");
+        sb.append("}");
+        return sb.toString();
+    }
 
   /**
    * Convert the given object to string with each line indented by 4 spaces

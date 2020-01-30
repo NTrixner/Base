@@ -26,18 +26,9 @@ paths:
             operationId: loginUser
             requestBody:
                 content:
-                    application/x-www-form-urlencoded:
+                    application/json:
                         schema:
-                            type: object
-                            properties:
-                                username:
-                                    type: string
-                                password:
-                                    type: string
-                                    format: password
-                            required:
-                                - username
-                                - password
+                            $ref: '#/components/schemas/LoginDto'
             description: Logs a user in with username and password
             security: []
         parameters: []
@@ -227,6 +218,18 @@ components:
             scheme: Bearer
             bearerFormat: JWT
     schemas:
+        LoginDto:
+            title: LoginDto
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+                    format: password
+            required:
+                - username
+                - password
         UserDto:
             title: UserDto
             type: object

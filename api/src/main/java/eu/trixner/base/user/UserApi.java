@@ -28,8 +28,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
 import java.util.Optional;
-
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T19:25:34.506+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T20:57:15.380+01:00[Europe/Berlin]")
 
 @Validated
 @Api(value = "user", description = "the user API")
@@ -146,9 +145,9 @@ public interface UserApi {
             @ApiResponse(code = 400, message = "Bad Request"),
             @ApiResponse(code = 404, message = "Not Found")})
     @RequestMapping(value = "/user/forgotPassword/resetPassword",
-        consumes = { "application/json" },
-        method = RequestMethod.GET)
-    default ResponseEntity<Void> resetPasswordRequest(@ApiParam(value = ""  )  @Valid @RequestBody PasswordResetDto passwordResetDto) {
+            consumes = {"application/json"},
+            method = RequestMethod.GET)
+    default ResponseEntity<Void> resetPasswordRequest(@ApiParam(value = "") @Valid @RequestBody PasswordResetDto passwordResetDto) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }
