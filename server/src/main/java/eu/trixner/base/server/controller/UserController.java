@@ -1,5 +1,6 @@
 package eu.trixner.base.server.controller;
 
+import eu.trixner.base.dto.ChangePasswordDto;
 import eu.trixner.base.dto.ForgotPasswordDto;
 import eu.trixner.base.dto.PasswordResetDto;
 import eu.trixner.base.dto.RegistrationDto;
@@ -90,6 +91,16 @@ public class UserController implements UserApi {
             return ResponseEntity.ok().build();
         } catch (NullPointerException ex) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Override
+    public ResponseEntity<Void> changePassword(@Valid ChangePasswordDto changePasswordDto) {
+        try {
+            userService.changePassword(changePasswordDto.getOldPassword(), changePasswordDto.getNewPassword());
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().build();
         }
     }
 }

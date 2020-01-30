@@ -74,6 +74,7 @@ public class UserService implements UserDetailsService {
         return userMapper.userToUserDto(user);
     }
 
+    @Transactional
     public User createUser(RegistrationDto dto) {
         User newUser = userMapper.userRegistrationDtoToUser(dto);
         newUser.setPassword(passwordEncoder().encode(newUser.getPassword()));
@@ -81,6 +82,7 @@ public class UserService implements UserDetailsService {
         return newUser;
     }
 
+    @Transactional
     public UserRegistrationRequest registerUser(RegistrationDto registrationDto) {
         User newUser = createUser(registrationDto);
 
@@ -94,6 +96,7 @@ public class UserService implements UserDetailsService {
         return newRequest;
     }
 
+    @Transactional
     public boolean confirmRegistration(String token) {
         UserRegistrationRequest request = this.userRegistrationRequestRepository.findByToken(token);
         if (request == null) {
@@ -111,6 +114,7 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    @Transactional
     public PasswordResetRequest requestPasswordReset(String username, String email) {
         User user = userRepository.findByUsernameAndEmail(username, email);
         if (user == null) {
@@ -139,6 +143,20 @@ public class UserService implements UserDetailsService {
         log.info("{} Password reset requests were deleted", deleted);
     }
 
+    @Transactional
+    public void changePassword(String oldPassword, String newPassword) {
+        UserDto currentUser = getCurrentUser();
+        User currentUserDatabase = userRepository.findById(currentUser.getId()).orElse(null);
+        if (currentUserDatabase == null) {
+            throw new NullPointerException();
+        }
+        if (!passwordEncoder().matches(oldPassword, currentUserDatabase.getPassword())) {
+            throw new IllegalArgumentException();
+        }
+        currentUserDatabase.setPassword(passwordEncoder().encode(newPassword));
+        userRepository.save(currentUserDatabase);
+    }
+
     /**
      * Scheduled Tasks
      */
@@ -163,7 +181,6 @@ public class UserService implements UserDetailsService {
     /**
      * Getters
      */
-
     public PasswordEncoder passwordEncoder() {
         return passwordEncoder;
     }
