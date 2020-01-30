@@ -1,12 +1,28 @@
 package eu.trixner.base.server.model;
 
-import org.springframework.security.core.GrantedAuthority;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
-public enum UserType implements GrantedAuthority {
-    ADMIN, USER;
+public enum UserType {
+    ADMIN(
+            Role.values() //GRANT ALL THE ROLES
+    ),
+    USER(
+            Role.ROLE_USER_CAN_SEE_SELF
+    );
 
-    @Override
-    public String getAuthority() {
-        return this.name();
+    public Role[] roles;
+
+    UserType(Role... roles) {
+        this.roles = roles;
+    }
+
+    public List<String> getRolesStrings() {
+        return Arrays.stream(roles).map(Role::getAuthority).collect(Collectors.toList());
+    }
+
+    public Role[] getRoles() {
+        return roles;
     }
 }

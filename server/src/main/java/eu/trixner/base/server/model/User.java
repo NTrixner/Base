@@ -12,8 +12,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 
 @Data
 @AllArgsConstructor
@@ -36,7 +36,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(userType);
+        return Arrays.asList(userType.getRoles());
     }
 
     @Override

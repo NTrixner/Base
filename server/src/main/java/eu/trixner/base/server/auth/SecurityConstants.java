@@ -24,4 +24,6 @@ public class SecurityConstants {
     private SecurityConstants() {
         throw new IllegalStateException("Cannot create instance of static util class");
     }
+
+    public static final String ROLE_PREFIX = "ROLE_";
 }

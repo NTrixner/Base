@@ -13,16 +13,30 @@ Content-Type: application/json
 POST http://localhost:8080/auth/login
 Content-Type: application/json
 
+{
+  "username": "user",
+  "password": "user"
+}
+
+###
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin"
+}
 
 ###
 
 GET http://localhost:8080/user
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1ODA0MTMyODksInJvbCI6WyJVU0VSIl19.wSBGrfR4xpf97EXic_au03cvh-Y5YkZalzqbazI8j3yccibXL-D5BDH0IXixbPpUcKAG0Jtaqv1Eg4OwmOkvaA
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1ODA0MTgzOTQsInJvbCI6WyJST0xFX1VTRVJfQ0FOX1NFRV9TRUxGIl19.xi47HBprmrunLWmHTxB1CtZkYfOHc3y1L5Htq9gYYFw_nF3cHJOXDPp0CToQ32PBCuu84kfZAVonLt2tNY1qCw
 
 ###
 
 GET http://localhost:8080/userlist
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1ODA0MTMwMjksInJvbCI6WyJVU0VSIl19.fntgPYgClBlu_6Z54PDrWY6VuyKlN3ArUeg9nX9HHpJd9X4jWazTIrs-0qR3Qr6jf4pFv--ERqg_-sX-03w05A
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1ODA0MTU2MjEsInJvbCI6WyJVU0VSX0NBTl9TRUVfU0VMRiJdfQ.8mW8KJ4R2k2QNq2HDs6Xud4Gv73rp5oKL84eM7qRk-M9nYtEb0pnzSLTbC5Ute6Btw_hJb3C0Ef7h6XZFx1K4w
 Content-Type: application/json
 
 {

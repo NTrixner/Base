@@ -1,6 +1,7 @@
 package eu.trixner.base.server.auth.filters;
 
 import eu.trixner.base.server.auth.SecurityConstants;
+import eu.trixner.base.server.model.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -12,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -51,9 +52,9 @@ public class JwtUtils {
                     .getBody()
                     .getSubject();
 
-            List<SimpleGrantedAuthority> authorities = ((List<?>) parsedToken.getBody()
+            List<GrantedAuthority> authorities = ((List<?>) parsedToken.getBody()
                     .get("rol")).stream()
-                    .map(authority -> new SimpleGrantedAuthority((String) authority))
+                    .map(r -> Role.valueOf(r.toString()))
                     .collect(Collectors.toList());
 
             if (StringUtils.isNotEmpty(username)) {
