@@ -70,7 +70,8 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDto getCurrentUser() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsernameIgnoreCase(username);
         return userMapper.userToUserDto(user);
     }
 

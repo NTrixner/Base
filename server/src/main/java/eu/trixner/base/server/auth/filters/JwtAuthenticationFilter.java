@@ -1,12 +1,15 @@
 package eu.trixner.base.server.auth.filters;
 
+import eu.trixner.base.dto.LoginDto;
 import eu.trixner.base.server.auth.SecurityConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import io.swagger.util.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -36,13 +39,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+        try {
+            LoginDto login = Json.mapper().readValue(request.getInputStream(), LoginDto.class);
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword());
 
-        log.info("Login try from IP {} with username {}", request.getRemoteAddr(), username);
+            log.info("Login try from IP {} with username {}", request.getRemoteAddr(), login.getUsername());
 
-        return authenticationManager.authenticate(authenticationToken);
+            return authenticationManager.authenticate(authenticationToken);
+        } catch (IOException ex) {
+            throw new AuthenticationServiceException("Authentication failed", ex);
+        }
     }
 
     @Override
@@ -68,8 +75,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.JWT_TOKEN_EXPIRATION))
                 .claim("rol", roles)
                 .compact();
-
-        TokenHandler.getTokens().put(token, authentication);
 
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
     }

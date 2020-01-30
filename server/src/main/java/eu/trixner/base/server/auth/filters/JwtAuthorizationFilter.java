@@ -23,21 +23,28 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
+
         String token = JwtUtils.getToken(request);
+
         if (token != null && JwtUtils.isExpired(token)) {
-            TokenHandler.getTokens().remove(token);
+            TokenHandler.getBlackList().remove(token);
         }
 
-        Authentication authentication = TokenHandler.getTokens().get(token);
-
-        if (authentication == null) {
+        if (TokenHandler.getBlackList().contains(token)) {
             log.info("Unsuccessful authentication try from {}", request.getRemoteAddr());
             filterChain.doFilter(request, response);
             return;
         }
 
-        log.info("Successful authentication try from username {}, IP Address is {}", authentication.getName(), request.getRemoteAddr());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Authentication auth = JwtUtils.getAuthentication(request);
+
+        if (auth != null) {
+            SecurityContextHolder.getContext().setAuthentication(auth);
+
+            log.info("Successful authentication try from username {}, IP Address is {}",
+                    auth.getName(),
+                    request.getRemoteAddr());
+        }
         filterChain.doFilter(request, response);
     }
 

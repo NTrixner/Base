@@ -61,6 +61,7 @@ public class JwtUtils {
             }
         } catch (ExpiredJwtException exception) {
             log.warn("Request to parse expired JWT : {} failed : {}", token, exception.getMessage());
+            TokenHandler.getBlackList().remove(token);
         } catch (UnsupportedJwtException exception) {
             log.warn("Request to parse unsupported JWT : {} failed : {}", token, exception.getMessage());
         } catch (MalformedJwtException exception) {

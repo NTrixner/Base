@@ -3,19 +3,20 @@ package eu.trixner.base.server.auth.filters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class TokenHandler {
     private static final Logger log = LoggerFactory.getLogger(TokenHandler.class);
 
-    private static HashMap<String, Authentication> tokens = new HashMap<>();
+    private static List<String> blackList = new ArrayList<>();
 
-    public static HashMap<String, Authentication> getTokens() {
-        return tokens;
+    public static List<String> getBlackList() {
+        return blackList;
     }
 
     /**
@@ -23,7 +24,8 @@ public class TokenHandler {
      */
     @Scheduled(fixedRateString = "${jwt.token.removeStaleTokenRate}")
     public void cleanUp() {
-        log.info("Removing old Session Tokens");
-        tokens.entrySet().removeIf(entry -> JwtUtils.isExpired(entry.getKey()));
+        List<String> toDelete = blackList.stream().filter(JwtUtils::isExpired).collect(Collectors.toList());
+        log.info("Removing {} old Session Tokens", toDelete.size());
+        blackList.removeAll(toDelete);
     }
 }

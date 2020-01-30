@@ -15,12 +15,13 @@ public class JwtLogoutHandler implements LogoutHandler {
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         log.info("Logout called from {}", request.getRemoteAddr());
         String token = JwtUtils.getToken(request);
-        if (!TokenHandler.getTokens().containsKey(token)) {
-            log.info("Could not find session");
+        Authentication auth = JwtUtils.getAuthentication(request);
+        if (TokenHandler.getBlackList().contains(token) || auth == null) {
+            //Either user is already blacklisted, or the token can not be parsed anyways
             response.setStatus(403);
             return;
         }
-        log.info("Logging user {} out", TokenHandler.getTokens().get(token).getName());
-        TokenHandler.getTokens().remove(token);
+        log.info("Logging user {} out", auth.getName());
+        TokenHandler.getBlackList().add(token);
     }
 }
