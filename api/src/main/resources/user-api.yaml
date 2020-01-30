@@ -161,6 +161,22 @@ paths:
                         schema:
                             $ref: '#/components/schemas/PasswordResetDto'
         parameters: []
+    /user/changePassword:
+        post:
+            summary: Your GET endpoint
+            responses:
+                '200':
+                    description: Password was changed
+                '400':
+                    description: Bad Request, old password was most likely wrong
+            description: Call to change the user's password
+            operationId: changePassword
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ChangePasswordDto'
+        parameters: []
     /userlist:
         get:
             summary: Your GET endpoint
@@ -260,8 +276,19 @@ components:
                 token:
                     type: string
             required:
-            - newPassword
-            - requestId
+                - newPassword
+                - requestId
+        ChangePasswordDto:
+            title: ChangePasswordDto
+            type: object
+            properties:
+                newPassword:
+                    type: string
+                oldPassword:
+                    type: string
+            required:
+                - newPassword
+                - oldPassword
         UserListDto:
             title: UserListDto
             type: object

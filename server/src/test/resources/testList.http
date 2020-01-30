@@ -19,7 +19,7 @@ username=user&password=abc
 ###
 
 GET http://localhost:8080/userlist
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1Nzk4OTMwODIsInJvbCI6WyJVU0VSIl19.ujSadu_sP4wor7xWGT7TAYb0ASTIXV0MjkR1uC2aEmD3leQGRhhs-HvN3SRXImo7-_cForTMmNnE9qPhB4NP5w
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1ODA0MDkzMzgsInJvbCI6WyJVU0VSIl19.M2dGWUOjaCNZaVM-zIDHw5HUv7C6ATiHogIYVbpHrp8WNcdxZ5aRvlGoZe2uzsT47n7d2FT3SbjwSOS9OF9fIw
 Content-Type: application/json
 
 {
@@ -31,8 +31,20 @@ Content-Type: application/json
 
 ###
 
+POST http://localhost:8080/user/changePassword
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1ODA0MDkzMzgsInJvbCI6WyJVU0VSIl19.M2dGWUOjaCNZaVM-zIDHw5HUv7C6ATiHogIYVbpHrp8WNcdxZ5aRvlGoZe2uzsT47n7d2FT3SbjwSOS9OF9fIw
+Content-Type: application/json
+
+{
+  "oldPassword": "user",
+  "newPassword": "abc"
+}
+
+###
+
 POST http://localhost:8080/auth/logout
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJzZWN1cmUtYXBpIiwiYXVkIjoic2VjdXJlLWFwcCIsInN1YiI6InVzZXIiLCJleHAiOjE1Nzk4ODU0MDMsInJvbCI6WyJVU0VSIl19.q_tbmeEN3epooL1LHZVHsjl0hv5O4ATDQQA9zC_VdNS1UjeU6cO6XNeg0MC-jAZvRg5ITuJ9cKQ7YThrLr_naA
+
 ###
 
 GET http://localhost:8080/userlist

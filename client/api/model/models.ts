@@ -1,3 +1,4 @@
+export * from './changePasswordDto';
 export * from './forgotPasswordDto';
 export * from './inlineObject';
 export * from './paginationRequestDto';
