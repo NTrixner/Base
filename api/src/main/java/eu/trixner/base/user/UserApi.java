@@ -5,6 +5,7 @@
  */
 package eu.trixner.base.user;
 
+import eu.trixner.base.dto.ChangePasswordDto;
 import eu.trixner.base.dto.ForgotPasswordDto;
 import eu.trixner.base.dto.PasswordResetDto;
 import eu.trixner.base.dto.RegistrationDto;
@@ -27,7 +28,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
 import java.util.Optional;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T19:56:14.402+01:00[Europe/Berlin]")
+
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T19:25:34.506+01:00[Europe/Berlin]")
 
 @Validated
 @Api(value = "user", description = "the user API")
@@ -36,6 +38,21 @@ public interface UserApi {
     default Optional<NativeWebRequest> getRequest() {
         return Optional.empty();
     }
+
+    @ApiOperation(value = "Your GET endpoint", nickname = "changePassword", notes = "Call to change the user's password", authorizations = {
+            @Authorization(value = "auth")
+    }, tags = {})
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Password was changed"),
+            @ApiResponse(code = 400, message = "Bad Request, old password was most likely wrong")})
+    @RequestMapping(value = "/user/changePassword",
+            consumes = {"application/json"},
+            method = RequestMethod.POST)
+    default ResponseEntity<Void> changePassword(@ApiParam(value = "") @Valid @RequestBody ChangePasswordDto changePasswordDto) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
 
     @ApiOperation(value = "", nickname = "confirmRegistration", notes = "Confirms the registration of a new user by activating via a link that was sent via email.", tags = {})
     @ApiResponses(value = {
@@ -124,10 +141,10 @@ public interface UserApi {
 
 
     @ApiOperation(value = "Your GET endpoint", nickname = "resetPasswordRequest", notes = "Resets a password based on a password reset request", tags = {})
-    @ApiResponses(value = { 
-        @ApiResponse(code = 200, message = "OK"),
-        @ApiResponse(code = 400, message = "Bad Request"),
-        @ApiResponse(code = 404, message = "Not Found") })
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "Bad Request"),
+            @ApiResponse(code = 404, message = "Not Found")})
     @RequestMapping(value = "/user/forgotPassword/resetPassword",
         consumes = { "application/json" },
         method = RequestMethod.GET)

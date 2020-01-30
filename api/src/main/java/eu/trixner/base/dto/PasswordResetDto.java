@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * PasswordResetDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T19:56:14.402+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T19:25:34.506+01:00[Europe/Berlin]")
 
 public class PasswordResetDto {
     @JsonProperty("newPassword")
@@ -28,13 +28,13 @@ public class PasswordResetDto {
      *
      * @return newPassword
      */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
+    @ApiModelProperty(required = true, value = "")
+    @NotNull
 
 
-  public String getNewPassword() {
-      return newPassword;
-  }
+    public String getNewPassword() {
+        return newPassword;
+    }
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
@@ -69,26 +69,26 @@ public class PasswordResetDto {
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
-    }
-    PasswordResetDto passwordResetDto = (PasswordResetDto) o;
+        }
+        PasswordResetDto passwordResetDto = (PasswordResetDto) o;
         return Objects.equals(this.newPassword, passwordResetDto.newPassword) &&
                 Objects.equals(this.token, passwordResetDto.token);
-  }
+    }
 
-  @Override
-  public int hashCode() {
-      return Objects.hash(newPassword, token);
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hash(newPassword, token);
+    }
 
   @Override
   public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class PasswordResetDto {\n");
+      StringBuilder sb = new StringBuilder();
+      sb.append("class PasswordResetDto {\n");
 
       sb.append("    newPassword: ").append(toIndentedString(newPassword)).append("\n");
       sb.append("    token: ").append(toIndentedString(token)).append("\n");
-    sb.append("}");
-    return sb.toString();
+      sb.append("}");
+      return sb.toString();
   }
 
   /**

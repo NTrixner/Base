@@ -16,6 +16,7 @@ import {HttpClient, HttpEvent, HttpHeaders, HttpParameterCodec, HttpParams, Http
 import {CustomHttpParameterCodec} from '../encoder';
 import {Observable} from 'rxjs';
 
+import {ChangePasswordDto} from '../model/changePasswordDto';
 import {ForgotPasswordDto} from '../model/forgotPasswordDto';
 import {PaginationRequestDto} from '../model/paginationRequestDto';
 import {PasswordResetDto} from '../model/passwordResetDto';
@@ -50,6 +51,55 @@ export class DefaultService {
         this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
     }
 
+    /**
+     * Your GET endpoint
+     * Call to change the user\&#39;s password
+     * @param changePasswordDto
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public changePassword(changePasswordDto?: ChangePasswordDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
+
+    public changePassword(changePasswordDto?: ChangePasswordDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+
+    public changePassword(changePasswordDto?: ChangePasswordDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+
+    public changePassword(changePasswordDto?: ChangePasswordDto, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // authentication (auth) required
+        if (this.configuration.username || this.configuration.password) {
+            headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
+        }
+        // to determine the Accept header
+        const httpHeaderAccepts: string[] = [];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.post<any>(`${this.configuration.basePath}/user/changePassword`,
+            changePasswordDto,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
     public confirmRegistration(token: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
         if (token === null || token === undefined) {
             throw new Error('Required parameter token was null or undefined when calling confirmRegistration.');
@@ -75,7 +125,6 @@ export class DefaultService {
         );
     }
 
-
     /**
      * Confirms the registration of a new user by activating via a link that was sent via email.
      * @param token The registration token that was sent via mail to the new user\&#39;s address
@@ -95,17 +144,6 @@ export class DefaultService {
      */
     public forgotPassword(forgotPasswordDto?: ForgotPasswordDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
 
-    /**
-     * Logs a user in with username and password
-     * @param username
-     * @param password
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public loginUser(username: string, password: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-
-    public forgotPassword(forgotPasswordDto?: ForgotPasswordDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public forgotPassword(forgotPasswordDto?: ForgotPasswordDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
     public forgotPassword(forgotPasswordDto?: ForgotPasswordDto, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -136,6 +174,18 @@ export class DefaultService {
             }
         );
     }
+
+    public forgotPassword(forgotPasswordDto?: ForgotPasswordDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public forgotPassword(forgotPasswordDto?: ForgotPasswordDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+
+    /**
+     * Logs a user in with username and password
+     * @param username
+     * @param password
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public loginUser(username: string, password: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
 
     /**
      * Your GET endpoint
@@ -300,6 +350,10 @@ export class DefaultService {
         );
     }
 
+    public loginUser(username: string, password: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+
+    public loginUser(username: string, password: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+
     public loginUser(username: string, password: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
         if (username === null || username === undefined) {
             throw new Error('Required parameter username was null or undefined when calling loginUser.');
@@ -351,20 +405,6 @@ export class DefaultService {
         );
     }
 
-    public loginUser(username: string, password: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public loginUser(username: string, password: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-
-    /**
-     * Logs the current user out and destroys the current session
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public logoutUser(observe?: 'body', reportProgress?: boolean): Observable<any>;
-
-    public logoutUser(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-
-    public logoutUser(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-
     public logoutUser(observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -393,12 +433,25 @@ export class DefaultService {
     }
 
     /**
+     * Logs the current user out and destroys the current session
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public logoutUser(observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public logoutUser(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public logoutUser(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+
+    /**
      * Registers a new user by putting in username, email and password
      * @param registrationDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
     public registerUser(registrationDto?: RegistrationDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
+
+    public registerUser(registrationDto?: RegistrationDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+
+    public registerUser(registrationDto?: RegistrationDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
 
     public registerUser(registrationDto?: RegistrationDto, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
@@ -431,9 +484,6 @@ export class DefaultService {
             }
         );
     }
-
-    public registerUser(registrationDto?: RegistrationDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public registerUser(registrationDto?: RegistrationDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
 
     /**
      * Your GET endpoint

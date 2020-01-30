@@ -13,7 +13,7 @@ import java.util.Objects;
  * A request for Pagination
  */
 @ApiModel(description = "A request for Pagination")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-24T19:56:14.402+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T19:25:34.506+01:00[Europe/Berlin]")
 
 public class PaginationRequestDto   {
   @JsonProperty("page")
