@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -38,17 +39,30 @@ public class UserController implements UserApi {
     }
 
     @Override
+    @Secured("ROLE_USER_CAN_SEE_SELF")
     public ResponseEntity<UserDto> getCurrentUser() {
         return ResponseEntity.ok(userService.getCurrentUser());
     }
 
     @Override
+    @Secured("ROLE_USER_CAN_GET_USER_BY_ID")
     public ResponseEntity<UserDto> getUserById(String userId) {
         UserDto dto = userService.findUser(UUID.fromString(userId));
         if (dto == null) {
             return ResponseEntity.notFound().build();
         } else {
             return ResponseEntity.ok(dto);
+        }
+    }
+
+    @Override
+    @Secured("ROLE_USER_CAN_CHANGE_PASSWORD")
+    public ResponseEntity<Void> changePassword(@Valid ChangePasswordDto changePasswordDto) {
+        try {
+            userService.changePassword(changePasswordDto.getOldPassword(), changePasswordDto.getNewPassword());
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -91,16 +105,6 @@ public class UserController implements UserApi {
             return ResponseEntity.ok().build();
         } catch (NullPointerException ex) {
             return ResponseEntity.notFound().build();
-        }
-    }
-
-    @Override
-    public ResponseEntity<Void> changePassword(@Valid ChangePasswordDto changePasswordDto) {
-        try {
-            userService.changePassword(changePasswordDto.getOldPassword(), changePasswordDto.getNewPassword());
-            return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException ex) {
-            return ResponseEntity.badRequest().build();
         }
     }
 }
