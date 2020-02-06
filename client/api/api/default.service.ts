@@ -53,6 +53,7 @@ export class DefaultService {
     }
 
 
+
     /**
      * Your GET endpoint
      * Call to change the user\&#39;s password
@@ -134,7 +135,7 @@ export class DefaultService {
     }
 
     /**
-     * Your GET endpoint
+     * Your POST endpoint
      * Call if the user forgot their password and want to get sent a mail with a password change link
      * @param forgotPasswordDto
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -164,7 +165,8 @@ export class DefaultService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.get<any>(`${this.configuration.basePath}/user/forgotPassword`,
+        return this.httpClient.post<any>(`${this.configuration.basePath}/user/forgotPassword`,
+            forgotPasswordDto,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -319,8 +321,7 @@ export class DefaultService {
 
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json',
-            'application/xml'
+            'application/json'
         ];
         const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
         if (httpContentTypeSelected !== undefined) {
@@ -486,7 +487,8 @@ export class DefaultService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.get<any>(`${this.configuration.basePath}/user/forgotPassword/resetPassword`,
+        return this.httpClient.post<any>(`${this.configuration.basePath}/user/forgotPassword/resetPassword`,
+            passwordResetDto,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

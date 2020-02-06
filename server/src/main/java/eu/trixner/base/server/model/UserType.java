@@ -9,7 +9,8 @@ public enum UserType {
             Role.values() //GRANT ALL THE ROLES
     ),
     USER(
-            Role.ROLE_USER_CAN_SEE_SELF
+            Role.ROLE_USER_CAN_SEE_SELF,
+            Role.ROLE_USER_CAN_CHANGE_PASSWORD
     );
 
     public Role[] roles;

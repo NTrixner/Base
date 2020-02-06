@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * UserDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T20:57:15.380+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-02-06T19:52:40.376+01:00[Europe/Berlin]")
 
 public class UserDto   {
   @JsonProperty("id")

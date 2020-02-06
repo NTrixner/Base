@@ -23,5 +23,6 @@ public class JwtLogoutHandler implements LogoutHandler {
         }
         log.info("Logging user {} out", auth.getName());
         TokenHandler.getBlackList().add(token);
+        response.setStatus(302);
     }
 }
