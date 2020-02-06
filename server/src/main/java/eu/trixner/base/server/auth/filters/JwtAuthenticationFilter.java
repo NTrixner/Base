@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -73,6 +74,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .setAudience(SecurityConstants.TOKEN_AUDIENCE)
                 .setSubject(user.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.JWT_TOKEN_EXPIRATION))
+                .setId(UUID.randomUUID().toString())
                 .claim("rol", roles)
                 .compact();
 

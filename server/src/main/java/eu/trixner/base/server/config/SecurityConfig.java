@@ -4,6 +4,7 @@ import eu.trixner.base.server.auth.SecurityConstants;
 import eu.trixner.base.server.auth.filters.JwtAuthenticationFilter;
 import eu.trixner.base.server.auth.filters.JwtAuthorizationFilter;
 import eu.trixner.base.server.auth.filters.JwtLogoutHandler;
+import eu.trixner.base.server.auth.filters.JwtLogoutSuccessHandler;
 import eu.trixner.base.server.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl(SecurityConstants.AUTH_LOGOUT_URL)
                 .addLogoutHandler(new JwtLogoutHandler())
+                .logoutSuccessHandler(new JwtLogoutSuccessHandler())
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .and()

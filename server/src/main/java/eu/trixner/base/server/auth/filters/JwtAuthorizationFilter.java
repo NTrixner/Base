@@ -32,7 +32,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         if (TokenHandler.getBlackList().contains(token)) {
             log.info("Unsuccessful authentication try from {}", request.getRemoteAddr());
-            filterChain.doFilter(request, response);
+            log.info("Token was {}", token);
+            response.setStatus(403);
             return;
         }
 

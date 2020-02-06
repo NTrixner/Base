@@ -155,7 +155,7 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException();
         }
         currentUserDatabase.setPassword(passwordEncoder().encode(newPassword));
-        userRepository.save(currentUserDatabase);
+        userRepository.saveAndFlush(currentUserDatabase);
     }
 
     /**

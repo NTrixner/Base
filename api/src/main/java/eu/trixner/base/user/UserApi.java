@@ -28,7 +28,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
 import java.util.Optional;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T20:57:15.380+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-02-06T19:52:40.376+01:00[Europe/Berlin]")
 
 @Validated
 @Api(value = "user", description = "the user API")
@@ -65,13 +65,13 @@ public interface UserApi {
     }
 
 
-    @ApiOperation(value = "Your GET endpoint", nickname = "forgotPassword", notes = "Call if the user forgot their password and want to get sent a mail with a password change link", tags = {})
+    @ApiOperation(value = "Your POST endpoint", nickname = "forgotPassword", notes = "Call if the user forgot their password and want to get sent a mail with a password change link", tags = {})
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Mail was sent"),
             @ApiResponse(code = 404, message = "User/Mail combination not found")})
     @RequestMapping(value = "/user/forgotPassword",
             consumes = {"application/json"},
-            method = RequestMethod.GET)
+            method = RequestMethod.POST)
     default ResponseEntity<Void> forgotPassword(@ApiParam(value = "") @Valid @RequestBody ForgotPasswordDto forgotPasswordDto) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
@@ -146,7 +146,7 @@ public interface UserApi {
             @ApiResponse(code = 404, message = "Not Found")})
     @RequestMapping(value = "/user/forgotPassword/resetPassword",
             consumes = {"application/json"},
-            method = RequestMethod.GET)
+            method = RequestMethod.POST)
     default ResponseEntity<Void> resetPasswordRequest(@ApiParam(value = "") @Valid @RequestBody PasswordResetDto passwordResetDto) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 

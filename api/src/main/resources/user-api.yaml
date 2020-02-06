@@ -117,8 +117,8 @@ paths:
             description: Returns the current user
             operationId: getCurrentUser
     /user/forgotPassword:
-        get:
-            summary: Your GET endpoint
+        post:
+            summary: Your POST endpoint
             responses:
                 '200':
                     description: Mail was sent
@@ -133,7 +133,7 @@ paths:
                         schema:
                             $ref: '#/components/schemas/ForgotPasswordDto'
     /user/forgotPassword/resetPassword:
-        get:
+        post:
             summary: Your GET endpoint
             tags: []
             responses:
@@ -189,9 +189,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/PaginationRequestDto'
-                    application/xml:
-                        schema:
+                            required: false
                             $ref: '#/components/schemas/PaginationRequestDto'
                 description: The Pagination Request. Is ignored if null.
         parameters: []
@@ -226,7 +224,6 @@ components:
                     type: string
                 password:
                     type: string
-                    format: password
             required:
                 - username
                 - password

@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * PasswordResetDto
  */
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T20:57:15.380+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-02-06T19:52:40.376+01:00[Europe/Berlin]")
 
 public class PasswordResetDto {
     @JsonProperty("newPassword")
@@ -91,15 +91,15 @@ public class PasswordResetDto {
         return sb.toString();
     }
 
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
+    /**
+     * Convert the given object to string with each line indented by 4 spaces
+     * (except the first line).
+     */
+    private String toIndentedString(java.lang.Object o) {
+        if (o == null) {
+            return "null";
+        }
+        return o.toString().replace("\n", "\n    ");
   }
 }
 

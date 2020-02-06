@@ -24,7 +24,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.validation.Valid;
 import java.util.Optional;
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-01-30T20:57:15.380+01:00[Europe/Berlin]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-02-06T19:52:40.376+01:00[Europe/Berlin]")
 
 @Validated
 @Api(value = "userlist", description = "the userlist API")
@@ -57,7 +57,7 @@ public interface UserlistApi {
             @ApiResponse(code = 403, message = "Unauthorized")})
     @RequestMapping(value = "/userlist",
             produces = {"application/json"},
-            consumes = {"application/json", "application/xml"},
+            consumes = {"application/json"},
             method = RequestMethod.GET)
     default ResponseEntity<UserListDto> listUsers(@ApiParam(value = "The Pagination Request. Is ignored if null."  )  @Valid @RequestBody PaginationRequestDto paginationRequestDto) {
         getRequest().ifPresent(request -> {
