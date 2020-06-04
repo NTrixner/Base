@@ -46,3 +46,5 @@ testem.log
 .DS_Store
 Thumbs.db
 /src/api/
+/node/
+/e2e/

@@ -56,3 +56,4 @@ testem.log
 .DS_Store
 Thumbs.db
 
+/api/.openapi-generator/
