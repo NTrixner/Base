@@ -10,57 +10,57 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ForgotPasswordDto
+ * ChangePasswordDto
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-06-04T09:29:54.671+02:00[Europe/Berlin]")
 
-public class ForgotPasswordDto   {
-  @JsonProperty("username")
-  private String username;
+public class ChangePasswordDto   {
+  @JsonProperty("newPassword")
+  private String newPassword;
 
-  @JsonProperty("email")
-  private String email;
+  @JsonProperty("oldPassword")
+  private String oldPassword;
 
-  public ForgotPasswordDto username(String username) {
-    this.username = username;
+  public ChangePasswordDto newPassword(String newPassword) {
+    this.newPassword = newPassword;
     return this;
   }
 
   /**
-   * Get username
-   * @return username
+   * Get newPassword
+   * @return newPassword
   */
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public String getUsername() {
-    return username;
+  public String getNewPassword() {
+    return newPassword;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setNewPassword(String newPassword) {
+    this.newPassword = newPassword;
   }
 
-  public ForgotPasswordDto email(String email) {
-    this.email = email;
+  public ChangePasswordDto oldPassword(String oldPassword) {
+    this.oldPassword = oldPassword;
     return this;
   }
 
   /**
-   * Get email
-   * @return email
+   * Get oldPassword
+   * @return oldPassword
   */
   @ApiModelProperty(required = true, value = "")
   @NotNull
 
 
-  public String getEmail() {
-    return email;
+  public String getOldPassword() {
+    return oldPassword;
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void setOldPassword(String oldPassword) {
+    this.oldPassword = oldPassword;
   }
 
 
@@ -72,23 +72,23 @@ public class ForgotPasswordDto   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ForgotPasswordDto forgotPasswordDto = (ForgotPasswordDto) o;
-    return Objects.equals(this.username, forgotPasswordDto.username) &&
-        Objects.equals(this.email, forgotPasswordDto.email);
+    ChangePasswordDto changePasswordDto = (ChangePasswordDto) o;
+    return Objects.equals(this.newPassword, changePasswordDto.newPassword) &&
+        Objects.equals(this.oldPassword, changePasswordDto.oldPassword);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, email);
+    return Objects.hash(newPassword, oldPassword);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ForgotPasswordDto {\n");
+    sb.append("class ChangePasswordDto {\n");
     
-    sb.append("    username: ").append(toIndentedString(username)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
+    sb.append("    newPassword: ").append(toIndentedString(newPassword)).append("\n");
+    sb.append("    oldPassword: ").append(toIndentedString(oldPassword)).append("\n");
     sb.append("}");
     return sb.toString();
   }

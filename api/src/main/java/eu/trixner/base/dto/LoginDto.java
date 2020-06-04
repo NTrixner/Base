@@ -10,21 +10,18 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * RegistrationDto
+ * LoginDto
  */
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2020-06-04T09:29:54.671+02:00[Europe/Berlin]")
 
-public class RegistrationDto   {
+public class LoginDto   {
   @JsonProperty("username")
   private String username;
-
-  @JsonProperty("email")
-  private String email;
 
   @JsonProperty("password")
   private String password;
 
-  public RegistrationDto username(String username) {
+  public LoginDto username(String username) {
     this.username = username;
     return this;
   }
@@ -45,28 +42,7 @@ public class RegistrationDto   {
     this.username = username;
   }
 
-  public RegistrationDto email(String email) {
-    this.email = email;
-    return this;
-  }
-
-  /**
-   * Get email
-   * @return email
-  */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
-  public RegistrationDto password(String password) {
+  public LoginDto password(String password) {
     this.password = password;
     return this;
   }
@@ -96,24 +72,22 @@ public class RegistrationDto   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RegistrationDto registrationDto = (RegistrationDto) o;
-    return Objects.equals(this.username, registrationDto.username) &&
-        Objects.equals(this.email, registrationDto.email) &&
-        Objects.equals(this.password, registrationDto.password);
+    LoginDto loginDto = (LoginDto) o;
+    return Objects.equals(this.username, loginDto.username) &&
+        Objects.equals(this.password, loginDto.password);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(username, email, password);
+    return Objects.hash(username, password);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class RegistrationDto {\n");
+    sb.append("class LoginDto {\n");
     
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -11,7 +11,7 @@
  */
 
 
-export interface PasswordResetDto {
+export interface PasswordResetDto { 
     newPassword: string;
     token?: string;
 }

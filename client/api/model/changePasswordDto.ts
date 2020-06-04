@@ -9,13 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { UserDto } from './userDto';
 
 
-export interface UserListDto { 
-    pageSize?: number;
-    pagePos?: number;
-    ordering?: string;
-    items?: Array<UserDto>;
+export interface ChangePasswordDto { 
+    newPassword: string;
+    oldPassword: string;
 }
 

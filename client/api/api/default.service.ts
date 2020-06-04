@@ -11,22 +11,24 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import {Inject, Injectable, Optional} from '@angular/core';
-import {HttpClient, HttpEvent, HttpHeaders, HttpParameterCodec, HttpResponse} from '@angular/common/http';
-import {CustomHttpParameterCodec} from '../encoder';
-import {Observable} from 'rxjs';
+import { Inject, Injectable, Optional }                      from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams,
+         HttpResponse, HttpEvent, HttpParameterCodec }       from '@angular/common/http';
+import { CustomHttpParameterCodec }                          from '../encoder';
+import { Observable }                                        from 'rxjs';
 
-import {ChangePasswordDto} from '../model/changePasswordDto';
-import {ForgotPasswordDto} from '../model/forgotPasswordDto';
-import {LoginDto} from '../model/loginDto';
-import {PaginationRequestDto} from '../model/paginationRequestDto';
-import {PasswordResetDto} from '../model/passwordResetDto';
-import {RegistrationDto} from '../model/registrationDto';
-import {UserDto} from '../model/userDto';
-import {UserListDto} from '../model/userListDto';
+import { ChangePasswordDto } from '../model/changePasswordDto';
+import { ForgotPasswordDto } from '../model/forgotPasswordDto';
+import { LoginDto } from '../model/loginDto';
+import { PaginationRequestDto } from '../model/paginationRequestDto';
+import { PasswordResetDto } from '../model/passwordResetDto';
+import { RegistrationDto } from '../model/registrationDto';
+import { UserDto } from '../model/userDto';
+import { UserListDto } from '../model/userListDto';
 
-import {BASE_PATH} from '../variables';
-import {Configuration} from '../configuration';
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
+
 
 
 @Injectable({
@@ -57,14 +59,14 @@ export class DefaultService {
     /**
      * Your GET endpoint
      * Call to change the user\&#39;s password
-     * @param changePasswordDto
+     * @param changePasswordDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
     public changePassword(changePasswordDto?: ChangePasswordDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
     public changePassword(changePasswordDto?: ChangePasswordDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
     public changePassword(changePasswordDto?: ChangePasswordDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public changePassword(changePasswordDto?: ChangePasswordDto, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public changePassword(changePasswordDto?: ChangePasswordDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -73,7 +75,8 @@ export class DefaultService {
             headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
         }
         // to determine the Accept header
-        const httpHeaderAccepts: string[] = [];
+        const httpHeaderAccepts: string[] = [
+        ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
@@ -109,7 +112,7 @@ export class DefaultService {
     public confirmRegistration(token: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
     public confirmRegistration(token: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
     public confirmRegistration(token: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public confirmRegistration(token: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public confirmRegistration(token: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
         if (token === null || token === undefined) {
             throw new Error('Required parameter token was null or undefined when calling confirmRegistration.');
         }
@@ -117,7 +120,8 @@ export class DefaultService {
         let headers = this.defaultHeaders;
 
         // to determine the Accept header
-        const httpHeaderAccepts: string[] = [];
+        const httpHeaderAccepts: string[] = [
+        ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
@@ -137,19 +141,20 @@ export class DefaultService {
     /**
      * Your POST endpoint
      * Call if the user forgot their password and want to get sent a mail with a password change link
-     * @param forgotPasswordDto
+     * @param forgotPasswordDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
     public forgotPassword(forgotPasswordDto?: ForgotPasswordDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
     public forgotPassword(forgotPasswordDto?: ForgotPasswordDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
     public forgotPassword(forgotPasswordDto?: ForgotPasswordDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public forgotPassword(forgotPasswordDto?: ForgotPasswordDto, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public forgotPassword(forgotPasswordDto?: ForgotPasswordDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
         // to determine the Accept header
-        const httpHeaderAccepts: string[] = [];
+        const httpHeaderAccepts: string[] = [
+        ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
@@ -340,19 +345,20 @@ export class DefaultService {
 
     /**
      * Logs a user in with username and password
-     * @param loginDto
+     * @param loginDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
     public loginUser(loginDto?: LoginDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
     public loginUser(loginDto?: LoginDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
     public loginUser(loginDto?: LoginDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public loginUser(loginDto?: LoginDto, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public loginUser(loginDto?: LoginDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
         // to determine the Accept header
-        const httpHeaderAccepts: string[] = [];
+        const httpHeaderAccepts: string[] = [
+        ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
@@ -387,7 +393,7 @@ export class DefaultService {
     public logoutUser(observe?: 'body', reportProgress?: boolean): Observable<any>;
     public logoutUser(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
     public logoutUser(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public logoutUser(observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public logoutUser(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
@@ -396,7 +402,8 @@ export class DefaultService {
             headers = headers.set('Authorization', 'Basic ' + btoa(this.configuration.username + ':' + this.configuration.password));
         }
         // to determine the Accept header
-        const httpHeaderAccepts: string[] = [];
+        const httpHeaderAccepts: string[] = [
+        ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
@@ -416,19 +423,20 @@ export class DefaultService {
 
     /**
      * Registers a new user by putting in username, email and password
-     * @param registrationDto
+     * @param registrationDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
     public registerUser(registrationDto?: RegistrationDto, observe?: 'body', reportProgress?: boolean): Observable<any>;
     public registerUser(registrationDto?: RegistrationDto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
     public registerUser(registrationDto?: RegistrationDto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public registerUser(registrationDto?: RegistrationDto, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public registerUser(registrationDto?: RegistrationDto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
         // to determine the Accept header
-        const httpHeaderAccepts: string[] = [];
+        const httpHeaderAccepts: string[] = [
+        ];
         const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         if (httpHeaderAcceptSelected !== undefined) {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
@@ -458,7 +466,7 @@ export class DefaultService {
     /**
      * Your GET endpoint
      * Resets a password based on a password reset request
-     * @param passwordResetDto
+     * @param passwordResetDto 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
