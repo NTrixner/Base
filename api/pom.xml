@@ -4,19 +4,26 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>eu.trixner</groupId>
     <artifactId>api</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <parent>
+        <artifactId>base</artifactId>
+        <groupId>eu.trixner</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <openapi-generator-version>4.2.1</openapi-generator-version>
+        <openapi-generator-version>4.2.2</openapi-generator-version>
         <springfox-version>2.8.0</springfox-version>
         <spring-boot-version>2.1.8.RELEASE</spring-boot-version>
         <jaxb-version>2.2.11</jaxb-version>
         <jackson-databind-nullable.version>0.1.0</jackson-databind-nullable.version>
         <jackson-datatype-jsr310.version>2.9.10</jackson-datatype-jsr310.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
+        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
     </properties>
 
     <dependencies>
@@ -24,11 +31,12 @@
             <groupId>org.openapitools</groupId>
             <artifactId>openapi-generator-maven-plugin</artifactId>
             <version>${openapi-generator-version}</version>
-        </dependency><dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-web</artifactId>
-        <version>${spring-boot-version}</version>
-    </dependency>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring-boot-version}</version>
+        </dependency>
         <!--SpringFox dependencies -->
         <dependency>
             <groupId>io.springfox</groupId>
@@ -64,15 +72,16 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>src/main/java</sourceDirectory>
+        <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
         <plugins>
             <plugin>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${maven-clean-plugin.version}</version>
                 <configuration>
                     <filesets>
                         <fileset>
-                            <directory>src/main/java</directory>
+                            <directory>${project.basedir}/src/main/java/**</directory>
+                            <directory>${project.parent.basedir}/client/src/api/**</directory>
                         </fileset>
                     </filesets>
                 </configuration>
@@ -128,7 +137,7 @@
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/user-api.yaml</inputSpec>
                             <generatorName>typescript-angular</generatorName>
-                            <output>${project.basedir}/../client/api/</output>
+                            <output>${project.parent.basedir}/client/src/api/</output>
                         </configuration>
                     </execution>
                 </executions>
