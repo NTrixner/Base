@@ -13,33 +13,39 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
+public class JwtAuthorizationFilter extends BasicAuthenticationFilter
+{
     private static final Logger log = LoggerFactory.getLogger(JwtAuthorizationFilter.class);
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager)
+    {
         super(authenticationManager);
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws IOException, ServletException {
+                                    FilterChain filterChain) throws IOException, ServletException
+    {
 
         String token = JwtUtils.getToken(request);
 
-        if (token != null && JwtUtils.isExpired(token)) {
+        if (token != null && JwtUtils.isExpired(token))
+        {
             TokenHandler.getBlackList().remove(token);
         }
 
-        if (TokenHandler.getBlackList().contains(token)) {
+        if (TokenHandler.getBlackList().contains(token))
+        {
             log.info("Unsuccessful authentication try from {}", request.getRemoteAddr());
             log.info("Token was {}", token);
-            response.setStatus(403);
+            response.setStatus(401);
             return;
         }
 
         Authentication auth = JwtUtils.getAuthentication(request);
 
-        if (auth != null) {
+        if (auth != null)
+        {
             SecurityContextHolder.getContext().setAuthentication(auth);
 
             log.info("Successful authentication try from username {}, IP Address is {}",
