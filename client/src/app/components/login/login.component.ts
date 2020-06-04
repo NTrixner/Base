@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../../services/auth/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {catchError} from 'rxjs/operators';
+import {of} from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -6,10 +10,40 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.component.less']
 })
 export class LoginComponent implements OnInit {
+  hide = true;
+  password = '';
+  username = '';
+  returnUrl: string;
+  loginFailureText: string;
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {
   }
 
+  ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+  }
+
+  canLogin(): boolean {
+    return !!(this.password && this.username);
+  }
+
+  login() {
+    if (this.canLogin()) {
+      this.authService.login(this.username, this.password)
+        .pipe(
+          catchError(err => {
+            this.loginFailureText = 'Login failed, please check the inputs';
+            return of(null);
+          })
+        )
+        .subscribe(data => {
+          if (data)
+            this.router.navigateByUrl(this.returnUrl);
+        });
+    }
+  }
+
+  register() {
+    this.router.navigateByUrl('register');
+  }
 }

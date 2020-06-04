@@ -27,20 +27,24 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter
+{
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final AuthenticationManager authenticationManager;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager)
+    {
         this.authenticationManager = authenticationManager;
 
         setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
-        try {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+    {
+        try
+        {
             LoginDto login = Json.mapper().readValue(request.getInputStream(), LoginDto.class);
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(login.getUsername(), login.getPassword());
@@ -48,14 +52,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             log.info("Login try from IP {} with username {}", request.getRemoteAddr(), login.getUsername());
 
             return authenticationManager.authenticate(authenticationToken);
-        } catch (IOException ex) {
+        }
+        catch (IOException ex)
+        {
             throw new AuthenticationServiceException("Authentication failed", ex);
         }
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                            FilterChain filterChain, Authentication authentication) {
+                                            FilterChain filterChain, Authentication authentication)
+    {
         UserDetails user = ((UserDetails) authentication.getPrincipal());
 
         log.info("User {} successfully logged in!", user.getUsername());
@@ -82,8 +89,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException
+    {
         log.info("Unsuccessful login try from {} with username {}", request.getRemoteAddr(), request.getParameter("username"));
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         super.unsuccessfulAuthentication(request, response, failed);
     }
 }

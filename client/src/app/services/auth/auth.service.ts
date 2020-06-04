@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {DefaultService, UserDto} from '../../../api';
 import {HttpEvent, HttpResponse} from '@angular/common/http';
-import {catchError} from 'rxjs/operators';
-import {of} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,21 +15,16 @@ export class AuthService {
     this.login('user', 'user');
   }
 
-  public login(username: string, password: string): void {
-    console.log(`Trying to log in ${username} with password ${password}`);
-    this.api.loginUser({username, password}, 'response')
+  public login(username: string, password: string): Observable<HttpResponse<any>> {
+    return this.api.loginUser({username, password}, 'response')
       .pipe(
-        catchError(err => {
-          console.log(err);
-          return of([]);
+        tap((data: HttpResponse<any>) => {
+          console.log(data.headers.keys());
+          if (data.ok && data.headers.get('Authorization')) {
+            this.token = data.headers.get('Authorization');
+          }
         })
-      )
-      .subscribe((data: HttpResponse<any>) => {
-        console.log(data.headers.keys());
-        if (data.ok && data.headers.get('Authorization')) {
-          this.token = data.headers.get('Authorization');
-        }
-      });
+      );
   }
 
   public logout(): void {

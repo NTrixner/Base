@@ -11,6 +11,12 @@ import {HomeComponent} from './components/home/home.component';
 import {RegisterComponent} from './components/register/register.component';
 import {ForgotPasswordComponent} from './components/forgot-password/forgot-password.component';
 import {environment} from '../environments/environment';
+import {MatCardModule} from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -33,7 +39,14 @@ export function apiConfigFactory(): Configuration {
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatButtonModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
