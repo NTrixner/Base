@@ -10,7 +10,10 @@
 /dist
 /tmp
 /out-tsc
-/api-definitions/src/main/java
+/api/src/main/java
+/.openapi-generator/
+.openapi-generator-ignore
+/server/src/main/resources/static/
 
 # Only exists if Bazel was run
 /bazel-out

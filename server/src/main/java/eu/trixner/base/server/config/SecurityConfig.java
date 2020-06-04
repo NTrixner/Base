@@ -6,6 +6,7 @@ import eu.trixner.base.server.auth.filters.JwtAuthorizationFilter;
 import eu.trixner.base.server.auth.filters.JwtLogoutHandler;
 import eu.trixner.base.server.auth.filters.JwtLogoutSuccessHandler;
 import eu.trixner.base.server.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,28 +19,36 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import javax.inject.Inject;
-
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter
+{
+
+    private static final String[] AUTH_WHITELIST = {
+            // -- swagger ui
+            "/h2-console/**",
+            "/user/registration/**",
+            "/user/forgotPassword/**"
+    };
 
     final UserService userService;
 
-    @Inject
-    public SecurityConfig(UserService userService) {
+    @Autowired
+    public SecurityConfig(UserService userService)
+    {
         this.userService = userService;
     }
 
+
     @Override
-    public void configure(HttpSecurity http) throws Exception {
+    public void configure(HttpSecurity http) throws Exception
+    {
         http
                 .cors().and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/h2-console/**", "/user/registration/**", "/user/forgotPassword/**").permitAll()
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
@@ -58,12 +67,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+    public void configure(AuthenticationManagerBuilder auth) throws Exception
+    {
         auth.userDetailsService(userService).passwordEncoder(userService.passwordEncoder());
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+    public CorsConfigurationSource corsConfigurationSource()
+    {
         final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
 
