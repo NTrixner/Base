@@ -1,1 +1,18 @@
-<p>home works!</p>
+<div id="homeWrapper">
+    <mat-card style="text-align: center;">
+      <mat-card-title>
+        Welcome
+      </mat-card-title>
+        <mat-card-content>
+            <p>Hello {{getUsername()}}</p>
+        </mat-card-content>
+  
+        <mat-card-actions>
+          <button mat-raised-button color="primary" type="button" (click)="logout()">Logout</button>
+        </mat-card-actions>
+  
+      <mat-card-footer>
+  
+      </mat-card-footer>
+    </mat-card>
+  </div>

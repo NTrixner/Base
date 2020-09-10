@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
   }
 
   canLogin(): boolean {
@@ -29,17 +29,14 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (this.canLogin()) {
-      this.authService.login(this.username, this.password)
+      this.authService.login(this.username, this.password, this.returnUrl)
         .pipe(
           catchError(err => {
             this.loginFailureText = 'Login failed, please check the inputs';
             return of(null);
           })
         )
-        .subscribe(data => {
-          if (data)
-            this.router.navigateByUrl(this.returnUrl);
-        });
+        .subscribe();
     }
   }
 
