@@ -11,7 +11,7 @@ info:
         url: 'https://opensource.org/licenses/MIT'
     description: Basic User API for other APIs
 servers:
-- url: 'http://localhost:8080'
+    - url: 'http://localhost:8080'
 security:
     - auth: []
 paths:
@@ -21,6 +21,10 @@ paths:
             responses:
                 '202':
                     description: Accepted
+                    headers:
+                        Authorization:
+                            schema:
+                                type: string
                 '401':
                     description: Unauthorized
             operationId: loginUser
@@ -30,8 +34,8 @@ paths:
                         schema:
                             $ref: '#/components/schemas/LoginDto'
             description: Logs a user in with username and password
+            parameters: []
             security: []
-        parameters: []
     /auth/logout:
         post:
             summary: ''
@@ -42,7 +46,6 @@ paths:
                     description: Unauthorized
             operationId: logoutUser
             description: Logs the current user out and destroys the current session
-        parameters: []
     '/user/{userId}':
         get:
             summary: Get a specific user
@@ -95,12 +98,12 @@ paths:
             description: Confirms the registration of a new user by activating via a link that was sent via email.
             security: []
         parameters:
-        - schema:
-              type: string
-          name: token
-          in: path
-          required: true
-          description: "The registration token that was sent via mail to the new user's address"
+            - schema:
+                  type: string
+              name: token
+              in: path
+              required: true
+              description: "The registration token that was sent via mail to the new user's address"
     /user:
         get:
             summary: Your GET endpoint
@@ -213,7 +216,7 @@ components:
     securitySchemes:
         auth:
             type: http
-            scheme: Bearer
+            scheme: bearer
             bearerFormat: JWT
     schemas:
         LoginDto:
@@ -252,9 +255,9 @@ components:
                     type: string
                     format: password
             required:
-            - username
-            - email
-            - password
+                - username
+                - email
+                - password
         ForgotPasswordDto:
             title: ForgotPasswordDto
             type: object
@@ -265,8 +268,8 @@ components:
                     type: string
                     format: email
             required:
-            - username
-            - email
+                - username
+                - email
         PasswordResetDto:
             title: PasswordResetDto
             type: object
@@ -316,6 +319,6 @@ components:
                 orderDirection:
                     type: object
                     enum:
-                    - ASC
-                    - DESC
+                        - ASC
+                        - DESC
             description: A request for Pagination
