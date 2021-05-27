@@ -19,13 +19,12 @@ export class AuthService {
   public login(username: string, password: string, returnUrl: string): Observable<HttpResponse<any>> {
     return this.api.loginUser({username, password}, 'response')
       .pipe(
-        tap((data: HttpResponse<any>) => {
-          if (data.ok && data.headers.get('Authorization')) {
-            this.api.configuration.accessToken = data.headers.get('Authorization').replace("Bearer ", "");
-            this.api.getCurrentUser('body').subscribe((data: UserDto) => {
-              if(data)
-              {
-                this.user = data;
+        tap((response: HttpResponse<any>) => {
+          if (response.ok && response.headers.get('Authorization')) {
+            this.api.configuration.accessToken = response.headers.get('Authorization').replace('Bearer ', '');
+            this.api.getCurrentUser('body').subscribe((userDto: UserDto) => {
+              if (userDto) {
+                this.user = userDto;
                 this.router.navigateByUrl(returnUrl);
               }
             });
@@ -39,7 +38,7 @@ export class AuthService {
       tap((data: HttpResponse<any>) => {
         this.api.configuration.accessToken = null;
         this.user = null;
-        this.router.navigateByUrl("/login");
+        this.router.navigateByUrl('/login');
       })
     ).subscribe();
   }
