@@ -1,31 +1,41 @@
 package eu.trixner.base.server.utils;
 
-import eu.trixner.base.dto.PaginationRequestDto;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
-public class PaginationUtils {
+import java.util.Objects;
 
-    private PaginationUtils() {
+public class PaginationUtils
+{
+
+    private PaginationUtils()
+    {
         //Empty Constructor
     }
 
-    public static PageRequest getPageRequest(PaginationRequestDto dto) {
-        PageRequest pr;
-        Sort s = null;
-        if (dto.getOrderField() != null) {
-            if (PaginationRequestDto.OrderDirectionEnum.ASC.equals((dto.getOrderDirection()))) {
-                s = Sort.by(dto.getOrderField()).ascending();
-            } else if (PaginationRequestDto.OrderDirectionEnum.DESC.equals((dto.getOrderDirection()))) {
-                s = Sort.by(dto.getOrderField()).descending();
-            }
+    public static PageRequest getPageRequest(Integer page, Integer pageSize, String orderField, String orderDirection)
+    {
+        if (page == null)
+        {
+            page = 0;
         }
-
-        if (s == null) {
-            pr = PageRequest.of(dto.getPage(), dto.getPageSize());
-        } else {
-            pr = PageRequest.of(dto.getPage(), dto.getPageSize(), s);
+        if (pageSize == null || pageSize < 1)
+        {
+            pageSize = Integer.MAX_VALUE;
         }
-        return pr;
+        Sort s;
+        if (orderField != null && orderDirection != null && Objects.equals(orderDirection.toUpperCase(), "ASC"))
+        {
+            s = Sort.by(orderField).ascending();
+        }
+        else if (orderField != null && orderDirection != null && Objects.equals(orderDirection.toUpperCase(), "DESC"))
+        {
+            s = Sort.by(orderField).descending();
+        }
+        else
+        {
+            s = Sort.unsorted();
+        }
+        return PageRequest.of(page, pageSize, s);
     }
 }

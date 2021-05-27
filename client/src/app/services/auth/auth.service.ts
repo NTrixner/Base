@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {DefaultService, UserDto} from '../../../api';
-import {HttpEvent, HttpResponse} from '@angular/common/http';
+import {UserDto, UserService} from '../../../api';
+import {HttpResponse} from '@angular/common/http';
 import {tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import { createOfflineCompileUrlResolver } from '@angular/compiler';
-import { Router } from '@angular/router';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +11,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   public user: UserDto;
 
-  constructor(private api: DefaultService, private router: Router) {
+  constructor(private api: UserService, private router: Router) {
     // Empty
   }
 
@@ -35,7 +34,7 @@ export class AuthService {
 
   public logout(): void {
     this.api.logoutUser('body').pipe(
-      tap((data: HttpResponse<any>) => {
+      tap(() => {
         this.api.configuration.accessToken = null;
         this.user = null;
         this.router.navigateByUrl('/login');

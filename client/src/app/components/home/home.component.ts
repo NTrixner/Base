@@ -1,16 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth/auth.service';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AuthService} from 'src/app/services/auth/auth.service';
+import {UserDto, UserlistService} from '../../../api';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.less']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements AfterViewInit {
+  displayedColumns: string[] = ['id', 'username', 'email'];
+  dataSource = new MatTableDataSource<UserDto>();
 
-  constructor(private authService: AuthService) { }
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
-  ngOnInit(): void {
+  constructor(private authService: AuthService, private service: UserlistService) {
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.loadUserList();
+  }
+
+  loadUserList() {
+    this.service.getUserCount('body')
+      .subscribe(num => {
+        this.paginator.length = num;
+      });
+    this.service.listUsers(
+      this.paginator?.pageIndex,
+      this.paginator?.pageSize,
+      this.getOrderField(),
+      this.getOrderDirection(),
+      'body'
+    )
+      .subscribe(data => {
+        this.dataSource = new MatTableDataSource<UserDto>(data.items);
+      });
+  }
+
+  private getOrderField() {
+    return !this.sort?.active ? null : this.sort.active;
+  }
+
+  private getOrderDirection() {
+    return !this.sort?.active ? null : this.sort.direction;
   }
 
   getUsername(): string {

@@ -23,87 +23,119 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Controller
-public class UserController implements UserApi {
+public class UserController implements UserApi
+{
     private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
     UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService)
+    {
         this.userService = userService;
     }
 
     @Override
-    public Optional<NativeWebRequest> getRequest() {
-        return null;
+    public Optional<NativeWebRequest> getRequest()
+    {
+        return Optional.empty();
     }
 
     @Override
     @Secured("ROLE_USER_CAN_SEE_SELF")
-    public ResponseEntity<UserDto> getCurrentUser() {
+    public ResponseEntity<UserDto> getCurrentUser()
+    {
         return ResponseEntity.ok(userService.getCurrentUser());
     }
 
     @Override
     @Secured("ROLE_USER_CAN_GET_USER_BY_ID")
-    public ResponseEntity<UserDto> getUserById(String userId) {
+    public ResponseEntity<UserDto> getUserById(String userId)
+    {
         UserDto dto = userService.findUser(UUID.fromString(userId));
-        if (dto == null) {
+        if (dto == null)
+        {
             return ResponseEntity.notFound().build();
-        } else {
+        }
+        else
+        {
             return ResponseEntity.ok(dto);
         }
     }
 
     @Override
     @Secured("ROLE_USER_CAN_CHANGE_PASSWORD")
-    public ResponseEntity<Void> changePassword(@Valid ChangePasswordDto changePasswordDto) {
-        try {
+    public ResponseEntity<Void> changePassword(@Valid ChangePasswordDto changePasswordDto)
+    {
+        try
+        {
             userService.changePassword(changePasswordDto.getOldPassword(), changePasswordDto.getNewPassword());
             return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException ex) {
+        }
+        catch (IllegalArgumentException ex)
+        {
             return ResponseEntity.badRequest().build();
         }
     }
 
     @Override
-    public ResponseEntity<Void> registerUser(@Valid RegistrationDto registrationDto) {
+    public ResponseEntity<Void> registerUser(@Valid RegistrationDto registrationDto)
+    {
         UserRegistrationRequest answer = userService.registerUser(registrationDto);
         ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentContextPath();
         String uri = builder.build().toUriString();
-        log.info("Registered new user, activate under {}/user/registration/confirmRegistration/{}", uri, answer.getToken());
+        log.info("Registered new user, activate under {}/user/registration/confirmRegistration/{}",
+                uri,
+                answer.getToken());
         return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<Void> confirmRegistration(String token) {
+    public ResponseEntity<Void> confirmRegistration(String token)
+    {
         boolean hasBeenRegistered = userService.confirmRegistration(token);
-        if (hasBeenRegistered) {
+        if (hasBeenRegistered)
+        {
             return ResponseEntity.ok().build();
-        } else {
+        }
+        else
+        {
             return ResponseEntity.notFound().build();
         }
     }
 
     @Override
-    public ResponseEntity<Void> forgotPassword(@Valid ForgotPasswordDto forgotPasswordDto) {
-        PasswordResetRequest req = userService.requestPasswordReset(forgotPasswordDto.getUsername(), forgotPasswordDto.getEmail());
-        if (req == null) {
+    public ResponseEntity<Void> forgotPassword(@Valid ForgotPasswordDto forgotPasswordDto)
+    {
+        PasswordResetRequest req = userService.requestPasswordReset(forgotPasswordDto.getUsername(),
+                forgotPasswordDto.getEmail());
+        if (req == null)
+        {
             return ResponseEntity.notFound().build();
-        } else {
+        }
+        else
+        {
             ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentContextPath();
             String uri = builder.build().toUriString();
-            log.info("Password reset request sent, reset password under {}/user/forgotPassword/resetPassword with token {}", uri, req.getToken());
+            log.info(
+                    "Password reset request sent, reset password under {}/user/forgotPassword/resetPassword with " +
+                            "token {}",
+                    uri,
+                    req.getToken());
             return ResponseEntity.ok().build();
         }
     }
 
     @Override
-    public ResponseEntity<Void> resetPasswordRequest(@Valid PasswordResetDto dto) {
-        try {
+    public ResponseEntity<Void> resetPasswordRequest(@Valid PasswordResetDto dto)
+    {
+        try
+        {
             userService.resetPassword(dto.getToken(), dto.getNewPassword());
             return ResponseEntity.ok().build();
-        } catch (NullPointerException ex) {
+        }
+        catch (NullPointerException ex)
+        {
             return ResponseEntity.notFound().build();
         }
     }
