@@ -31,7 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
             // -- swagger ui
             "/h2-console/**",
             "/user/registration/**",
-            "/user/forgotPassword/**"
+            "/user/forgotPassword/**",
+            "/user/available/**"
     };
 
     final UserService userService;
