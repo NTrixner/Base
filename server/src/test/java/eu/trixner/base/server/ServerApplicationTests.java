@@ -19,10 +19,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,16 +30,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class ServerApplicationTests {
+class ServerApplicationTests
+{
     public static final String USER = "/user";
     public static final String AUTH_LOGIN = "/auth/login";
     public static final String APPLICATION_JSON = "application/json";
     public static final String AUTHORIZATION = "Authorization";
     public static final String AUTH_LOGOUT = "/auth/logout";
+    public static final String USERNAME_AVAILABLE = "/user/available/username/{username}";
+    public static final String EMAIL_AVAILABLE = "/user/available/email/{email}";
     @Autowired
     private MockMvc mvc;
 
-    public ListAppender<ILoggingEvent> getLogAppender(Class clazz) {
+    public ListAppender<ILoggingEvent> getLogAppender(Class clazz)
+    {
         Logger logger = (Logger) LoggerFactory.getLogger(clazz);
 
         ListAppender<ILoggingEvent> loggingEventListAppender = new ListAppender<>();
@@ -51,12 +55,14 @@ class ServerApplicationTests {
     }
 
     @Test
-    void contextLoads() {
+    void contextLoads()
+    {
         //Fails automatically if nothing happens
     }
 
     @Test
-    void logonWorks() throws Exception {
+    void logonWorks() throws Exception
+    {
         mvc.perform(
                 get(USER))
                 .andDo(print())
@@ -96,13 +102,15 @@ class ServerApplicationTests {
         mvc.perform(
                 post(AUTH_LOGIN)
                         .contentType(APPLICATION_JSON)
-                        .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("wrongPass"))))
+                        .content(Json.mapper()
+                                .writeValueAsString(new LoginDto().username("user").password("wrongPass"))))
                 .andDo(print())
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    void changePasswordWorks() throws Exception {
+    void changePasswordWorks() throws Exception
+    {
         String token = mvc.perform(
                 post(AUTH_LOGIN)
                         .contentType(APPLICATION_JSON)
@@ -163,7 +171,8 @@ class ServerApplicationTests {
 
 
     @Test
-    void userRolesWork() throws Exception {
+    void userRolesWork() throws Exception
+    {
         String token = mvc.perform(
                 post(AUTH_LOGIN)
                         .contentType(APPLICATION_JSON)
@@ -204,12 +213,16 @@ class ServerApplicationTests {
     }
 
     @Test
-    public void registerWorks() throws Exception {
+    public void registerWorks() throws Exception
+    {
         ListAppender<ILoggingEvent> loggingEventListAppender = getLogAppender(UserController.class);
 
         mvc.perform(post("/user/registration/register")
                 .contentType(APPLICATION_JSON)
-                .content(Json.mapper().writeValueAsString(new RegistrationDto().email("test@asdf.com").password("asdf").username("asdf"))))
+                .content(Json.mapper()
+                        .writeValueAsString(new RegistrationDto().email("test@asdf.com")
+                                .password("asdf")
+                                .username("asdf"))))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -245,7 +258,8 @@ class ServerApplicationTests {
     }
 
     @Test
-    public void resetPasswordWorks() throws Exception {
+    public void resetPasswordWorks() throws Exception
+    {
         ListAppender<ILoggingEvent> loggingEventListAppender = getLogAppender(UserController.class);
 
         mvc.perform(post("/user/forgotPassword")
@@ -286,6 +300,28 @@ class ServerApplicationTests {
                         .header(AUTHORIZATION, logintoken))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void usernameAndEmailAvailableWorks() throws Exception
+    {
+        mvc.perform(get(USERNAME_AVAILABLE, "user"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().string("false"));
+        mvc.perform(get(USERNAME_AVAILABLE, "userB"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().string("true"));
+
+        mvc.perform(get(EMAIL_AVAILABLE, "user@test.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().string("false"));
+        mvc.perform(get(EMAIL_AVAILABLE, "userB@test.com"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().string("true"));
     }
 
 }

@@ -135,6 +135,48 @@ paths:
                     description: Unauthorized
             description: Returns the current user
             operationId: getCurrentUser
+    /user/available/username/{username}:
+        get:
+            summary: Your GET endpoint
+            tags:
+                - User
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: boolean
+            description: Checks if a username is available
+            operationId: isUsernameAvailable
+            security: []
+            parameters:
+                -   schema:
+                        type: string
+                    name: username
+                    in: path
+                    required: true
+    /user/available/email/{email}:
+        get:
+            summary: Your GET endpoint
+            tags:
+                - User
+            responses:
+                '200':
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: boolean
+            description: Checks if a email is available
+            operationId: isEmailAvailable
+            security: []
+            parameters:
+                -   schema:
+                        type: string
+                    name: email
+                    in: path
+                    required: true
     /user/forgotPassword:
         post:
             tags:

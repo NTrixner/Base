@@ -20,7 +20,7 @@ export class AuthService {
       .pipe(
         tap((response: HttpResponse<any>) => {
           if (response.ok && response.headers.get('Authorization')) {
-            this.api.configuration.accessToken = response.headers.get('Authorization').replace('Bearer ', '');
+            this.api.configuration.credentials['auth'] = response.headers.get('Authorization').replace('Bearer ', '');
             this.api.getCurrentUser('body').subscribe((userDto: UserDto) => {
               if (userDto) {
                 this.user = userDto;
@@ -35,7 +35,7 @@ export class AuthService {
   public logout(): void {
     this.api.logoutUser('body').pipe(
       tap(() => {
-        this.api.configuration.accessToken = null;
+        this.api.configuration.credentials = {};
         this.user = null;
         this.router.navigateByUrl('/login');
       })
