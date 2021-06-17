@@ -139,4 +139,17 @@ public class UserController implements UserApi
             return ResponseEntity.notFound().build();
         }
     }
+
+    @Override
+    public ResponseEntity<Boolean> isEmailAvailable(String email)
+    {
+
+        return ResponseEntity.ok(userService.isEmailAvailable(email));
+    }
+
+    @Override
+    public ResponseEntity<Boolean> isUsernameAvailable(String username)
+    {
+        return ResponseEntity.ok(userService.isUsernameAvailable(username));
+    }
 }
