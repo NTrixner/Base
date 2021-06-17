@@ -7,6 +7,14 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+
     "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
