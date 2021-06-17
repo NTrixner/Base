@@ -5,6 +5,7 @@ import eu.trixner.base.server.auth.filters.JwtAuthenticationFilter;
 import eu.trixner.base.server.auth.filters.JwtAuthorizationFilter;
 import eu.trixner.base.server.auth.filters.JwtLogoutHandler;
 import eu.trixner.base.server.auth.filters.JwtLogoutSuccessHandler;
+import eu.trixner.base.server.controller.MainController;
 import eu.trixner.base.server.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -32,6 +33,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
             // -- swagger ui
             "/h2-console/**",
             "/user/registration/**",
+            "/user/forgotPassword/**",
+
+            // Static content when the client is served from the server application
+            MainController.MAIN_PAGE_URL,
+            "/login",
+            "/*.js",
+            "/*.js.map", //TODO: Right now we still create sourcemaps even in prod build. In tsconfig we should exclude it if we are in production mode
             "/user/forgotPassword/**",
             "/user/available/**"
     };
