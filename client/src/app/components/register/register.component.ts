@@ -3,7 +3,7 @@ import {RegistrationDto, UserService} from '../../../api';
 import {Router} from '@angular/router';
 import {AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {map} from 'rxjs/operators';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -41,8 +41,14 @@ export class RegisterComponent implements OnInit {
         username: this.userForm.get('username')?.value,
         password: this.userForm.get('password')?.value,
         email: this.userForm.get('email')?.value
-      })
-      .subscribe();
+      }, 'response')
+      .subscribe(value => {
+        if (value.status === 200) {
+          this.router.navigateByUrl('register/success');
+        } else {
+          this.router.navigateByUrl('register/error');
+        }
+      });
   }
 
   goBackToLogin() {
@@ -54,7 +60,7 @@ export class RegisterComponent implements OnInit {
     return (fg: FormGroup) => {
       const passwordA = fg.get('password');
       const passwordB = fg.get('passwordMatch');
-      if (passwordA && passwordB) {
+      if (!!passwordA && !!passwordB) {
         if (passwordA.value !== passwordB.value) {
           passwordB.setErrors({...passwordB.errors, notEquivalent: true});
         } else if (!!passwordB.errors) {
@@ -71,25 +77,17 @@ export class RegisterComponent implements OnInit {
 
   emailValidator(): AsyncValidatorFn {
     return (fc: FormControl): Observable<ValidationErrors | null> => {
-      if (!!fc.value) {
-        return this.userService.isEmailAvailable(fc.value, 'body').pipe(
-          map(isAvailable => !isAvailable ? {used: true} : null)
-        );
-      } else {
-        return of(null);
-      }
+      return this.userService.isEmailAvailable(fc.value, 'body').pipe(
+        map(isAvailable => !isAvailable ? {used: true} : null)
+      );
     };
   }
 
   usernameValidator(): AsyncValidatorFn {
     return (fc: FormControl): Observable<ValidationErrors | null> => {
-      if (!!fc.value) {
-        return this.userService.isUsernameAvailable(fc.value, 'body').pipe(
-          map(isAvailable => !isAvailable ? {used: true} : null)
-        );
-      } else {
-        return of(null);
-      }
+      return this.userService.isUsernameAvailable(fc.value, 'body').pipe(
+        map(isAvailable => !isAvailable ? {used: true} : null)
+      );
     };
   }
 }

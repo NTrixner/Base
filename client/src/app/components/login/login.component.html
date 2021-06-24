@@ -5,6 +5,7 @@
     </mat-card-title>
     <form (ngSubmit)="login()">
       <mat-card-content>
+        <p [hidden]="!confirmationRegistration">Registration was successful! You can now log in.</p>
         <p [hidden]="!!loginFailureText">{{loginFailureText}}</p>
         <br/>
         <mat-form-field appearance="legacy">
