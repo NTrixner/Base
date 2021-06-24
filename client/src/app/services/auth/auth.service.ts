@@ -3,9 +3,6 @@ import {UserDto, UserService} from '../../../api';
 import {HttpResponse} from '@angular/common/http';
 import {tap} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
-import { createOfflineCompileUrlResolver } from '@angular/compiler';
-import { Router } from '@angular/router';
-import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
 
 @Injectable({
@@ -24,8 +21,8 @@ export class AuthService {
         tap((response: HttpResponse<any>) => {
           let authorization = response.headers.get('Authorization');
           if (response.ok && authorization) {
-            this.api.configuration.credentials['auth'] = authorization.replace('Bearer ', '');
-            this.setTokenAndLoadUserData(token).add(()=> {
+            let token = authorization.replace('Bearer ', '');
+            this.setTokenAndLoadUserData(token).add(() => {
               this.router.navigateByUrl(returnUrl);
             })
           }
