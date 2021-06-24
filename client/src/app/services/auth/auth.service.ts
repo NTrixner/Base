@@ -9,7 +9,7 @@ import {Router} from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  public user: UserDto;
+  public user: UserDto | null = null;
 
   constructor(private api: UserService, private router: Router) {
     // Empty
@@ -19,8 +19,9 @@ export class AuthService {
     return this.api.loginUser({username, password}, 'response')
       .pipe(
         tap((response: HttpResponse<any>) => {
-          if (response.ok && response.headers.get('Authorization')) {
-            this.api.configuration.credentials['auth'] = response.headers.get('Authorization').replace('Bearer ', '');
+          let authorization = response.headers.get('Authorization');
+          if (response.ok && authorization) {
+            this.api.configuration.credentials['auth'] = authorization.replace('Bearer ', '');
             this.api.getCurrentUser('body').subscribe((userDto: UserDto) => {
               if (userDto) {
                 this.user = userDto;
