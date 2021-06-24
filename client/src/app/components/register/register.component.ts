@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {RegistrationDto, UserService} from '../../../api';
 import {Router} from '@angular/router';
-import {AsyncValidatorFn, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {map} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -37,9 +38,9 @@ export class RegisterComponent implements OnInit {
   register() {
     this.userService
       .registerUser({
-        username: this.userForm.get('username').value,
-        password: this.userForm.get('password').value,
-        email: this.userForm.get('email').value
+        username: this.userForm.get('username')?.value,
+        password: this.userForm.get('password')?.value,
+        email: this.userForm.get('email')?.value
       })
       .subscribe();
   }
@@ -53,33 +54,41 @@ export class RegisterComponent implements OnInit {
     return (fg: FormGroup) => {
       const passwordA = fg.get('password');
       const passwordB = fg.get('passwordMatch');
-      if (passwordA.value !== passwordB.value) {
-        passwordB.setErrors({...passwordB.errors, notEquivalent: true});
-      } else if (!!passwordB.errors) {
-        passwordB.setErrors({...passwordB.errors});
+      if (passwordA && passwordB) {
+        if (passwordA.value !== passwordB.value) {
+          passwordB.setErrors({...passwordB.errors, notEquivalent: true});
+        } else if (!!passwordB.errors) {
+          passwordB.setErrors({...passwordB.errors});
+        } else {
+          passwordB.setErrors(null);
+        }
+        return passwordB.errors;
       } else {
-        passwordB.setErrors(null);
+        return null;
       }
-      return passwordB.errors;
     };
   }
 
   emailValidator(): AsyncValidatorFn {
-    return (fc: FormControl) => {
+    return (fc: FormControl): Observable<ValidationErrors | null> => {
       if (!!fc.value) {
         return this.userService.isEmailAvailable(fc.value, 'body').pipe(
           map(isAvailable => !isAvailable ? {used: true} : null)
         );
+      } else {
+        return of(null);
       }
     };
   }
 
   usernameValidator(): AsyncValidatorFn {
-    return (fc: FormControl) => {
+    return (fc: FormControl): Observable<ValidationErrors | null> => {
       if (!!fc.value) {
         return this.userService.isUsernameAvailable(fc.value, 'body').pipe(
           map(isAvailable => !isAvailable ? {used: true} : null)
         );
+      } else {
+        return of(null);
       }
     };
   }

@@ -17,8 +17,8 @@ export class AuthGuard implements CanActivate {
     if (this.authService.user) {
       return true;
     } else {
-      let userToken = window.sessionStorage.getItem('userToken');
-      if(userToken != null) {
+      const userToken = window.sessionStorage.getItem('userToken');
+      if (userToken != null) {
         this.authService.setTokenAndLoadUserData(userToken);
         return true;
       } else {

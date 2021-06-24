@@ -19,19 +19,19 @@ export class AuthService {
     return this.api.loginUser({username, password}, 'response')
       .pipe(
         tap((response: HttpResponse<any>) => {
-          let authorization = response.headers.get('Authorization');
+          const authorization = response.headers.get('Authorization');
           if (response.ok && authorization) {
-            let token = authorization.replace('Bearer ', '');
+            const token = authorization.replace('Bearer ', '');
             this.setTokenAndLoadUserData(token).add(() => {
               this.router.navigateByUrl(returnUrl);
-            })
+            });
           }
         })
       );
   }
 
   public setTokenAndLoadUserData(token: string): Subscription {
-    this.api.configuration.accessToken = token;
+    this.api.configuration.credentials['auth'] = token;
     window.sessionStorage.setItem('userToken', token);
     return this.api.getCurrentUser('body').subscribe((userDto: UserDto) => {
       if (userDto) {
@@ -45,7 +45,7 @@ export class AuthService {
       tap(() => {
         this.api.configuration.credentials = {};
         this.user = null;
-        window.sessionStorage.removeItem('userToken')
+        window.sessionStorage.removeItem('userToken');
         this.router.navigateByUrl('/login');
       })
     ).subscribe();

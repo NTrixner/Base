@@ -121,7 +121,6 @@
 
                             <configOptions>
                                 <sourceFolder>src/main/java</sourceFolder>
-                                <dateLibrary>java8</dateLibrary>
                                 <interfaceOnly>true</interfaceOnly>
                                 <java8>true</java8>
                                 <library>spring-boot</library>

@@ -10,11 +10,11 @@ import {of} from 'rxjs';
   styleUrls: ['./login.component.less']
 })
 export class LoginComponent implements OnInit {
-  hide: boolean = true;
-  password: string = '';
-  username: string = '';
-  returnUrl: string = '';
-  loginFailureText: string = '';
+  hide = true;
+  password = '';
+  username = '';
+  returnUrl = '';
+  loginFailureText = '';
 
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {
   }
