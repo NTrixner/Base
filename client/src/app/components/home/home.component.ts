@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {AuthService} from 'src/app/services/auth/auth.service';
-import {UserDto, UserlistService} from '../../../api';
+import {UserDto, UserListDto, UserlistService} from '../../../api';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
@@ -14,8 +14,8 @@ export class HomeComponent implements AfterViewInit {
   displayedColumns: string[] = ['id', 'username', 'email'];
   dataSource = new MatTableDataSource<UserDto>();
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
+  @ViewChild(MatSort) sort: MatSort | null = null;
 
   constructor(private authService: AuthService, private service: UserlistService) {
   }
@@ -29,7 +29,9 @@ export class HomeComponent implements AfterViewInit {
   loadUserList() {
     this.service.getUserCount('body')
       .subscribe(num => {
-        this.paginator.length = num;
+        if (this.paginator) {
+          this.paginator.length = num;
+        }
       });
     this.service.listUsers(
       this.paginator?.pageIndex,
@@ -38,21 +40,21 @@ export class HomeComponent implements AfterViewInit {
       this.getOrderDirection(),
       'body'
     )
-      .subscribe(data => {
+      .subscribe((data: UserListDto) => {
         this.dataSource = new MatTableDataSource<UserDto>(data.items);
       });
   }
 
-  private getOrderField() {
-    return !this.sort?.active ? null : this.sort.active;
+  private getOrderField(): string | undefined {
+    return !this.sort?.active ? undefined : this.sort.active;
   }
 
-  private getOrderDirection() {
-    return !this.sort?.active ? null : this.sort.direction;
+  private getOrderDirection(): string | undefined {
+    return !this.sort?.active ? undefined : this.sort.direction;
   }
 
   getUsername(): string {
-    return this.authService.user.username || 'Anonymous';
+    return this.authService.user?.username || 'Anonymous';
   }
 
   logout(): void {
