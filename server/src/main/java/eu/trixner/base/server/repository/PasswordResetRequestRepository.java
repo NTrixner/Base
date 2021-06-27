@@ -11,7 +11,7 @@ public interface PasswordResetRequestRepository extends CrudRepository<PasswordR
 
     PasswordResetRequest findByToken(String token);
 
-    int deleteByUser_Id(UUID user_Id);
+    int deleteByUserId(UUID userId);
 
     int deleteByExpiresAtIsBefore(Date date);
 }

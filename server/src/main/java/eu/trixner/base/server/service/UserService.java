@@ -68,7 +68,9 @@ public class UserService implements UserDetailsService
     {
         User u = userRepository.findByUsernameIgnoreCase(s);
         if (u == null)
+        {
             throw new UsernameNotFoundException("User " + s + " was not found");
+        }
         return u;
     }
 
@@ -160,8 +162,8 @@ public class UserService implements UserDetailsService
         User user = request.getUser();
         user.setPassword(passwordEncoder().encode(newPassword));
         userRepository.save(user);
-        int deleted = passwordResetRequestRepository.deleteByUser_Id(user.getId());
-        log.info("{} Password reset requests were deleted", deleted);
+        int deleted = passwordResetRequestRepository.deleteByUserId(user.getId());
+        log.debug("{} Password reset requests were deleted", deleted);
     }
 
     @Transactional
@@ -193,7 +195,7 @@ public class UserService implements UserDetailsService
         int deleted = toDelete.size();
         userRepository.deleteAll(toDelete.stream().map(UserRegistrationRequest::getUser).collect(Collectors.toList()));
         userRegistrationRequestRepository.deleteAll(toDelete);
-        log.info("{} User Registration requests were deleted", deleted);
+        log.debug("{} User Registration requests were deleted", deleted);
     }
 
     @Scheduled(fixedRateString = "${user.passwordReset.requestCleanupRate}")
@@ -201,7 +203,7 @@ public class UserService implements UserDetailsService
     public void cleanUpPasswordResetRequests()
     {
         int deleted = passwordResetRequestRepository.deleteByExpiresAtIsBefore(new Date());
-        log.info("{} Password reset requests were deleted", deleted);
+        log.debug("{} Password reset requests were deleted", deleted);
     }
 
     /**

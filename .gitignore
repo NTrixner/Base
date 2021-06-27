@@ -1,8 +1,8 @@
 *.iml
 *.lst
 *.jar
-.idea/
 */target/
+server/src/main/resources/application-local.properties
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
@@ -26,7 +26,8 @@ chrome-profiler-events.json
 speed-measure-plugin.json
 
 # IDEs and editors
-/.idea
+.idea/*
+!.idea/runConfigurations
 .project
 .classpath
 .c9/
