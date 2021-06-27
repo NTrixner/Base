@@ -9,16 +9,22 @@ import eu.trixner.base.dto.LoginDto;
 import eu.trixner.base.dto.PasswordResetDto;
 import eu.trixner.base.dto.RegistrationDto;
 import eu.trixner.base.server.controller.UserController;
+import eu.trixner.base.server.service.EmailService;
 import io.swagger.util.Json;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -39,8 +45,12 @@ class ServerApplicationTests
     public static final String AUTH_LOGOUT = "/auth/logout";
     public static final String USERNAME_AVAILABLE = "/user/available/username/{username}";
     public static final String EMAIL_AVAILABLE = "/user/available/email/{email}";
+
     @Autowired
     private MockMvc mvc;
+
+    @MockBean
+    private EmailService emailService;
 
     public ListAppender<ILoggingEvent> getLogAppender(Class clazz)
     {
@@ -233,6 +243,7 @@ class ServerApplicationTests
                 .orElse(null);
 
         assertThat(message).isNotNull();
+        verify(emailService, times(1)).sendUserRegistrationMessage(any(), any(), any());
 
         String token = message.substring(message.length() - 8);
 
@@ -255,6 +266,8 @@ class ServerApplicationTests
                         .header(AUTHORIZATION, logintoken))
                 .andDo(print())
                 .andExpect(status().isOk());
+
+        verify(emailService, times(1)).sendUserRegistrationMessage(any(), any(), any());
     }
 
     @Test
