@@ -21,11 +21,4 @@ public class MainController implements ErrorController {
     public String error() {
         return "index.html";
     }
-
-    @Override
-    public String getErrorPath() {
-        // Previously this had to return the error path we want to render,
-        // but this is deprecated starting with 2.3.x Spring Boot
-        return null;
-    }
 }
