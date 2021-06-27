@@ -74,7 +74,7 @@
           <execution>
             <id>copy-resources</id>
             <!-- here the phase you need -->
-            <phase>prepare-package</phase>
+            <phase>validate</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
@@ -93,13 +93,18 @@
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <version>${maven-clean-plugin.version}</version>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>${project.basedir}/dist</directory>
-            </fileset>
-          </filesets>
-        </configuration>
+        <executions>
+          <execution>
+            <phase>clean</phase>
+            <configuration>
+              <filesets>
+                <fileset>
+                  <directory>${project.basedir}/dist</directory>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

@@ -41,6 +41,7 @@ public class UserService implements UserDetailsService
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final PasswordResetRequestRepository passwordResetRequestRepository;
+    private final EmailService emailService;
 
     @Value("${user.registration.requestExpiration}")
     private int registrationExpiryDuration;
@@ -52,12 +53,14 @@ public class UserService implements UserDetailsService
     public UserService(UserRepository userRepository,
                        UserMapper userMapper,
                        UserRegistrationRequestRepository userRegistrationRequestRepository,
-                       PasswordResetRequestRepository passwordResetRequestRepository)
+                       PasswordResetRequestRepository passwordResetRequestRepository,
+                       EmailService emailService)
     {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.userRegistrationRequestRepository = userRegistrationRequestRepository;
         this.passwordResetRequestRepository = passwordResetRequestRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -102,6 +105,8 @@ public class UserService implements UserDetailsService
         newRequest.setExpiresAt(new Date(System.currentTimeMillis() + registrationExpiryDuration));
 
         newRequest = this.userRegistrationRequestRepository.save(newRequest);
+
+        emailService.sendUserRegistrationMessage(newUser.getUsername(), newRequest.getToken(), newUser.getEmail());
         return newRequest;
     }
 

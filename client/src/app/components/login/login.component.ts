@@ -15,12 +15,14 @@ export class LoginComponent implements OnInit {
   username = '';
   returnUrl = '';
   loginFailureText = '';
+  confirmationRegistration = false;
 
   constructor(private authService: AuthService, private route: ActivatedRoute, private router: Router) {
   }
 
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+    this.confirmationRegistration = this.route.snapshot.queryParams['confirmationRegistration'] || false;
   }
 
   canLogin(): boolean {

@@ -12,6 +12,8 @@ import eu.trixner.base.user.UserApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -96,7 +98,10 @@ public class UserController implements UserApi
         boolean hasBeenRegistered = userService.confirmRegistration(token);
         if (hasBeenRegistered)
         {
-            return ResponseEntity.ok().build();
+            HttpHeaders headers = new HttpHeaders();
+            String uri = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+            headers.add(HttpHeaders.LOCATION, uri + "/login?confirmationRegistration=true");
+            return new ResponseEntity<>(headers, HttpStatus.FOUND);
         }
         else
         {
@@ -115,8 +120,7 @@ public class UserController implements UserApi
         }
         else
         {
-            ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentContextPath();
-            String uri = builder.build().toUriString();
+            String uri = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
             log.info(
                     "Password reset request sent, reset password under {}/user/forgotPassword/resetPassword with " +
                             "token {}",

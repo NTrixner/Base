@@ -105,8 +105,8 @@ paths:
                 - User
             summary: ''
             responses:
-                '200':
-                    description: OK
+                '302':
+                    description: Found and confirmed, will redirect to other location
                 '400':
                     description: Bad Request
             operationId: confirmRegistration

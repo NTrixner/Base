@@ -20,6 +20,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
+import {RegisterSuccessComponent} from './components/register/register-success/register-success.component';
+import {RegisterErrorComponent} from './components/register/register-error/register-error.component';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -34,7 +36,9 @@ export function apiConfigFactory(): Configuration {
     LoginComponent,
     HomeComponent,
     RegisterComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    RegisterSuccessComponent,
+    RegisterErrorComponent
   ],
   imports: [
     ApiModule,

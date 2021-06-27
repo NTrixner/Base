@@ -240,7 +240,7 @@ class ServerApplicationTests
 
         mvc.perform(get("/user/registration/confirmRegistration/" + token))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isFound());
 
         String logintoken = mvc.perform(
                 post(AUTH_LOGIN)
