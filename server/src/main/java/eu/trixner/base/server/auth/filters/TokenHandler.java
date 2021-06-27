@@ -25,7 +25,7 @@ public class TokenHandler {
     @Scheduled(fixedRateString = "${jwt.token.removeStaleTokenRate}")
     public void cleanUp() {
         List<String> toDelete = blackList.stream().filter(JwtUtils::isExpired).collect(Collectors.toList());
-        log.info("Removing {} old Session Tokens", toDelete.size());
+        log.debug("Removing {} old Session Tokens", toDelete.size());
         blackList.removeAll(toDelete);
     }
 }
