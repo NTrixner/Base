@@ -1,0 +1,40 @@
+{
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "env": {
+        "browser": true,
+        "es2021": true
+      },
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "ecmaVersion": "latest",
+        "project": [
+          "tsconfig.app.json",
+          "tsconfig.spec.json"
+        ]
+      },
+      "plugins": [
+        "@typescript-eslint"
+      ],
+      "rules": {
+      }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
+      "rules": {
+      }
+    }
+  ]
+}

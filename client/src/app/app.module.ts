@@ -3,7 +3,8 @@ import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ApiModule, Configuration, ConfigurationParameters} from '../api';
+import type {ConfigurationParameters} from '../api';
+import {ApiModule, Configuration} from '../api';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
 import {LoginComponent} from './components/login/login.component';
@@ -25,7 +26,7 @@ import {RegisterErrorComponent} from './components/register/register-error/regis
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
-    basePath: environment.serverUrl
+    basePath: environment.serverUrl,
   };
   return new Configuration(params);
 }
@@ -56,11 +57,10 @@ export function apiConfigFactory(): Configuration {
     FormsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {
-
 }

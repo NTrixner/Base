@@ -1,33 +1,36 @@
 import {Injectable} from '@angular/core';
 import {UserDto, UserService} from '../../../api';
-import {HttpResponse} from '@angular/common/http';
+import type {HttpResponse} from '@angular/common/http';
 import {tap} from 'rxjs/operators';
-import {Observable, Subscription} from 'rxjs';
+import type {Observable, Subscription} from 'rxjs';
 import {Router} from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   public user: UserDto | null = null;
 
-  constructor(private api: UserService, private router: Router) {
+  constructor(private readonly api: UserService, private readonly router: Router) {
     // Empty
   }
 
-  public login(username: string, password: string, returnUrl: string): Observable<HttpResponse<any>> {
-    return this.api.loginUser({username, password}, 'response')
-      .pipe(
-        tap((response: HttpResponse<any>) => {
-          const authorization = response.headers.get('Authorization');
-          if (response.ok && authorization) {
-            const token = authorization.replace('Bearer ', '');
-            this.setTokenAndLoadUserData(token).add(() => {
-              this.router.navigateByUrl(returnUrl);
-            });
-          }
-        })
-      );
+  public login(
+    username: string,
+    password: string,
+    returnUrl: string
+  ): Observable<HttpResponse<unknown>> {
+    return this.api.loginUser({username, password}, 'response').pipe(
+      tap((response: HttpResponse<unknown>) => {
+        const authorization = response.headers.get('Authorization');
+        if (response.ok && authorization) {
+          const token = authorization.replace('Bearer ', '');
+          this.setTokenAndLoadUserData(token).add(() => {
+            this.router.navigateByUrl(returnUrl);
+          });
+        }
+      })
+    );
   }
 
   public setTokenAndLoadUserData(token: string): Subscription {
@@ -41,13 +44,16 @@ export class AuthService {
   }
 
   public logout(): void {
-    this.api.logoutUser('body').pipe(
-      tap(() => {
-        this.api.configuration.credentials = {};
-        this.user = null;
-        window.sessionStorage.removeItem('userToken');
-        this.router.navigateByUrl('/login');
-      })
-    ).subscribe();
+    this.api
+      .logoutUser('body')
+      .pipe(
+        tap(() => {
+          this.api.configuration.credentials = {};
+          this.user = null;
+          window.sessionStorage.removeItem('userToken');
+          this.router.navigateByUrl('/login');
+        })
+      )
+      .subscribe();
   }
 }

@@ -1,16 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-register-error',
   templateUrl: './register-error.component.html',
-  styleUrls: ['./register-error.component.less']
+  styleUrls: ['./register-error.component.less'],
 })
-export class RegisterErrorComponent implements OnInit {
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
+export class RegisterErrorComponent {
 }

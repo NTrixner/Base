@@ -2,9 +2,11 @@ package eu.trixner.base.server.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,26 +14,40 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import java.util.Arrays;
 import java.util.Collection;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @Entity
+@Table(name = "APP_USER")
 public class User extends BaseEntity implements UserDetails {
+
     @Column(unique = true)
+    @Builder.Default
     private String username = "";
+
     @Column
+    @Builder.Default
     private String password = "";
+
     @Column
+    @Builder.Default
     private String email = "";
+
     @Column
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private UserType userType = UserType.USER;
+
     @Column
+    @Builder.Default
     private Boolean isActivated = false;
 
     @Override
@@ -56,6 +72,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isActivated;
+        return isAccountNonLocked();
     }
+
 }

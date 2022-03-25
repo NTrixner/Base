@@ -7,6 +7,8 @@ import eu.trixner.base.server.auth.filters.JwtLogoutHandler;
 import eu.trixner.base.server.auth.filters.JwtLogoutSuccessHandler;
 import eu.trixner.base.server.controller.MainController;
 import eu.trixner.base.server.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +30,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
 
     private static final String[] AUTH_WHITELIST = {
             // -- swagger ui

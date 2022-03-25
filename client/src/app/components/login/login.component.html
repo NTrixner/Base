@@ -1,26 +1,38 @@
 <div id="loginWrapper">
-  <mat-card style="text-align: center;">
-    <mat-card-title>
-      Login
-    </mat-card-title>
+  <mat-card style="text-align: center">
+    <mat-card-title> Login</mat-card-title>
     <form (ngSubmit)="login()">
       <mat-card-content>
-        <p [hidden]="!confirmationRegistration">Registration was successful! You can now log in.</p>
-        <p [hidden]="!!loginFailureText">{{loginFailureText}}</p>
+        <p [hidden]="!confirmationRegistration">
+          Registration was successful! You can now log in.
+        </p>
+        <p [hidden]="!!loginFailureText">{{ loginFailureText }}</p>
         <br/>
         <mat-form-field appearance="legacy">
           <mat-label>Username</mat-label>
-          <input matInput [(ngModel)]="username" required name="username">
+          <input matInput [(ngModel)]="username" required name="username"/>
           <mat-error *ngIf="!username">You must enter a username</mat-error>
         </mat-form-field>
         <br/>
 
         <mat-form-field appearance="legacy">
           <mat-label>Password</mat-label>
-          <input matInput [type]="hide ? 'password' : 'text'" name="password" [(ngModel)]="password" required>
-          <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-                  [attr.aria-pressed]="hide">
-            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          <input
+            matInput
+            [type]="hide ? 'password' : 'text'"
+            name="password"
+            [(ngModel)]="password"
+            required
+          />
+          <button
+            mat-icon-button
+            type="button"
+            matSuffix
+            (click)="hide = !hide"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide"
+          >
+            <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
           <mat-error *ngIf="!password">You must enter a password</mat-error>
         </mat-form-field>
@@ -28,13 +40,20 @@
       </mat-card-content>
 
       <mat-card-actions align="end">
-        <button mat-raised-button color="primary" type="submit" [disabled]="!canLogin()">Login</button>
-        <button mat-raised-button color="primary" (click)="register()">Register</button>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!canLogin()"
+        >
+          Login
+        </button>
+        <button mat-raised-button color="primary" (click)="register()">
+          Register
+        </button>
       </mat-card-actions>
     </form>
 
-    <mat-card-footer>
-
-    </mat-card-footer>
+    <mat-card-footer></mat-card-footer>
   </mat-card>
 </div>

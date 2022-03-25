@@ -1,4 +1,5 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import type {AfterViewInit} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {AuthService} from 'src/app/services/auth/auth.service';
 import {UserDto, UserListDto, UserlistService} from '../../../api';
 import {MatTableDataSource} from '@angular/material/table';
@@ -8,16 +9,19 @@ import {MatSort} from '@angular/material/sort';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.less']
+  styleUrls: ['./home.component.less'],
 })
 export class HomeComponent implements AfterViewInit {
-  displayedColumns: string[] = ['id', 'username', 'email'];
+  displayedColumns: Array<string> = ['id', 'username', 'email'];
   dataSource = new MatTableDataSource<UserDto>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;
   @ViewChild(MatSort) sort: MatSort | null = null;
 
-  constructor(private authService: AuthService, private service: UserlistService) {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly service: UserlistService
+  ) {
   }
 
   ngAfterViewInit(): void {
@@ -27,19 +31,19 @@ export class HomeComponent implements AfterViewInit {
   }
 
   loadUserList() {
-    this.service.getUserCount('body')
-      .subscribe(num => {
-        if (this.paginator) {
-          this.paginator.length = num;
-        }
-      });
-    this.service.listUsers(
-      this.paginator?.pageIndex,
-      this.paginator?.pageSize,
-      this.getOrderField(),
-      this.getOrderDirection(),
-      'body'
-    )
+    this.service.getUserCount('body').subscribe((num) => {
+      if (this.paginator) {
+        this.paginator.length = num;
+      }
+    });
+    this.service
+      .listUsers(
+        this.paginator?.pageIndex,
+        this.paginator?.pageSize,
+        this.getOrderField(),
+        this.getOrderDirection(),
+        'body'
+      )
       .subscribe((data: UserListDto) => {
         this.dataSource = new MatTableDataSource<UserDto>(data.items);
       });
@@ -60,5 +64,4 @@ export class HomeComponent implements AfterViewInit {
   logout(): void {
     this.authService.logout();
   }
-
 }

@@ -17,8 +17,9 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
-    <frontend-maven-plugin.nodeVersion>v13.3.0</frontend-maven-plugin.nodeVersion>
+    <frontend-maven-plugin.nodeVersion>v16.10.0</frontend-maven-plugin.nodeVersion>
     <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+    <frontend-maven-plugin.npmVersion>8.3.1</frontend-maven-plugin.npmVersion>
   </properties>
 
   <build>
@@ -29,6 +30,7 @@
         <version>${frontend-maven-plugin.version}</version>
         <configuration>
           <nodeVersion>${frontend-maven-plugin.nodeVersion}</nodeVersion>
+          <npmVersion>${frontend-maven-plugin.npmVersion}</npmVersion>
         </configuration>
         <executions>
           <execution>
@@ -62,7 +64,7 @@
             </goals>
             <phase>verify</phase>
             <configuration>
-              <arguments>run lint -- --type-check</arguments>
+              <arguments>run lint</arguments>
             </configuration>
           </execution>
         </executions>

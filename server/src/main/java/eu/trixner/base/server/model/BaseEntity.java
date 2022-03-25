@@ -1,7 +1,8 @@
 package eu.trixner.base.server.model;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.GeneratedValue;
@@ -10,7 +11,8 @@ import javax.persistence.MappedSuperclass;
 import java.util.UUID;
 
 @EqualsAndHashCode
-@Data
+@Getter
+@Setter
 @MappedSuperclass
 public class BaseEntity {
     @Id

@@ -13,12 +13,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class JwtUtils {
     private static final Logger log = LoggerFactory.getLogger(JwtUtils.class);
@@ -38,8 +36,7 @@ public class JwtUtils {
     public static Jws<Claims> parseToken(String token) {
         byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
 
-        return Jwts.parser()
-                .setSigningKey(signingKey)
+        return Jwts.parserBuilder().setSigningKey(signingKey).build()
                 .parseClaimsJws(token);
     }
 
@@ -52,10 +49,10 @@ public class JwtUtils {
                     .getBody()
                     .getSubject();
 
-            List<GrantedAuthority> authorities = ((List<?>) parsedToken.getBody()
+            List<Role> authorities = ((List<?>) parsedToken.getBody()
                     .get("rol")).stream()
                     .map(r -> Role.valueOf(r.toString()))
-                    .collect(Collectors.toList());
+                    .toList();
 
             if (StringUtils.isNotEmpty(username)) {
                 return new UsernamePasswordAuthenticationToken(username, null, authorities);

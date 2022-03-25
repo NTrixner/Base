@@ -1,48 +1,61 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {RegistrationDto, UserService} from '../../../api';
 import {Router} from '@angular/router';
-import {AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import type {AsyncValidatorFn, ValidationErrors, ValidatorFn} from '@angular/forms';
+import {FormControl, FormGroup, Validators,} from '@angular/forms';
 import {map} from 'rxjs/operators';
-import {Observable} from 'rxjs';
+import type {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.less']
+  styleUrls: ['./register.component.less'],
 })
-export class RegisterComponent implements OnInit {
-
+export class RegisterComponent {
   registrationDto: RegistrationDto = {
     email: '',
     password: '',
-    username: ''
+    username: '',
   };
   hideA = true;
   hideB = true;
   password = '';
 
-  userForm = new FormGroup({
-      username: new FormControl('', [Validators.required, Validators.minLength(3)], [this.usernameValidator()]),
-      email: new FormControl('', [Validators.required, Validators.email], [this.emailValidator()]),
-      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      passwordMatch: new FormControl('', [Validators.required])
+  userForm = new FormGroup(
+    {
+      username: new FormControl(
+        '',
+        [Validators.required, Validators.minLength(3)],
+        [this.usernameValidator()]
+      ),
+      email: new FormControl(
+        '',
+        [Validators.required, Validators.email],
+        [this.emailValidator()]
+      ),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
+      passwordMatch: new FormControl('', [Validators.required]),
     },
-    this.passwordCheckValidator());
+    this.passwordCheckValidator()
+  );
 
-  constructor(private userService: UserService, private router: Router) {
-  }
-
-  ngOnInit(): void {
+  constructor(private readonly userService: UserService, private readonly router: Router) {
   }
 
   register() {
     this.userService
-      .registerUser({
-        username: this.userForm.get('username')?.value,
-        password: this.userForm.get('password')?.value,
-        email: this.userForm.get('email')?.value
-      }, 'response')
-      .subscribe(value => {
+      .registerUser(
+        {
+          username: this.userForm.get('username')?.value,
+          password: this.userForm.get('password')?.value,
+          email: this.userForm.get('email')?.value,
+        },
+        'response'
+      )
+      .subscribe((value) => {
         if (value.status === 200) {
           this.router.navigateByUrl('register/success');
         } else {
@@ -55,7 +68,6 @@ export class RegisterComponent implements OnInit {
     this.router.navigateByUrl('login');
   }
 
-
   passwordCheckValidator(): ValidatorFn {
     return (fg: FormGroup) => {
       const passwordA = fg.get('password');
@@ -63,7 +75,7 @@ export class RegisterComponent implements OnInit {
       if (!!passwordA && !!passwordB) {
         if (passwordA.value !== passwordB.value) {
           passwordB.setErrors({...passwordB.errors, notEquivalent: true});
-        } else if (!!passwordB.errors) {
+        } else if (passwordB.errors) {
           passwordB.setErrors({...passwordB.errors});
         } else {
           passwordB.setErrors(null);
@@ -77,17 +89,17 @@ export class RegisterComponent implements OnInit {
 
   emailValidator(): AsyncValidatorFn {
     return (fc: FormControl): Observable<ValidationErrors | null> => {
-      return this.userService.isEmailAvailable(fc.value, 'body').pipe(
-        map(isAvailable => !isAvailable ? {used: true} : null)
-      );
+      return this.userService
+        .isEmailAvailable(fc.value, 'body')
+        .pipe(map((isAvailable) => (!isAvailable ? {used: true} : null)));
     };
   }
 
   usernameValidator(): AsyncValidatorFn {
     return (fc: FormControl): Observable<ValidationErrors | null> => {
-      return this.userService.isUsernameAvailable(fc.value, 'body').pipe(
-        map(isAvailable => !isAvailable ? {used: true} : null)
-      );
+      return this.userService
+        .isUsernameAvailable(fc.value, 'body')
+        .pipe(map((isAvailable) => (!isAvailable ? {used: true} : null)));
     };
   }
 }
