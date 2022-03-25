@@ -11,15 +11,35 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>11</java.version>
-        <springfox-version>2.8.0</springfox-version>
-        <spring-boot-version>2.1.8.RELEASE</spring-boot-version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-compiler-java.version>1.16</maven-compiler-java.version>
+        <java.version>16</java.version>
+
         <jaxb-version>2.2.11</jaxb-version>
-        <jackson-databind-nullable.version>0.1.0</jackson-databind-nullable.version>
-        <jackson-datatype-jsr310.version>2.9.10</jackson-datatype-jsr310.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-        <openapi-generator-version>4.2.1</openapi-generator-version>
+        <openapi-generator-version>5.4.0</openapi-generator-version>
+
+        <springfox-version>3.0.0</springfox-version>
+        <springfox-version>2.8.0</springfox-version>
+        <spring-boot-version>2.6.4</spring-boot-version>
+        <spring-security-test.version>5.6.2</spring-security-test.version>
+
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
+        <h2.version>2.1.210</h2.version>
+
+        <jaxb-version>2.3.1</jaxb-version>
+        <jackson-datatype-jsr310.version>2.13.2</jackson-datatype-jsr310.version>
+        <jackson-databind-nullable.version>0.1.0</jackson-databind-nullable.version>
+        <validation-api.version>2.0.1.Final</validation-api.version>
+        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+        <angular.version>9.1.13</angular.version>
+        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
+        <lombok.version>1.18.22</lombok.version>
+        <commons-text.version>1.9</commons-text.version>
+        <freemarker.version>2.3.31</freemarker.version>
+        <jackson-core.version>2.13.2</jackson-core.version>
+        <jjwt.version>0.11.2</jjwt.version>
     </properties>
     <modules>
         <module>api</module>
@@ -32,7 +52,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
