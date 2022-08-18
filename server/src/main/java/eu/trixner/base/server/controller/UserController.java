@@ -9,6 +9,7 @@ import eu.trixner.base.server.model.PasswordResetRequest;
 import eu.trixner.base.server.model.UserRegistrationRequest;
 import eu.trixner.base.server.service.UserService;
 import eu.trixner.base.user.UserApi;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,10 @@ import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Controller
 public class UserController implements UserApi
 {
-    private static final Logger log = LoggerFactory.getLogger(UserController.class);
-
     UserService userService;
 
     @Autowired

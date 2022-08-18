@@ -9,6 +9,7 @@ import eu.trixner.base.server.repository.PasswordResetRequestRepository;
 import eu.trixner.base.server.repository.UserRegistrationRequestRepository;
 import eu.trixner.base.server.repository.UserRepository;
 import eu.trixner.base.server.service.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.text.CharacterPredicates;
 import org.apache.commons.text.RandomStringGenerator;
@@ -31,10 +32,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class UserService implements UserDetailsService
 {
-    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
     private final UserRegistrationRequestRepository userRegistrationRequestRepository;
@@ -148,6 +149,7 @@ public class UserService implements UserDetailsService
         request.setToken(getToken(passwordResetRequestRepository::existsByToken));
 
         request = passwordResetRequestRepository.save(request);
+        emailService.sendUserPasswordResetMessage(user.getUsername(), request.getToken(), user.getEmail());
         return request;
     }
 

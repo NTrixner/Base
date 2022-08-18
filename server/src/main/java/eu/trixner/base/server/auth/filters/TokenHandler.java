@@ -1,5 +1,6 @@
 package eu.trixner.base.server.auth.filters;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,8 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class TokenHandler {
-    private static final Logger log = LoggerFactory.getLogger(TokenHandler.class);
 
     private static List<String> blackList = new ArrayList<>();
 

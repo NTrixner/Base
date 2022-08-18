@@ -6,4 +6,6 @@ import {Component} from '@angular/core';
   styleUrls: ['./register-success.component.less'],
 })
 export class RegisterSuccessComponent {
+  constructor() {
+  }
 }
