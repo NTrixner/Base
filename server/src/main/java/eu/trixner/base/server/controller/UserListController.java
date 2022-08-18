@@ -4,6 +4,7 @@ import eu.trixner.base.dto.UserListDto;
 import eu.trixner.base.server.service.UserListService;
 import eu.trixner.base.server.utils.PaginationUtils;
 import eu.trixner.base.user.UserlistApi;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,10 @@ import org.springframework.web.context.request.NativeWebRequest;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 public class UserListController implements UserlistApi
 {
-    private static final Logger log = LoggerFactory.getLogger(UserListController.class);
 
     UserListService userListService;
 

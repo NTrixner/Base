@@ -14,13 +14,6 @@
   </parent>
 
   <version>1.0-SNAPSHOT</version>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
-    <frontend-maven-plugin.nodeVersion>v16.10.0</frontend-maven-plugin.nodeVersion>
-    <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-    <frontend-maven-plugin.npmVersion>8.3.1</frontend-maven-plugin.npmVersion>
-  </properties>
 
   <build>
     <plugins>
@@ -71,7 +64,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>${maven-resources-plugin.version}</version>
         <executions>
           <execution>
             <id>copy-resources</id>

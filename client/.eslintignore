@@ -1,15 +1,1 @@
-/dist/**
-/node_modules/**
-/node/**
-/target/**
-/assembly/**
-*.json
-*.iml
-*.log
-*.xml
-*.less
-polyfills.ts
-environment.ts
-environment.prod.ts
-**/api/**
-**/generated-sources/**
+src/api/**

@@ -6,4 +6,6 @@ import {Component} from '@angular/core';
   styleUrls: ['./register-error.component.less'],
 })
 export class RegisterErrorComponent {
+  constructor() {
+  }
 }

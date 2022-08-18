@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {UserDto, UserService} from '../../../api';
-import type {HttpResponse} from '@angular/common/http';
-import {tap} from 'rxjs/operators';
-import type {Observable, Subscription} from 'rxjs';
-import {Router} from '@angular/router';
+import { Injectable } from '@angular/core';
+import { UserDto, UserService } from '../../../api';
+import { HttpResponse } from '@angular/common/http';
+import { tap } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
 export class AuthService {
   public user: UserDto | null = null;
 
-  constructor(private readonly api: UserService, private readonly router: Router) {
+  constructor(private api: UserService, private router: Router) {
     // Empty
   }
 
@@ -19,9 +19,9 @@ export class AuthService {
     username: string,
     password: string,
     returnUrl: string
-  ): Observable<HttpResponse<unknown>> {
-    return this.api.loginUser({username, password}, 'response').pipe(
-      tap((response: HttpResponse<unknown>) => {
+  ): Observable<HttpResponse<any>> {
+    return this.api.loginUser({ username, password }, 'response').pipe(
+      tap((response: HttpResponse<any>) => {
         const authorization = response.headers.get('Authorization');
         if (response.ok && authorization) {
           const token = authorization.replace('Bearer ', '');

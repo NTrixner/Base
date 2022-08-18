@@ -1,10 +1,9 @@
 import {Component} from '@angular/core';
 import {RegistrationDto, UserService} from '../../../api';
 import {Router} from '@angular/router';
-import type {AsyncValidatorFn, ValidationErrors, ValidatorFn} from '@angular/forms';
-import {FormControl, FormGroup, Validators,} from '@angular/forms';
+import {AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators,} from '@angular/forms';
 import {map} from 'rxjs/operators';
-import type {Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -42,19 +41,17 @@ export class RegisterComponent {
     this.passwordCheckValidator()
   );
 
-  constructor(private readonly userService: UserService, private readonly router: Router) {
+  constructor(private userService: UserService, private router: Router) {
   }
 
   register() {
+    let registrationDto: RegistrationDto = {
+      username: this.userForm.get('username')?.value || '',
+      password: this.userForm.get('password')?.value || '',
+      email: this.userForm.get('email')?.value || '',
+    };
     this.userService
-      .registerUser(
-        {
-          username: this.userForm.get('username')?.value,
-          password: this.userForm.get('password')?.value,
-          email: this.userForm.get('email')?.value,
-        },
-        'response'
-      )
+      .registerUser(registrationDto, 'response')
       .subscribe((value) => {
         if (value.status === 200) {
           this.router.navigateByUrl('register/success');
@@ -75,7 +72,7 @@ export class RegisterComponent {
       if (!!passwordA && !!passwordB) {
         if (passwordA.value !== passwordB.value) {
           passwordB.setErrors({...passwordB.errors, notEquivalent: true});
-        } else if (passwordB.errors) {
+        } else if (!!passwordB.errors) {
           passwordB.setErrors({...passwordB.errors});
         } else {
           passwordB.setErrors(null);

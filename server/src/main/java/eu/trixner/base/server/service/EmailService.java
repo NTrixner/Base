@@ -2,6 +2,7 @@ package eu.trixner.base.server.service;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,16 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class EmailService
 {
-    private static final Logger LOG = LoggerFactory.getLogger(EmailService.class);
     public static final String REGISTRATION_SUB_URI = "/user/registration/confirmRegistration";
     public static final String REGISTER_TPL = "register.ftlh";
+
+    public static final String PW_RESET_SUB_URI = "/user/forgotPassword/resetPassword";
+
+    public static final String PW_RESET_TPL = "pwReset.ftlh";
     public static final String USERNAME = "username";
     public static final String APPLICATION_NAME = "applicationName";
     public static final String URL = "url";
@@ -60,6 +65,19 @@ public class EmailService
         createAndSendMessage(address, REGISTER_TPL, "Registration at " + applicationName, templateModel);
     }
 
+    public void sendUserPasswordResetMessage(String username, String token, String address)
+    {
+        Map<String, Object> templateModel = new HashMap<>();
+        templateModel.put(USERNAME, username);
+        templateModel.put(APPLICATION_NAME, applicationName);
+        ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentContextPath();
+        String url = builder.build().toUriString() + PW_RESET_SUB_URI;
+        templateModel.put(URL, url);
+        templateModel.put(TOKEN, token);
+
+        createAndSendMessage(address, PW_RESET_TPL, "Password reset at " + applicationName, templateModel);
+    }
+
     private void createAndSendMessage(String address,
                                       String templateLocation,
                                       String subject,
@@ -73,7 +91,7 @@ public class EmailService
         }
         catch (IOException | TemplateException e)
         {
-            LOG.error("Error when trying to create email message", e);
+            log.error("Error when trying to create email message", e);
         }
     }
 
@@ -91,7 +109,7 @@ public class EmailService
         }
         catch (MessagingException e)
         {
-            LOG.error("Error when sending mail!", e);
+            log.error("Error when sending mail!", e);
         }
     }
 }

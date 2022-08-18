@@ -1,19 +1,13 @@
 package eu.trixner.base.server;
 
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.read.ListAppender;
-import eu.trixner.base.dto.ChangePasswordDto;
-import eu.trixner.base.dto.ForgotPasswordDto;
-import eu.trixner.base.dto.LoginDto;
-import eu.trixner.base.dto.PasswordResetDto;
-import eu.trixner.base.dto.RegistrationDto;
-import eu.trixner.base.server.controller.UserController;
+import com.icegreen.greenmail.junit5.GreenMailExtension;
+import com.icegreen.greenmail.util.ServerSetupTest;
+import eu.trixner.base.dto.*;
 import eu.trixner.base.server.service.EmailService;
 import io.swagger.util.Json;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-import org.slf4j.LoggerFactory;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,16 +22,15 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class ServerApplicationTests
-{
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+class ServerApplicationTests {
+    @RegisterExtension
+    static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP);
     public static final String USER = "/user";
     public static final String AUTH_LOGIN = "/auth/login";
     public static final String APPLICATION_JSON = "application/json";
@@ -52,242 +45,213 @@ class ServerApplicationTests
     @MockBean
     private EmailService emailService;
 
-    public ListAppender<ILoggingEvent> getLogAppender(Class clazz)
-    {
-        Logger logger = (Logger) LoggerFactory.getLogger(clazz);
-
-        ListAppender<ILoggingEvent> loggingEventListAppender = new ListAppender<>();
-        loggingEventListAppender.start();
-
-        logger.addAppender(loggingEventListAppender);
-
-        return loggingEventListAppender;
-    }
-
     @Test
-    void contextLoads()
-    {
+    void contextLoads() {
         //Fails automatically if nothing happens
     }
 
     @Test
-    void logonWorks() throws Exception
-    {
+    void logonWorks() throws Exception {
         mvc.perform(
-                get(USER))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
+            get(USER))
+          .andDo(print())
+          .andExpect(status().isUnauthorized());
 
         String token = mvc.perform(
-                post(AUTH_LOGIN)
-                        .contentType(APPLICATION_JSON)
-                        .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
-                .andDo(print())
-                .andExpect(header().exists(AUTHORIZATION))
-                .andReturn().getResponse().getHeader(AUTHORIZATION);
+            post(AUTH_LOGIN)
+              .contentType(APPLICATION_JSON)
+              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
+          .andDo(print())
+          .andExpect(header().exists(AUTHORIZATION))
+          .andReturn().getResponse().getHeader(AUTHORIZATION);
 
         mvc.perform(
-                get(USER)
-                        .header(AUTHORIZATION, token))
-                .andDo(print())
-                .andExpect(status().isOk());
+            get(USER)
+              .header(AUTHORIZATION, token))
+          .andDo(print())
+          .andExpect(status().isOk());
 
         mvc.perform(
-                post(AUTH_LOGOUT)
-                        .header(AUTHORIZATION, token))
-                .andDo(print())
-                .andExpect(status().isNoContent());
+            post(AUTH_LOGOUT)
+              .header(AUTHORIZATION, token))
+          .andDo(print())
+          .andExpect(status().isNoContent());
 
         mvc.perform(
-                get(USER))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
+            get(USER))
+          .andDo(print())
+          .andExpect(status().isUnauthorized());
 
         mvc.perform(
-                post(AUTH_LOGOUT)
-                        .header(AUTHORIZATION, token))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
+            post(AUTH_LOGOUT)
+              .header(AUTHORIZATION, token))
+          .andDo(print())
+          .andExpect(status().isUnauthorized());
 
         mvc.perform(
-                post(AUTH_LOGIN)
-                        .contentType(APPLICATION_JSON)
-                        .content(Json.mapper()
-                                .writeValueAsString(new LoginDto().username("user").password("wrongPass"))))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
+            post(AUTH_LOGIN)
+              .contentType(APPLICATION_JSON)
+              .content(Json.mapper()
+                .writeValueAsString(new LoginDto().username("user").password("wrongPass"))))
+          .andDo(print())
+          .andExpect(status().isUnauthorized());
     }
 
     @Test
-    void changePasswordWorks() throws Exception
-    {
+    void changePasswordWorks() throws Exception {
         String token = mvc.perform(
-                post(AUTH_LOGIN)
-                        .contentType(APPLICATION_JSON)
-                        .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
-                .andDo(print())
-                .andExpect(header().exists(AUTHORIZATION))
-                .andReturn().getResponse().getHeader(AUTHORIZATION);
+            post(AUTH_LOGIN)
+              .contentType(APPLICATION_JSON)
+              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
+          .andDo(print())
+          .andExpect(header().exists(AUTHORIZATION))
+          .andReturn().getResponse().getHeader(AUTHORIZATION);
 
         mvc.perform(post("/user/changePassword")
-                .contentType(APPLICATION_JSON)
-                .content(Json.mapper().writeValueAsString(new ChangePasswordDto().oldPassword("user").newPassword(
-                        "abc")))
-                .header(AUTHORIZATION, token))
-                .andDo(print())
-                .andExpect(status().isOk());
+            .contentType(APPLICATION_JSON)
+            .content(Json.mapper().writeValueAsString(new ChangePasswordDto().oldPassword("user").newPassword(
+              "abc")))
+            .header(AUTHORIZATION, token))
+          .andDo(print())
+          .andExpect(status().isOk());
 
         mvc.perform(
-                post(AUTH_LOGOUT)
-                        .header(AUTHORIZATION, token))
-                .andDo(print())
-                .andExpect(status().isNoContent());
+            post(AUTH_LOGOUT)
+              .header(AUTHORIZATION, token))
+          .andDo(print())
+          .andExpect(status().isNoContent());
 
         mvc.perform(
-                post(AUTH_LOGIN)
-                        .contentType(APPLICATION_JSON)
-                        .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
-                .andDo(print())
-                .andExpect(status().isUnauthorized());
+            post(AUTH_LOGIN)
+              .contentType(APPLICATION_JSON)
+              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
+          .andDo(print())
+          .andExpect(status().isUnauthorized());
 
         token = mvc.perform(
-                post(AUTH_LOGIN)
-                        .contentType(APPLICATION_JSON)
-                        .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("abc"))))
-                .andDo(print())
-                .andExpect(header().exists(AUTHORIZATION))
-                .andReturn().getResponse().getHeader(AUTHORIZATION);
+            post(AUTH_LOGIN)
+              .contentType(APPLICATION_JSON)
+              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("abc"))))
+          .andDo(print())
+          .andExpect(header().exists(AUTHORIZATION))
+          .andReturn().getResponse().getHeader(AUTHORIZATION);
 
         mvc.perform(
-                get(USER)
-                        .header(AUTHORIZATION, token))
-                .andDo(print())
-                .andExpect(status().isOk());
+            get(USER)
+              .header(AUTHORIZATION, token))
+          .andDo(print())
+          .andExpect(status().isOk());
 
         mvc.perform(post("/user/changePassword")
-                .contentType(APPLICATION_JSON)
-                .content(Json.mapper().writeValueAsString(new ChangePasswordDto().oldPassword("abc").newPassword(
-                        "user")))
-                .header(AUTHORIZATION, token))
-                .andDo(print())
-                .andExpect(status().isOk());
+            .contentType(APPLICATION_JSON)
+            .content(Json.mapper().writeValueAsString(new ChangePasswordDto().oldPassword("abc").newPassword(
+              "user")))
+            .header(AUTHORIZATION, token))
+          .andDo(print())
+          .andExpect(status().isOk());
 
         mvc.perform(
-                post(AUTH_LOGOUT)
-                        .header(AUTHORIZATION, token))
-                .andDo(print())
-                .andExpect(status().isNoContent());
+            post(AUTH_LOGOUT)
+              .header(AUTHORIZATION, token))
+          .andDo(print())
+          .andExpect(status().isNoContent());
     }
 
 
     @Test
-    void userRolesWork() throws Exception
-    {
+    void userRolesWork() throws Exception {
         String token = mvc.perform(
-                post(AUTH_LOGIN)
-                        .contentType(APPLICATION_JSON)
-                        .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
-                .andDo(print())
-                .andExpect(header().exists(AUTHORIZATION))
-                .andReturn().getResponse().getHeader(AUTHORIZATION);
+            post(AUTH_LOGIN)
+              .contentType(APPLICATION_JSON)
+              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
+          .andDo(print())
+          .andExpect(header().exists(AUTHORIZATION))
+          .andReturn().getResponse().getHeader(AUTHORIZATION);
 
         mvc.perform(get("/userlist")
-                .contentType(APPLICATION_JSON)
-                .header(AUTHORIZATION, token))
-                .andExpect(status().isForbidden());
+            .contentType(APPLICATION_JSON)
+            .header(AUTHORIZATION, token))
+          .andExpect(status().isForbidden());
 
         mvc.perform(
-                post(AUTH_LOGOUT)
-                        .header(AUTHORIZATION, token))
-                .andDo(print())
-                .andExpect(status().isNoContent());
+            post(AUTH_LOGOUT)
+              .header(AUTHORIZATION, token))
+          .andDo(print())
+          .andExpect(status().isNoContent());
 
         token = mvc.perform(
-                post(AUTH_LOGIN)
-                        .contentType(APPLICATION_JSON)
-                        .content(Json.mapper().writeValueAsString(new LoginDto().username("admin").password("admin"))))
-                .andDo(print())
-                .andExpect(header().exists(AUTHORIZATION))
-                .andReturn().getResponse().getHeader(AUTHORIZATION);
+            post(AUTH_LOGIN)
+              .contentType(APPLICATION_JSON)
+              .content(Json.mapper().writeValueAsString(new LoginDto().username("admin").password("admin"))))
+          .andDo(print())
+          .andExpect(header().exists(AUTHORIZATION))
+          .andReturn().getResponse().getHeader(AUTHORIZATION);
 
         mvc.perform(get("/userlist")
-                .contentType(APPLICATION_JSON)
-                .header(AUTHORIZATION, token))
-                .andExpect(status().isOk());
+            .contentType(APPLICATION_JSON)
+            .header(AUTHORIZATION, token))
+          .andExpect(status().isOk());
 
         mvc.perform(
-                post(AUTH_LOGOUT)
-                        .header(AUTHORIZATION, token))
-                .andDo(print())
-                .andExpect(status().isNoContent());
+            post(AUTH_LOGOUT)
+              .header(AUTHORIZATION, token))
+          .andDo(print())
+          .andExpect(status().isNoContent());
     }
 
     @Test
-    public void registerWorks() throws Exception
-    {
-        ListAppender<ILoggingEvent> loggingEventListAppender = getLogAppender(UserController.class);
-
+    public void registerWorks() throws Exception {
         mvc.perform(post("/user/registration/register")
-                .contentType(APPLICATION_JSON)
-                .content(Json.mapper()
-                        .writeValueAsString(new RegistrationDto().email("test@asdf.com")
-                                .password("asdf")
-                                .username("asdf"))))
-                .andDo(print())
-                .andExpect(status().isOk());
+            .contentType(APPLICATION_JSON)
+            .content(Json.mapper()
+              .writeValueAsString(new RegistrationDto().email("test@asdf.com")
+                .password("asdf")
+                .username("asdf"))))
+          .andDo(print())
+          .andExpect(status().isOk());
 
-        String message = (loggingEventListAppender.list)
-                .stream()
-                .map(ILoggingEvent::getFormattedMessage)
-                .findFirst()
-                .orElse(null);
+        ArgumentCaptor<String> tokenCapture = ArgumentCaptor.forClass(String.class);
+        verify(emailService, times(1)).sendUserRegistrationMessage(any(), tokenCapture.capture(), any());
+        String message = tokenCapture.getValue();
 
         assertThat(message).isNotNull();
-        verify(emailService, times(1)).sendUserRegistrationMessage(any(), any(), any());
-
         String token = message.substring(message.length() - 8);
 
         assertThat(token).isNotNull();
 
         mvc.perform(get("/user/registration/confirmRegistration/" + token))
-                .andDo(print())
-                .andExpect(status().isFound());
+          .andDo(print())
+          .andExpect(status().isFound());
 
         String logintoken = mvc.perform(
-                post(AUTH_LOGIN)
-                        .contentType(APPLICATION_JSON)
-                        .content(Json.mapper().writeValueAsString(new LoginDto().username("asdf").password("asdf"))))
-                .andDo(print())
-                .andExpect(header().exists(AUTHORIZATION))
-                .andReturn().getResponse().getHeader(AUTHORIZATION);
+            post(AUTH_LOGIN)
+              .contentType(APPLICATION_JSON)
+              .content(Json.mapper().writeValueAsString(new LoginDto().username("asdf").password("asdf"))))
+          .andDo(print())
+          .andExpect(header().exists(AUTHORIZATION))
+          .andReturn().getResponse().getHeader(AUTHORIZATION);
 
         mvc.perform(
-                get(USER)
-                        .header(AUTHORIZATION, logintoken))
-                .andDo(print())
-                .andExpect(status().isOk());
+            get(USER)
+              .header(AUTHORIZATION, logintoken))
+          .andDo(print())
+          .andExpect(status().isOk());
 
         verify(emailService, times(1)).sendUserRegistrationMessage(any(), any(), any());
     }
 
     @Test
-    public void resetPasswordWorks() throws Exception
-    {
-        ListAppender<ILoggingEvent> loggingEventListAppender = getLogAppender(UserController.class);
-
+    public void resetPasswordWorks() throws Exception {
         mvc.perform(post("/user/forgotPassword")
-                .contentType(APPLICATION_JSON)
-                .content(Json.mapper().writeValueAsString(new ForgotPasswordDto().email("user@test.com").username(
-                        "user"))))
-                .andDo(print())
-                .andExpect(status().isOk());
+            .contentType(APPLICATION_JSON)
+            .content(Json.mapper().writeValueAsString(new ForgotPasswordDto().email("user@test.com").username(
+              "user"))))
+          .andDo(print())
+          .andExpect(status().isOk());
 
-        String message = (loggingEventListAppender.list)
-                .stream()
-                .map(ILoggingEvent::getFormattedMessage)
-                .findFirst()
-                .orElse(null);
-
+        ArgumentCaptor<String> tokenCapture = ArgumentCaptor.forClass(String.class);
+        verify(emailService, times(1)).sendUserPasswordResetMessage(any(), tokenCapture.capture(), any());
+        String message = tokenCapture.getValue();
         assertThat(message).isNotNull();
 
         String token = message.substring(message.length() - 8);
@@ -295,46 +259,45 @@ class ServerApplicationTests
         assertThat(token).isNotNull();
 
         mvc.perform(post("/user/forgotPassword/resetPassword")
-                .contentType(APPLICATION_JSON)
-                .content(Json.mapper().writeValueAsString(new PasswordResetDto().token(token).newPassword("asdf"))))
-                .andDo(print())
-                .andExpect(status().isOk());
+            .contentType(APPLICATION_JSON)
+            .content(Json.mapper().writeValueAsString(new PasswordResetDto().token(token).newPassword("asdf"))))
+          .andDo(print())
+          .andExpect(status().isOk());
 
         String logintoken = mvc.perform(
-                post(AUTH_LOGIN)
-                        .contentType(APPLICATION_JSON)
-                        .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("asdf"))))
-                .andDo(print())
-                .andExpect(header().exists(AUTHORIZATION))
-                .andReturn().getResponse().getHeader(AUTHORIZATION);
+            post(AUTH_LOGIN)
+              .contentType(APPLICATION_JSON)
+              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("asdf"))))
+          .andDo(print())
+          .andExpect(header().exists(AUTHORIZATION))
+          .andReturn().getResponse().getHeader(AUTHORIZATION);
 
         mvc.perform(
-                get(USER)
-                        .header(AUTHORIZATION, logintoken))
-                .andDo(print())
-                .andExpect(status().isOk());
+            get(USER)
+              .header(AUTHORIZATION, logintoken))
+          .andDo(print())
+          .andExpect(status().isOk());
     }
 
     @Test
-    public void usernameAndEmailAvailableWorks() throws Exception
-    {
+    public void usernameAndEmailAvailableWorks() throws Exception {
         mvc.perform(get(USERNAME_AVAILABLE, "user"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content().string("false"));
+          .andExpect(status().isOk())
+          .andExpect(content().contentType("application/json"))
+          .andExpect(content().string("false"));
         mvc.perform(get(USERNAME_AVAILABLE, "userB"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content().string("true"));
+          .andExpect(status().isOk())
+          .andExpect(content().contentType("application/json"))
+          .andExpect(content().string("true"));
 
         mvc.perform(get(EMAIL_AVAILABLE, "user@test.com"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content().string("false"));
+          .andExpect(status().isOk())
+          .andExpect(content().contentType("application/json"))
+          .andExpect(content().string("false"));
         mvc.perform(get(EMAIL_AVAILABLE, "userB@test.com"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content().string("true"));
+          .andExpect(status().isOk())
+          .andExpect(content().contentType("application/json"))
+          .andExpect(content().string("true"));
     }
 
 }

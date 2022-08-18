@@ -1,9 +1,8 @@
-import type {OnInit} from '@angular/core';
-import {Component} from '@angular/core';
-import {AuthService} from '../../services/auth/auth.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {catchError} from 'rxjs/operators';
-import {of} from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -19,11 +18,10 @@ export class LoginComponent implements OnInit {
   confirmationRegistration = false;
 
   constructor(
-    private readonly authService: AuthService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router
-  ) {
-  }
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
@@ -42,7 +40,7 @@ export class LoginComponent implements OnInit {
         .pipe(
           catchError((err) => {
             this.loginFailureText = 'Login failed, please check the inputs';
-            return of(err);
+            return of(null);
           })
         )
         .subscribe();
