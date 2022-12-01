@@ -6,9 +6,12 @@ import {Router} from '@angular/router';
   templateUrl: './reset-password-error.component.html',
   styleUrls: ['./reset-password-error.component.less']
 })
-export class ResetPasswordErrorComponent {
+export class ResetPasswordErrorComponent implements OnInit {
 
   constructor(public router: Router) {
+  }
+
+  ngOnInit(): void {
   }
 
 }
