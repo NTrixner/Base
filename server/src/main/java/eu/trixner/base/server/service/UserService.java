@@ -15,6 +15,7 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -74,7 +75,9 @@ public class UserService implements UserDetailsService {
     public UserDto getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsernameIgnoreCase(username);
-        return userMapper.userToUserDto(user);
+        UserDto userDto = userMapper.userToUserDto(user);
+        userDto.setRights(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+        return userDto;
     }
 
     @Transactional

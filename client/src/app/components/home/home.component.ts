@@ -4,6 +4,7 @@ import {UserDto, UserListDto, UserlistService} from '../../../api';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import {RightsConstants} from '../../constants/rights-constants';
 
 @Component({
   selector: 'app-home',
@@ -24,9 +25,12 @@ export class HomeComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.loadUserList();
+    if(this.canSeeUsers())
+    {
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.loadUserList();
+    }
   }
 
   loadUserList() {
@@ -62,5 +66,9 @@ export class HomeComponent implements AfterViewInit {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  canSeeUsers(): boolean {
+    return this.authService.hasRight(RightsConstants.ROLE_USER_CAN_WATCH_USERLIST);
   }
 }
