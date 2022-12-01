@@ -8,8 +8,7 @@
           mat-table
           [dataSource]="dataSource"
           matSort
-          (matSortChange)="loadUserList()"
-        >
+          (matSortChange)="loadUserList()">
           <!-- Position Column -->
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>UID</th>
@@ -44,8 +43,7 @@
         mat-raised-button
         color="primary"
         type="button"
-        (click)="logout()"
-      >
+        (click)="logout()">
         Logout
       </button>
     </mat-card-actions>

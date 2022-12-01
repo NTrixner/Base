@@ -6,12 +6,9 @@ import {Router} from '@angular/router';
   templateUrl: './forgot-password-success.component.html',
   styleUrls: ['./forgot-password-success.component.less']
 })
-export class ForgotPasswordSuccessComponent implements OnInit {
+export class ForgotPasswordSuccessComponent {
 
   constructor(public router: Router) {
-  }
-
-  ngOnInit(): void {
   }
 
 }
