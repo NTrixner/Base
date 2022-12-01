@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_user
+      author: ntrixner
+      changes:
+        - createTable:
+            tableName: APP_USER
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(60)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(60)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_type
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_activated
+                  type: boolean
+                  valueBoolean: true

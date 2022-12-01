@@ -7,10 +7,6 @@ import java.util.Date;
 import java.util.UUID;
 
 public interface PasswordResetRequestRepository extends CrudRepository<PasswordResetRequest, UUID> {
-    boolean existsByToken(String token);
-
-    PasswordResetRequest findByToken(String token);
-
     int deleteByUserId(UUID userId);
 
     int deleteByExpiresAtIsBefore(Date date);

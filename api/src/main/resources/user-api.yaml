@@ -99,7 +99,7 @@ paths:
             operationId: registerUser
             security: []
         parameters: []
-    '/user/registration/confirmRegistration/{token}':
+    '/user/registration/confirmRegistration/{uuid}':
         get:
             tags:
                 - User
@@ -115,10 +115,10 @@ paths:
         parameters:
             -   schema:
                     type: string
-                name: token
+                name: uuid
                 in: path
                 required: true
-                description: "The registration token that was sent via mail to the new user's address"
+                description: "The registration request id that was sent via mail to the new user's address"
     /user:
         get:
             summary: Your GET endpoint
@@ -360,7 +360,7 @@ components:
             properties:
                 newPassword:
                     type: string
-                token:
+                uuid:
                     type: string
             required:
                 - newPassword

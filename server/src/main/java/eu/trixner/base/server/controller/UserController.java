@@ -10,8 +10,6 @@ import eu.trixner.base.server.model.UserRegistrationRequest;
 import eu.trixner.base.server.service.UserService;
 import eu.trixner.base.user.UserApi;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,7 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -88,14 +86,14 @@ public class UserController implements UserApi
         String uri = builder.build().toUriString();
         log.info("Registered new user, activate under {}/user/registration/confirmRegistration/{}",
                 uri,
-                answer.getToken());
+                answer.getId());
         return ResponseEntity.ok().build();
     }
 
     @Override
-    public ResponseEntity<Void> confirmRegistration(String token)
+    public ResponseEntity<Void> confirmRegistration(String id)
     {
-        boolean hasBeenRegistered = userService.confirmRegistration(token);
+        boolean hasBeenRegistered = userService.confirmRegistration(UUID.fromString(id));
         if (hasBeenRegistered)
         {
             HttpHeaders headers = new HttpHeaders();
@@ -125,7 +123,7 @@ public class UserController implements UserApi
                     "Password reset request sent, reset password under {}/user/forgotPassword/resetPassword with " +
                             "token {}",
                     uri,
-                    req.getToken());
+                    req.getId());
             return ResponseEntity.ok().build();
         }
     }
@@ -135,7 +133,7 @@ public class UserController implements UserApi
     {
         try
         {
-            userService.resetPassword(dto.getToken(), dto.getNewPassword());
+            userService.resetPassword(UUID.fromString(dto.getUuid()), dto.getNewPassword());
             return ResponseEntity.ok().build();
         }
         catch (NullPointerException ex)

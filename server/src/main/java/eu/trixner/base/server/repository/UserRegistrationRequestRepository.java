@@ -10,9 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface UserRegistrationRequestRepository extends CrudRepository<UserRegistrationRequest, UUID> {
-    boolean existsByToken(String token);
-
-    UserRegistrationRequest findByToken(String token);
-
     List<UserRegistrationRequest> findByExpiresAtIsBefore(Date date);
 }

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - preConditions:
+      - runningAs:
+          username: DATABASEUSER
+  - include:
+      file: db/changelog/init/user.yaml
+  - include:
+      file: db/changelog/init/password_reset_request.yaml
+  - include:
+      file: db/changelog/init/user_registration_request.yaml
+
+  - include:
+      file: db/changelog/data/user.yaml

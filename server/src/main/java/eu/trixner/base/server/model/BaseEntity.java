@@ -5,9 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 import java.util.UUID;
 
 @EqualsAndHashCode
@@ -17,6 +17,5 @@ import java.util.UUID;
 public class BaseEntity {
     @Id
     @GeneratedValue(generator = "uuid")
-    @Type(type = "uuid-char")
     private UUID id;
 }

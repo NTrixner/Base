@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: create_user_registration_request
+      author: ntrixner
+      changes:
+        - createTable:
+            tableName: USER_REGISTRATION_REQUEST
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_registration_user
+                    references: app_user(id)
+              - column:
+                  name: expires_at
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mail_sent
+                  type: boolean
+                  valueBoolean: false

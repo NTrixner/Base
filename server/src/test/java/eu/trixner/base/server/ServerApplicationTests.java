@@ -4,7 +4,7 @@ import com.icegreen.greenmail.junit5.GreenMailExtension;
 import com.icegreen.greenmail.util.ServerSetupTest;
 import eu.trixner.base.dto.*;
 import eu.trixner.base.server.service.EmailService;
-import io.swagger.util.Json;
+import io.swagger.v3.core.util.Json;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.ArgumentCaptor;
@@ -215,11 +215,9 @@ class ServerApplicationTests {
         String message = tokenCapture.getValue();
 
         assertThat(message).isNotNull();
-        String token = message.substring(message.length() - 8);
 
-        assertThat(token).isNotNull();
 
-        mvc.perform(get("/user/registration/confirmRegistration/" + token))
+        mvc.perform(get("/user/registration/confirmRegistration/" + message))
           .andDo(print())
           .andExpect(status().isFound());
 
@@ -254,13 +252,9 @@ class ServerApplicationTests {
         String message = tokenCapture.getValue();
         assertThat(message).isNotNull();
 
-        String token = message.substring(message.length() - 8);
-
-        assertThat(token).isNotNull();
-
         mvc.perform(post("/user/forgotPassword/resetPassword")
             .contentType(APPLICATION_JSON)
-            .content(Json.mapper().writeValueAsString(new PasswordResetDto().token(token).newPassword("asdf"))))
+            .content(Json.mapper().writeValueAsString(new PasswordResetDto().uuid(message).newPassword("asdf"))))
           .andDo(print())
           .andExpect(status().isOk());
 

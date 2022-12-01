@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: add_user_data_admin
+      author: ntrixner
+      changes:
+        - insert:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  value: 9f6a5ef6-dfcf-49a8-84c3-965b2618adc8
+              - column:
+                  name: username
+                  value: admin
+              - column:
+                  name: password
+                  value: $2y$10$VpwC0FSFOmX0R3a4jx7FJeNVESH/XIrgvnxUOIEsqJgsXQTAAf45.
+              - column:
+                  name: email
+                  value: admin@test.com
+              - column:
+                  name: user_type
+                  value: ADMIN
+              - column:
+                  name: is_activated
+                  valueBoolean: true
+  - changeSet:
+      id: add_user_data_user
+      author: ntrixner
+      changes:
+        - insert:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  value: b374bb51-8950-4e0d-8141-454feeaf838a
+              - column:
+                  name: username
+                  value: user
+              - column:
+                  name: password
+                  value: $2y$10$HtiKaRC1z360ms2HIOgY3.fxfFu9w68o6ICcEczZels.oERUJ/FDa
+              - column:
+                  name: email
+                  value: user@test.com
+              - column:
+                  name: user_type
+                  value: USER
+              - column:
+                  name: is_activated
+                  valueBoolean: true
