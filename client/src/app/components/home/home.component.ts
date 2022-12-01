@@ -1,9 +1,9 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
-import { UserDto, UserListDto, UserlistService } from '../../../api';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AuthService} from '../../services/auth/auth.service';
+import {UserDto, UserListDto, UserlistService} from '../../../api';
+import {MatTableDataSource} from '@angular/material/table';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +20,8 @@ export class HomeComponent implements AfterViewInit {
   constructor(
     private authService: AuthService,
     private service: UserlistService
-  ) {}
+  ) {
+  }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;

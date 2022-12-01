@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register-success',
@@ -6,6 +7,6 @@ import {Component} from '@angular/core';
   styleUrls: ['./register-success.component.less'],
 })
 export class RegisterSuccessComponent {
-  constructor() {
+  constructor(public router: Router) {
   }
 }

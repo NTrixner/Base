@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {RegistrationDto, UserService} from '../../../api';
+import {RegistrationDto, UserService} from '../../../../api';
 import {Router} from '@angular/router';
 import {AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators,} from '@angular/forms';
 import {map} from 'rxjs/operators';
@@ -41,7 +41,7 @@ export class RegisterComponent {
     this.passwordCheckValidator()
   );
 
-  constructor(private userService: UserService, private router: Router) {
+  constructor(private userService: UserService, public router: Router) {
   }
 
   register() {
@@ -59,10 +59,6 @@ export class RegisterComponent {
           this.router.navigateByUrl('register/error');
         }
       });
-  }
-
-  goBackToLogin() {
-    this.router.navigateByUrl('login');
   }
 
   passwordCheckValidator(): ValidatorFn {
