@@ -45,7 +45,8 @@ public class SecurityConfig {
       "/*.js",
       "/*.js.map", //TODO: Right now we still create sourcemaps even in prod build. In tsconfig we should exclude it if we are in production mode
       "/user/forgotPassword/**",
-      "/user/available/**"
+      "/user/available/**",
+      "/user/registration/confirmRegistration/**"
     };
 
     final UserService userService;
@@ -78,6 +79,7 @@ public class SecurityConfig {
           .authorizeHttpRequests()
           .requestMatchers(AUTH_WHITELIST).permitAll()
           .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+          .requestMatchers(PathRequest.toH2Console()).permitAll()
           .anyRequest().authenticated()
           .and()
           .addFilter(new JwtAuthenticationFilter(manager))
@@ -93,10 +95,12 @@ public class SecurityConfig {
           .invalidateHttpSession(true)
           .clearAuthentication(true)
           .and()
-          .exceptionHandling(e -> e
-            .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-          .headers().frameOptions().disable()
-          .and().build();
+          .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+          .headers()
+          .frameOptions()
+          .disable()
+          .and()
+          .build();
 
     }
 

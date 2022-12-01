@@ -3,6 +3,7 @@
 *.jar
 */target/
 server/src/main/resources/application-local.properties
+server/src/main/resources/application-local.yaml
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 

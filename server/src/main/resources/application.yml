@@ -1,61 +1,64 @@
 application:
-    name: BASE APPLICATION
+  name: BASE APPLICATION
+
 email:
-    sender:
-        address: sender
+  sender: yourmail@gmx.at
+  host: mail.gmx.com
+  password: yourpass
+  port: 587
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
+  username: yourUser
+
 jwt:
-    token:
-        expiration: 900000
-        removeStaleTokenRate: 60000
+  token:
+    expiration: 900000
+    removeStaleTokenRate: 60000
+
 logging:
-    level:
-        eu:
-            trixner:
-                base:
-                    server: INFO
-        org:
-            hibernate: ERROR
-            springframework:
-                security: DEBUG
-                web: INFO
+  level:
+    eu:
+      trixner:
+        base:
+          server: INFO
+    org:
+      hibernate: ERROR
+      springframework:
+        security: DEBUG
+        web: INFO
+
 hashids:
-    salt: this is some hash id salt
+  salt: this is some hash id salt
 
 spring:
-    datasource:
-        driverClassName: org.h2.Driver
-        password: password
-        url: jdbc:h2:mem:testdb
-        username: databaseuser
-    freemarker:
-        cache: false
-        suffix: .ftl
-        template-loader-path: file:src/main/resources/templates/
-    h2:
-        console:
-            enabled: true
-            path: /h2-console
-            settings:
-                trace: false
-                web-allow-others: false
-    jpa:
-        database-platform: org.hibernate.dialect.H2Dialect
-        defer-datasource-initialization: false
-    mail:
-        host: mail.gmx.com
-        password: password
-        port: 587
-        properties:
-            mail:
-                smtp:
-                    auth: true
-                    starttls:
-                        enable: true
-        username: username
+  datasource:
+    driverClassName: org.h2.Driver
+    password: password
+    url: jdbc:h2:mem:testdb
+    username: databaseuser
+  freemarker:
+    cache: false
+    suffix: .ftl
+    template-loader-path: file:src/main/resources/templates/
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        trace: false
+        web-allow-others: false
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: false
+
 user:
-    passwordReset:
-        requestCleanupRate: 30000
-        requestExpiration: 30000
-    registration:
-        requestCleanupRate: 300000
-        requestExpiration: 86400000
+  passwordReset:
+    requestCleanupRate: 30000
+    requestExpiration: 30000
+  registration:
+    requestCleanupRate: 300000
+    requestExpiration: 86400000

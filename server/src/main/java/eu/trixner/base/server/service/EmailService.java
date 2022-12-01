@@ -2,6 +2,7 @@ package eu.trixner.base.server.service;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import jakarta.annotation.PostConstruct;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 @Slf4j
 @Component
@@ -36,8 +38,26 @@ public class EmailService {
 
     private final FreeMarkerConfigurer freeMarkerConfigurer;
 
-    @Value("${email.sender.address}")
+    @Value("${email.sender}")
     private String senderAddress;
+
+    @Value("${email.host}")
+    private String mailHost;
+
+    @Value("${email.username}")
+    private String mailUser;
+
+    @Value("${email.password}")
+    private String mailPassword;
+
+    @Value("${email.port}")
+    private int mailPort;
+
+    @Value("${email.properties.mail.smtp.auth}")
+    private boolean smtpAuth;
+
+    @Value("${email.properties.mail.smtp.starttls.enable}")
+    private boolean startTls;
 
     @Value("${application.name}")
     private String applicationName;
@@ -46,8 +66,20 @@ public class EmailService {
     @Autowired
     public EmailService(FreeMarkerConfigurer freeMarkerConfigurer) {
         this.freeMarkerConfigurer = freeMarkerConfigurer;
-        emailSender = new JavaMailSenderImpl();
-        emailSender.setHost(senderAddress);
+        this.emailSender = new JavaMailSenderImpl();
+    }
+    @PostConstruct
+    void afterPropertiesSet()
+    {
+        emailSender.setHost(mailHost);
+        emailSender.setPort(mailPort);
+        emailSender.setUsername(mailUser);
+        emailSender.setPassword(mailPassword);
+        Properties properties = emailSender.getJavaMailProperties();
+        properties.put("mail.transport.protocol", "smtp");
+        properties.put("mail.smtp.auth", smtpAuth);
+        properties.put("mail.smtp.starttls.enable", startTls);
+        properties.put("mail.debug", "true");
     }
 
     public void sendUserRegistrationMessage(String username, String token, String address) {
@@ -93,8 +125,9 @@ public class EmailService {
             helper.setSubject(subject);
             helper.setText(htmlBody, true);
             helper.setFrom(senderAddress);
+            log.info("Sent mail {}", message.getContent().toString());
             emailSender.send(message);
-        } catch (MessagingException e) {
+        } catch (MessagingException | IOException e) {
             log.error("Error when sending mail!", e);
         }
     }
