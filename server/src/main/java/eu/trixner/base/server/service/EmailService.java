@@ -26,7 +26,7 @@ public class EmailService {
     public static final String REGISTRATION_SUB_URI = "/user/registration/confirmRegistration";
     public static final String REGISTER_TPL = "register.ftlh";
 
-    public static final String PW_RESET_SUB_URI = "/user/forgotPassword/resetPassword";
+    public static final String PW_RESET_SUB_URI = "/resetPassword";
 
     public static final String PW_RESET_TPL = "pwReset.ftlh";
     public static final String USERNAME = "username";
@@ -98,6 +98,7 @@ public class EmailService {
         templateModel.put(USERNAME, username);
         templateModel.put(APPLICATION_NAME, applicationName);
         ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentContextPath();
+        builder.port(8080);
         String url = builder.build().toUriString() + registrationSubUri;
         templateModel.put(URL, url);
         templateModel.put(TOKEN, token);

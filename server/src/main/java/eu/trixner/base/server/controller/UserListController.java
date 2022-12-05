@@ -50,6 +50,7 @@ public class UserListController implements UserlistApi
     }
 
     @Override
+    @Secured("ROLE_USER_CAN_WATCH_USERLIST")
     public ResponseEntity<Integer> getUserCount()
     {
         return ResponseEntity.ok(userListService.countUsers().intValue());

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../../../services/auth/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {catchError} from 'rxjs/operators';
+import {of} from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -21,12 +21,13 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
     this.confirmationRegistration =
-      this.route.snapshot.queryParams['confirmationRegistration'] || false;
+      this.route.snapshot.queryParams['confirmationRegistration'] === 'true' || false;
   }
 
   canLogin(): boolean {
@@ -49,5 +50,10 @@ export class LoginComponent implements OnInit {
 
   register() {
     this.router.navigateByUrl('register');
+  }
+
+
+  forgotPassword() {
+    this.router.navigateByUrl('forgotPassword');
   }
 }

@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register-error',
@@ -6,6 +7,6 @@ import {Component} from '@angular/core';
   styleUrls: ['./register-error.component.less'],
 })
 export class RegisterErrorComponent {
-  constructor() {
+  constructor(public router: Router) {
   }
 }

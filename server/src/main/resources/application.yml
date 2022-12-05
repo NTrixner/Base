@@ -57,8 +57,8 @@ spring:
 
 user:
   passwordReset:
-    requestCleanupRate: 30000
-    requestExpiration: 30000
+    requestCleanupRate: 300000
+    requestExpiration: 86400000
   registration:
     requestCleanupRate: 300000
     requestExpiration: 86400000
