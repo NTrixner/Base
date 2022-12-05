@@ -56,4 +56,8 @@ export class AuthService {
       )
       .subscribe();
   }
+
+  public hasRight(right: string): boolean {
+    return !!this.user?.rights?.includes(right).valueOf() || false;
+  }
 }

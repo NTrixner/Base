@@ -326,6 +326,10 @@ components:
                 email:
                     type: string
                     format: email
+                rights:
+                    type: array
+                    items:
+                        type: string
         RegistrationDto:
             title: RegistrationDto
             type: object

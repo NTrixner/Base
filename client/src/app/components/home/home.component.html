@@ -3,7 +3,7 @@
     <mat-card-title> Welcome </mat-card-title>
     <mat-card-content>
       <p>Hello {{ getUsername() }}</p>
-      <div class="mat-elevation-z8">
+      <div class="mat-elevation-z8" *ngIf="canSeeUsers()">
         <table
           mat-table
           [dataSource]="dataSource"
@@ -31,7 +31,7 @@
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
         <mat-paginator
-          [pageSizeOptions]="[1, 5, 10, 20]"
+          [pageSizeOptions]="[5, 10, 20]"
           (page)="loadUserList()"
           showFirstLastButtons
         ></mat-paginator>
