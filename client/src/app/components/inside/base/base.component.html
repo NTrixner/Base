@@ -1,19 +1,18 @@
-<mat-sidenav-container class="nav-container">
+<mat-sidenav-container autosize class="nav-container">
   <mat-sidenav mode="side" opened fixedInViewport>
     <mat-action-list>
       <mat-list-item [routerLink]="['home']">Home</mat-list-item>
       <mat-list-item [routerLink]="['userlist']"
                      *ngIf="authService.hasRight(RightsConstants.ROLE_USER_CAN_WATCH_USERLIST)">Userlist
       </mat-list-item>
-      <mat-list-item>
-        <button
-          mat-raised-button
-          color="primary"
-          type="button"
-          (click)="logout()">
-          Logout
-        </button>
-      </mat-list-item>
+      <!-- Bottom items -->
+      <div [ngClass]="appropriateClass">
+        <mat-list-item
+          [queryParams]="{user: authService.user?.id, mode: EditViewMode.VIEW}" [routerLink]="['user']">
+          User
+        </mat-list-item>
+        <mat-list-item (click)="logout()">Logout</mat-list-item>
+      </div>
     </mat-action-list>
   </mat-sidenav>
   <mat-sidenav-content class="homeWrapper">

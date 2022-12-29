@@ -1,0 +1,75 @@
+<mat-card>
+  <mat-card-title>
+    <div *ngIf="!!user.id">
+      User {{user.username}}
+    </div>
+    <div *ngIf="!user.id">
+      New User
+    </div>
+  </mat-card-title>
+  <!-- Create and edit mode -->
+  <ng-container *ngIf="mode == EditViewMode.CREATE || mode == EditViewMode.EDIT">
+    <form (ngSubmit)="onSave()" [formGroup]="userForm">
+      <mat-card-content>
+        <mat-form-field>
+          <mat-label>Username</mat-label>
+          <input
+            autocomplete="username"
+            formControlName="username"
+            matInput
+            required/>
+          <mat-error *ngIf="userForm.get('username')?.hasError('minlength')">Usernames must be at least 3 characters
+            long!
+          </mat-error>
+          <mat-error *ngIf="userForm.get('username')?.hasError('required')">You must enter a username</mat-error>
+          <mat-error *ngIf="userForm.get('username')?.hasError('used')">This username is already in use</mat-error>
+        </mat-form-field>
+        <br/>
+        <br/>
+        <br/>
+        <mat-form-field appearance="outline">
+          <mat-label>EMail</mat-label>
+          <input
+            autocomplete="email"
+            email="true"
+            formControlName="email"
+            matInput
+            required
+            type="email"/>
+          <mat-error *ngIf="userForm.get('email')?.hasError('required')">You must enter a email</mat-error>
+          <mat-error *ngIf="userForm.get('email')?.hasError('used')">This email is already in use</mat-error>
+          <mat-error *ngIf="userForm.get('email')?.hasError('email')">The entered email is invalid</mat-error>
+        </mat-form-field>
+      </mat-card-content>
+      <mat-card-actions>
+        <button color="primary" mat-raised-button type="submit">
+          Save
+        </button>
+        <button (click)="onReset()" color="primary" mat-raised-button type="button">
+          Reset
+        </button>
+        <button (click)="changeMode(EditViewMode.EDIT, EditViewMode.VIEW)" *ngIf="mode == EditViewMode.EDIT"
+                color="primary" mat-raised-button type="button">
+          Cancel
+        </button>
+      </mat-card-actions>
+    </form>
+  </ng-container>
+
+  <!-- View mode -->
+  <ng-container *ngIf="mode == EditViewMode.VIEW">
+    <mat-card-content>
+      <p>Username: {{user.username}}</p>
+      <p>EMail: {{user.email}}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button (click)="changeMode(EditViewMode.VIEW, EditViewMode.EDIT)" *ngIf="canEdit" color="primary"
+              mat-raised-button type="button">
+        Edit
+      </button>
+      <button (click)="changePassword()" *ngIf="canChangePassword" color="primary" mat-raised-button type="button">
+        Change Password
+      </button>
+    </mat-card-actions>
+  </ng-container>
+</mat-card>

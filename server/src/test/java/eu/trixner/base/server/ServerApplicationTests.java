@@ -15,6 +15,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -31,13 +33,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ServerApplicationTests {
     @RegisterExtension
     static GreenMailExtension greenMail = new GreenMailExtension(ServerSetupTest.SMTP);
-    public static final String USER = "/user";
-    public static final String AUTH_LOGIN = "/auth/login";
+
+    public static final String PREFIX = "/api";
+    public static final String USER = PREFIX + "/user";
+    public static final String AUTH_LOGIN = PREFIX + "/auth/login";
+    public static final String USER_LIST = PREFIX + "/userlist";
+    public static final String REGISTER = PREFIX + "/user/registration/register";
+    public static final String CONFIRM_REGISTER = PREFIX + "/user/registration/confirmRegistration/";
+    public static final String FORGOT_PASSWORD = PREFIX + "/user/forgotPassword";
+    public static final String RESET_PASSWORD = PREFIX + "/user/forgotPassword/resetPassword";
+    public static final String USERNAME_AVAILABLE = PREFIX + "/user/available/username/{username}";
+    public static final String EMAIL_AVAILABLE = PREFIX + "/user/available/email/{email}";
+    public static final String AUTH_LOGOUT = PREFIX + "/auth/logout";
+    public static final String CHANGE_PASSWORD = PREFIX + "/user/change/changePassword";
     public static final String APPLICATION_JSON = "application/json";
     public static final String AUTHORIZATION = "Authorization";
-    public static final String AUTH_LOGOUT = "/auth/logout";
-    public static final String USERNAME_AVAILABLE = "/user/available/username/{username}";
-    public static final String EMAIL_AVAILABLE = "/user/available/email/{email}";
+    public static final String USER_MAIL = "user@test.com";
+    public static final String USERNAME = "user";
+    public static final String NEW_PASS = "asdf";
+    public static final String TEST_MAIL = "test@asdf.com";
+    public static final String ADMIN = "admin";
+    public static final String WRONG_PASS = "wrongPass";
+
+    public static final String USER_UUID = "b374bb51-8950-4e0d-8141-454feeaf838a";
 
     @Autowired
     private MockMvc mvc;
@@ -60,7 +78,7 @@ class ServerApplicationTests {
         String token = mvc.perform(
             post(AUTH_LOGIN)
               .contentType(APPLICATION_JSON)
-              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
+              .content(Json.mapper().writeValueAsString(new LoginDto().username(USERNAME).password(USERNAME))))
           .andDo(print())
           .andExpect(header().exists(AUTHORIZATION))
           .andReturn().getResponse().getHeader(AUTHORIZATION);
@@ -92,7 +110,7 @@ class ServerApplicationTests {
             post(AUTH_LOGIN)
               .contentType(APPLICATION_JSON)
               .content(Json.mapper()
-                .writeValueAsString(new LoginDto().username("user").password("wrongPass"))))
+                .writeValueAsString(new LoginDto().username(USERNAME).password(WRONG_PASS))))
           .andDo(print())
           .andExpect(status().isUnauthorized());
     }
@@ -102,15 +120,15 @@ class ServerApplicationTests {
         String token = mvc.perform(
             post(AUTH_LOGIN)
               .contentType(APPLICATION_JSON)
-              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
+              .content(Json.mapper().writeValueAsString(new LoginDto().username(USERNAME).password(USERNAME))))
           .andDo(print())
           .andExpect(header().exists(AUTHORIZATION))
           .andReturn().getResponse().getHeader(AUTHORIZATION);
 
-        mvc.perform(post("/user/changePassword")
+        mvc.perform(post(CHANGE_PASSWORD)
             .contentType(APPLICATION_JSON)
-            .content(Json.mapper().writeValueAsString(new ChangePasswordDto().oldPassword("user").newPassword(
-              "abc")))
+            .content(Json.mapper().writeValueAsString(new ChangePasswordDto().userId(UUID.fromString(USER_UUID))
+              .newPassword(NEW_PASS)))
             .header(AUTHORIZATION, token))
           .andDo(print())
           .andExpect(status().isOk());
@@ -124,14 +142,14 @@ class ServerApplicationTests {
         mvc.perform(
             post(AUTH_LOGIN)
               .contentType(APPLICATION_JSON)
-              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
+              .content(Json.mapper().writeValueAsString(new LoginDto().username(USERNAME).password(USERNAME))))
           .andDo(print())
           .andExpect(status().isUnauthorized());
 
         token = mvc.perform(
             post(AUTH_LOGIN)
               .contentType(APPLICATION_JSON)
-              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("abc"))))
+              .content(Json.mapper().writeValueAsString(new LoginDto().username(USERNAME).password(NEW_PASS))))
           .andDo(print())
           .andExpect(header().exists(AUTHORIZATION))
           .andReturn().getResponse().getHeader(AUTHORIZATION);
@@ -142,10 +160,11 @@ class ServerApplicationTests {
           .andDo(print())
           .andExpect(status().isOk());
 
-        mvc.perform(post("/user/changePassword")
+        mvc.perform(post(CHANGE_PASSWORD)
             .contentType(APPLICATION_JSON)
-            .content(Json.mapper().writeValueAsString(new ChangePasswordDto().oldPassword("abc").newPassword(
-              "user")))
+            .content(Json.mapper().writeValueAsString(new ChangePasswordDto()
+              .userId(UUID.fromString(USER_UUID))
+              .newPassword(USERNAME)))
             .header(AUTHORIZATION, token))
           .andDo(print())
           .andExpect(status().isOk());
@@ -163,12 +182,12 @@ class ServerApplicationTests {
         String token = mvc.perform(
             post(AUTH_LOGIN)
               .contentType(APPLICATION_JSON)
-              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("user"))))
+              .content(Json.mapper().writeValueAsString(new LoginDto().username(USERNAME).password(USERNAME))))
           .andDo(print())
           .andExpect(header().exists(AUTHORIZATION))
           .andReturn().getResponse().getHeader(AUTHORIZATION);
 
-        mvc.perform(get("/userlist")
+        mvc.perform(get(USER_LIST)
             .contentType(APPLICATION_JSON)
             .header(AUTHORIZATION, token))
           .andExpect(status().isForbidden());
@@ -182,12 +201,12 @@ class ServerApplicationTests {
         token = mvc.perform(
             post(AUTH_LOGIN)
               .contentType(APPLICATION_JSON)
-              .content(Json.mapper().writeValueAsString(new LoginDto().username("admin").password("admin"))))
+              .content(Json.mapper().writeValueAsString(new LoginDto().username(ADMIN).password(ADMIN))))
           .andDo(print())
           .andExpect(header().exists(AUTHORIZATION))
           .andReturn().getResponse().getHeader(AUTHORIZATION);
 
-        mvc.perform(get("/userlist")
+        mvc.perform(get(USER_LIST)
             .contentType(APPLICATION_JSON)
             .header(AUTHORIZATION, token))
           .andExpect(status().isOk());
@@ -201,12 +220,12 @@ class ServerApplicationTests {
 
     @Test
     public void registerWorks() throws Exception {
-        mvc.perform(post("/user/registration/register")
+        mvc.perform(post(REGISTER)
             .contentType(APPLICATION_JSON)
             .content(Json.mapper()
-              .writeValueAsString(new RegistrationDto().email("test@asdf.com")
-                .password("asdf")
-                .username("asdf"))))
+              .writeValueAsString(new RegistrationDto().email(TEST_MAIL)
+                .password(NEW_PASS)
+                .username(NEW_PASS))))
           .andDo(print())
           .andExpect(status().isOk());
 
@@ -217,14 +236,14 @@ class ServerApplicationTests {
         assertThat(message).isNotNull();
 
 
-        mvc.perform(get("/user/registration/confirmRegistration/" + message))
+        mvc.perform(get(CONFIRM_REGISTER + message))
           .andDo(print())
           .andExpect(status().isFound());
 
         String logintoken = mvc.perform(
             post(AUTH_LOGIN)
               .contentType(APPLICATION_JSON)
-              .content(Json.mapper().writeValueAsString(new LoginDto().username("asdf").password("asdf"))))
+              .content(Json.mapper().writeValueAsString(new LoginDto().username(NEW_PASS).password(NEW_PASS))))
           .andDo(print())
           .andExpect(header().exists(AUTHORIZATION))
           .andReturn().getResponse().getHeader(AUTHORIZATION);
@@ -240,10 +259,11 @@ class ServerApplicationTests {
 
     @Test
     public void resetPasswordWorks() throws Exception {
-        mvc.perform(post("/user/forgotPassword")
+        mvc.perform(post(FORGOT_PASSWORD)
             .contentType(APPLICATION_JSON)
-            .content(Json.mapper().writeValueAsString(new ForgotPasswordDto().email("user@test.com").username(
-              "user"))))
+            .content(Json.mapper().writeValueAsString(new ForgotPasswordDto()
+              .email(USER_MAIL)
+              .username(USERNAME))))
           .andDo(print())
           .andExpect(status().isOk());
 
@@ -252,16 +272,16 @@ class ServerApplicationTests {
         String message = tokenCapture.getValue();
         assertThat(message).isNotNull();
 
-        mvc.perform(post("/user/forgotPassword/resetPassword")
+        mvc.perform(post(RESET_PASSWORD)
             .contentType(APPLICATION_JSON)
-            .content(Json.mapper().writeValueAsString(new PasswordResetDto().uuid(message).newPassword("asdf"))))
+            .content(Json.mapper().writeValueAsString(new PasswordResetDto().uuid(message).newPassword(NEW_PASS))))
           .andDo(print())
           .andExpect(status().isOk());
 
         String logintoken = mvc.perform(
             post(AUTH_LOGIN)
               .contentType(APPLICATION_JSON)
-              .content(Json.mapper().writeValueAsString(new LoginDto().username("user").password("asdf"))))
+              .content(Json.mapper().writeValueAsString(new LoginDto().username(USERNAME).password(NEW_PASS))))
           .andDo(print())
           .andExpect(header().exists(AUTHORIZATION))
           .andReturn().getResponse().getHeader(AUTHORIZATION);
@@ -275,7 +295,7 @@ class ServerApplicationTests {
 
     @Test
     public void usernameAndEmailAvailableWorks() throws Exception {
-        mvc.perform(get(USERNAME_AVAILABLE, "user"))
+        mvc.perform(get(USERNAME_AVAILABLE, USERNAME))
           .andExpect(status().isOk())
           .andExpect(content().contentType("application/json"))
           .andExpect(content().string("false"));
@@ -284,7 +304,7 @@ class ServerApplicationTests {
           .andExpect(content().contentType("application/json"))
           .andExpect(content().string("true"));
 
-        mvc.perform(get(EMAIL_AVAILABLE, "user@test.com"))
+        mvc.perform(get(EMAIL_AVAILABLE, USER_MAIL))
           .andExpect(status().isOk())
           .andExpect(content().contentType("application/json"))
           .andExpect(content().string("false"));

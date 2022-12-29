@@ -1,6 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import {AuthService} from '../../../services/auth/auth.service';
 import {RightsConstants} from '../../../constants/rights-constants';
+import {EditViewMode} from '../../../enums/edit-view-mode';
 
 @Component({
   selector: 'app-base',
@@ -10,10 +11,25 @@ import {RightsConstants} from '../../../constants/rights-constants';
 export class BaseComponent {
 
   public RightsConstants = RightsConstants;
-  constructor(public authService: AuthService) {
-  }
+  public EditViewMode = EditViewMode;
+  events: string[] = [];
+  appropriateClass: string = '';
 
   logout(): void {
     this.authService.logout();
+  }
+
+  constructor(public authService: AuthService) {
+    this.getScreenHeight();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  getScreenHeight() {
+    //console.log(window.innerHeight);
+    if (window.innerHeight <= 412) {
+      this.appropriateClass = 'bottomRelative';
+    } else {
+      this.appropriateClass = 'bottomStick';
+    }
   }
 }

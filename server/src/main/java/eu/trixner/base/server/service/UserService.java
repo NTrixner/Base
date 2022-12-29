@@ -13,7 +13,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -57,8 +55,8 @@ public class UserService implements UserDetailsService {
         return u;
     }
 
-    public UserDto findUser(UUID uuid) {
-        return userRepository.findById(uuid).map(userMapper::userToUserDto).orElse(null);
+    private static List<String> cleanStringList(List<String> ignores) {
+        return ignores.stream().map(ignore -> ignore.trim().toUpperCase()).collect(Collectors.toList());
     }
 
     public UserDto getCurrentUser() {
@@ -92,35 +90,22 @@ public class UserService implements UserDetailsService {
         return newRequest;
     }
 
+    public UserDto findUser(UUID uuid) {
+        return userRepository.findById(uuid).map(userMapper::userToUserDto).orElseThrow(NullPointerException::new);
+    }
+
     @Transactional
-    public boolean confirmRegistration(UUID id) {
+    public void confirmRegistration(UUID id) {
         UserRegistrationRequest request = this.userRegistrationRequestRepository.findById(id).orElseThrow(NullPointerException::new);
         User user = request.getUser();
         if (request.getExpiresAt().before(new Date())) {
             this.userRegistrationRequestRepository.delete(request);
             this.userRepository.delete(user);
-            return false;
+            throw new NullPointerException();
         }
         user.setIsActivated(true);
         this.userRepository.save(user);
         this.userRegistrationRequestRepository.delete(request);
-        return true;
-    }
-
-    @Transactional
-    public PasswordResetRequest requestPasswordReset(String username, String email) {
-        User user = userRepository.findByUsernameIgnoreCaseAndEmailIgnoreCase(username, email);
-        if (user == null) {
-            return null;
-        }
-        PasswordResetRequest request = new PasswordResetRequest();
-        request.setUser(user);
-        request.setExpiresAt(new Date(System.currentTimeMillis() + passwordResetExpiryDuration));
-        request.setMailSent(false);
-
-        request = passwordResetRequestRepository.save(request);
-        emailService.sendUserPasswordResetMessage(user.getUsername(), request.getId().toString(), user.getEmail());
-        return request;
     }
 
     @Transactional
@@ -134,17 +119,19 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void changePassword(String oldPassword, String newPassword) {
-        UserDto currentUser = getCurrentUser();
-        User currentUserDatabase = userRepository.findById(currentUser.getId()).orElse(null);
-        if (currentUserDatabase == null) {
+    public PasswordResetRequest requestPasswordReset(String username, String email) {
+        User user = userRepository.findByUsernameIgnoreCaseAndEmailIgnoreCase(username, email);
+        if (user == null) {
             throw new NullPointerException();
         }
-        if (!passwordEncoder.matches(oldPassword, currentUserDatabase.getPassword())) {
-            throw new IllegalArgumentException();
-        }
-        currentUserDatabase.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.saveAndFlush(currentUserDatabase);
+        PasswordResetRequest request = new PasswordResetRequest();
+        request.setUser(user);
+        request.setExpiresAt(new Date(System.currentTimeMillis() + passwordResetExpiryDuration));
+        request.setMailSent(false);
+
+        request = passwordResetRequestRepository.save(request);
+        emailService.sendUserPasswordResetMessage(user.getUsername(), request.getId().toString(), user.getEmail());
+        return request;
     }
 
     /**
@@ -168,12 +155,40 @@ public class UserService implements UserDetailsService {
         log.debug("{} Password reset requests were deleted", deleted);
     }
 
-    public Boolean isUsernameAvailable(String username) {
-        return BooleanUtils.isFalse(userRepository.existsByUsernameIgnoreCase(username));
+    @Transactional
+    public void changePassword(UUID uid, String newPassword) {
+        User user = userRepository.findById(uid).orElseThrow(NullPointerException::new);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.saveAndFlush(user);
     }
 
-    public Boolean isEmailAvailable(String email) {
-        return BooleanUtils.isFalse(userRepository.existsByEmailIgnoreCase(email));
+    public Boolean isUsernameAvailable(String username, List<String> ignores) {
+        if (ignores == null || ignores.size() == 0) {
+            ignores = List.of("");
+        }
+        username = username.trim();
+        ignores = cleanStringList(ignores);
+
+        return BooleanUtils.isFalse(userRepository.usernameExists(username, ignores));
+    }
+
+    public Boolean isEmailAvailable(String email, List<String> ignores) {
+        if (ignores == null || ignores.size() == 0) {
+            ignores = List.of("");
+        }
+        email = email.trim();
+        ignores = cleanStringList(ignores);
+        return BooleanUtils.isFalse(userRepository.emailExists(email, ignores));
+    }
+
+    public void changeUser(UserDto userDto) {
+        User byId = userRepository.findById(userDto.getId()).orElseThrow(NullPointerException::new);
+        userMapper.update(byId, userDto);
+        userRepository.save(byId);
+    }
+
+    public void deleteUser(String uuid) {
+        userRepository.deleteById(UUID.fromString(uuid));
     }
 }
 

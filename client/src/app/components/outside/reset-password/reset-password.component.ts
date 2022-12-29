@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {PasswordResetDto, UserService} from '../../../../api';
-import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
+import {UserUtils} from '../../../services/utils/user-utils';
 
 @Component({
   selector: 'app-rest-password',
@@ -27,7 +28,7 @@ export class ResetPasswordComponent implements OnInit {
       ]),
       passwordMatch: new FormControl('', [Validators.required]),
     },
-    this.passwordCheckValidator()
+    UserUtils.passwordCheckValidator()
   );
 
   constructor(private userService: UserService, public router: Router, private route: ActivatedRoute) {
@@ -55,24 +56,5 @@ export class ResetPasswordComponent implements OnInit {
           this.router.navigateByUrl('resetPassword/error');
         }
       });
-  }
-
-  passwordCheckValidator(): ValidatorFn {
-    return (fg: FormGroup) => {
-      const passwordA = fg.get('password');
-      const passwordB = fg.get('passwordMatch');
-      if (!!passwordA && !!passwordB) {
-        if (passwordA.value !== passwordB.value) {
-          passwordB.setErrors({...passwordB.errors, notEquivalent: true});
-        } else if (!!passwordB.errors) {
-          passwordB.setErrors({...passwordB.errors});
-        } else {
-          passwordB.setErrors(null);
-        }
-        return passwordB.errors;
-      } else {
-        return null;
-      }
-    };
   }
 }

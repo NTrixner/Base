@@ -1,6 +1,6 @@
 <div>
   <mat-card style="text-align: center">
-    <mat-card-title> Users </mat-card-title>
+    <mat-card-title> Users</mat-card-title>
     <mat-card-content>
       <div class="mat-elevation-z8" *ngIf="canSeeUsers()">
         <table
@@ -26,6 +26,15 @@
             <td mat-cell *matCellDef="let element">{{ element.email }}</td>
           </ng-container>
 
+          <ng-container matColumnDef="menu">
+            <th *matHeaderCellDef mat-header-cell>Options</th>
+            <td *matCellDef="let element" mat-cell>
+              <button [matMenuTriggerData]="{element: element}" [matMenuTriggerFor]="menu" mat-icon-button>
+                <mat-icon>more_vert</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
@@ -37,6 +46,30 @@
       </div>
     </mat-card-content>
 
-    <mat-card-footer> </mat-card-footer>
+    <mat-card-actions>
+      <button (click)="createUser()" *ngIf="canCreateUsers" color="primary" mat-raised-button type="button">
+        Create
+      </button>
+    </mat-card-actions>
+
+    <mat-card-footer></mat-card-footer>
   </mat-card>
 </div>
+
+<mat-menu #menu="matMenu">
+  <ng-template let-element="element" matMenuContent>
+    <button (click)="viewUser(element)" mat-menu-item>
+      <span>View</span>
+      <mat-icon>visibility</mat-icon>
+    </button>
+    <button (click)="editUser(element)" [disabled]="!canEditUser(element)" mat-menu-item>
+      <span>Edit</span>
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button (click)="deleteUser(element)" [disabled]="!canDeleteUser(element)" mat-menu-item>
+      <span>Delete</span>
+      <mat-icon>delete</mat-icon>
+    </button>
+  </ng-template>
+</mat-menu>
+
