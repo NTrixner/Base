@@ -10,7 +10,8 @@
     <mat-card-title> Login </mat-card-title>
     <form (ngSubmit)="login()">
       <mat-card-content>
-        <p [hidden]="!!loginFailureText">{{ loginFailureText }}</p>
+        <p [hidden]="!message">{{ message }}</p>
+        <p [hidden]="!loginFailureText">{{ loginFailureText }}</p>
         <br />
         <mat-form-field appearance="legacy">
           <mat-label>Username</mat-label>
@@ -40,7 +41,7 @@
           <mat-error *ngIf="!password">You must enter a password</mat-error>
         </mat-form-field>
         <br />
-        <a href="/forgotPassword">Forgot Password?</a>
+        <a (click)="forgotPassword()">Forgot Password?</a>
         <br />
       </mat-card-content>
 

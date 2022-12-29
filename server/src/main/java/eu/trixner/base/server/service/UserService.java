@@ -10,6 +10,7 @@ import eu.trixner.base.server.repository.UserRegistrationRequestRepository;
 import eu.trixner.base.server.repository.UserRepository;
 import eu.trixner.base.server.service.mapper.UserMapper;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +32,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final UserRegistrationRequestRepository userRegistrationRequestRepository;
     private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
     private final PasswordResetRequestRepository passwordResetRequestRepository;
     private final EmailService emailService;
 
@@ -45,19 +47,6 @@ public class UserService implements UserDetailsService {
 
     @Value("${user.passwordReset.requestExpiration}")
     private int passwordResetExpiryDuration;
-
-    @Autowired
-    public UserService(UserRepository userRepository,
-                       UserMapper userMapper,
-                       UserRegistrationRequestRepository userRegistrationRequestRepository,
-                       PasswordResetRequestRepository passwordResetRequestRepository,
-                       EmailService emailService) {
-        this.userRepository = userRepository;
-        this.userMapper = userMapper;
-        this.userRegistrationRequestRepository = userRegistrationRequestRepository;
-        this.passwordResetRequestRepository = passwordResetRequestRepository;
-        this.emailService = emailService;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String s) {
@@ -83,7 +72,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public User createUser(RegistrationDto dto) {
         User newUser = userMapper.userRegistrationDtoToUser(dto);
-        newUser.setPassword(passwordEncoder().encode(newUser.getPassword()));
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         newUser = this.userRepository.save(newUser);
         return newUser;
     }
@@ -138,7 +127,7 @@ public class UserService implements UserDetailsService {
     public void resetPassword(UUID id, String newPassword) {
         PasswordResetRequest request = passwordResetRequestRepository.findById(id).orElseThrow(NullPointerException::new);
         User user = request.getUser();
-        user.setPassword(passwordEncoder().encode(newPassword));
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         int deleted = passwordResetRequestRepository.deleteByUserId(user.getId());
         log.debug("{} Password reset requests were deleted", deleted);
@@ -151,10 +140,10 @@ public class UserService implements UserDetailsService {
         if (currentUserDatabase == null) {
             throw new NullPointerException();
         }
-        if (!passwordEncoder().matches(oldPassword, currentUserDatabase.getPassword())) {
+        if (!passwordEncoder.matches(oldPassword, currentUserDatabase.getPassword())) {
             throw new IllegalArgumentException();
         }
-        currentUserDatabase.setPassword(passwordEncoder().encode(newPassword));
+        currentUserDatabase.setPassword(passwordEncoder.encode(newPassword));
         userRepository.saveAndFlush(currentUserDatabase);
     }
 
@@ -177,13 +166,6 @@ public class UserService implements UserDetailsService {
     public void cleanUpPasswordResetRequests() {
         int deleted = passwordResetRequestRepository.deleteByExpiresAtIsBefore(new Date());
         log.debug("{} Password reset requests were deleted", deleted);
-    }
-
-    /**
-     * Getters
-     */
-    public PasswordEncoder passwordEncoder() {
-        return passwordEncoder;
     }
 
     public Boolean isUsernameAvailable(String username) {

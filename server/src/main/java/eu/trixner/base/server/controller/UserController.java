@@ -9,6 +9,7 @@ import eu.trixner.base.server.model.PasswordResetRequest;
 import eu.trixner.base.server.model.UserRegistrationRequest;
 import eu.trixner.base.server.service.UserService;
 import eu.trixner.base.user.UserApi;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -25,15 +27,11 @@ import java.util.UUID;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
+@RequestMapping("api")
 public class UserController implements UserApi
 {
-    UserService userService;
-
-    @Autowired
-    public UserController(UserService userService)
-    {
-        this.userService = userService;
-    }
+    private final UserService userService;
 
     @Override
     public Optional<NativeWebRequest> getRequest()

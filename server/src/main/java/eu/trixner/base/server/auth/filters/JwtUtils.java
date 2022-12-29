@@ -22,10 +22,6 @@ import java.util.List;
 @Slf4j
 public class JwtUtils {
 
-    public static boolean isExpired(HttpServletRequest request) {
-        return isExpired(getToken(request));
-    }
-
     public static boolean isExpired(String token) {
         try {
             return parseToken(token).getBody().getExpiration().before(new Date());

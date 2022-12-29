@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {HomeComponent} from './components/home/home.component';
+import {HomeComponent} from './components/inside/home/home.component';
 import {LoginComponent} from './components/outside/login/login.component';
 import {RegisterComponent} from './components/outside/register/register.component';
 import {AuthGuard} from './guards/auth/auth.guard';
@@ -20,9 +20,11 @@ import {
 import {
   ResetPasswordErrorComponent
 } from './components/outside/reset-password/reset-password-error-component/reset-password-error.component';
+import {UserListComponent} from './components/inside/user-list/user-list.component';
+import {BaseComponent} from './components/inside/base/base.component';
 
 const routes: Routes = [
-  {path: '', component: HomeComponent, canActivate: [AuthGuard]},
+  {path: '', component: LoginComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'register/success', component: RegisterSuccessComponent},
@@ -33,6 +35,10 @@ const routes: Routes = [
   {path: 'resetPassword', component: ResetPasswordComponent},
   {path: 'resetPassword/success', component: ResetPasswordSuccessComponent},
   {path: 'resetPassword/error', component: ResetPasswordErrorComponent},
+  {path: 'base', component: BaseComponent, canActivate: [AuthGuard], children: [
+      {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+      {path: 'userlist', component: UserListComponent, canActivate: [AuthGuard]},
+    ]},
   // otherwise redirect to home
   {path: '**', redirectTo: ''},
 ];

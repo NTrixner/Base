@@ -5,6 +5,7 @@ import freemarker.template.TemplateException;
 import jakarta.annotation.PostConstruct;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,7 @@ import java.util.Properties;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class EmailService {
     public static final String REGISTRATION_SUB_URI = "/user/registration/confirmRegistration";
     public static final String REGISTER_TPL = "register.ftlh";
@@ -34,7 +36,7 @@ public class EmailService {
     public static final String URL = "url";
     public static final String TOKEN = "token";
 
-    private final JavaMailSenderImpl emailSender;
+    private final JavaMailSenderImpl emailSender = new JavaMailSenderImpl();
 
     private final FreeMarkerConfigurer freeMarkerConfigurer;
 
@@ -62,12 +64,6 @@ public class EmailService {
     @Value("${application.name}")
     private String applicationName;
 
-
-    @Autowired
-    public EmailService(FreeMarkerConfigurer freeMarkerConfigurer) {
-        this.freeMarkerConfigurer = freeMarkerConfigurer;
-        this.emailSender = new JavaMailSenderImpl();
-    }
     @PostConstruct
     void afterPropertiesSet()
     {

@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { UserDto, UserService } from '../../../api';
-import { HttpResponse } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
-import { Observable, Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import {Injectable} from '@angular/core';
+import {UserDto, UserService} from '../../../api';
+import {HttpHeaders, HttpResponse} from '@angular/common/http';
+import {tap} from 'rxjs/operators';
+import {Observable, Subscription} from 'rxjs';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -20,27 +20,33 @@ export class AuthService {
     password: string,
     returnUrl: string
   ): Observable<HttpResponse<any>> {
-    return this.api.loginUser({ username, password }, 'response').pipe(
-      tap((response: HttpResponse<any>) => {
-        const authorization = response.headers.get('Authorization');
-        if (response.ok && authorization) {
-          const token = authorization.replace('Bearer ', '');
-          this.setTokenAndLoadUserData(token).add(() => {
-            this.router.navigateByUrl(returnUrl);
-          });
-        }
-      })
-    );
+    return this.api.loginUser({username, password}, 'response')
+      .pipe(tap((response: HttpResponse<any>) => {
+          const authorization = response.headers.get('Authorization');
+          console.log(authorization);
+          if (response.ok && authorization) {
+            const token = authorization.replace('Bearer ', '');
+            this.setTokenAndLoadUserData(token).add(() => {
+              this.router.navigateByUrl(returnUrl);
+            });
+          } else {
+            this.router.navigateByUrl('login');
+          }
+        })
+      );
   }
 
   public setTokenAndLoadUserData(token: string): Subscription {
-    this.api.configuration.credentials['auth'] = token;
+    this.api.configuration.credentials['auth'] = 'Bearer ' + token;
     window.sessionStorage.setItem('userToken', token);
     return this.api.getCurrentUser('body').subscribe((userDto: UserDto) => {
-      if (userDto) {
-        this.user = userDto;
-      }
-    });
+        if (userDto) {
+          this.user = userDto;
+        }
+      },
+      error => {
+        this.router.navigate(['login'], {queryParams: {message: 'You have been logged out. Please try again'}});
+      });
   }
 
   public logout(): void {

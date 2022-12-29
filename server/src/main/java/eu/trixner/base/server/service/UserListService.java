@@ -3,19 +3,18 @@ package eu.trixner.base.server.service;
 import eu.trixner.base.dto.UserListDto;
 import eu.trixner.base.server.repository.UserRepository;
 import eu.trixner.base.server.service.mapper.UserListMapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class UserListService {
 
-    private UserRepository userRepository;
-    private UserListMapper userListMapper;
-
-    public UserListService(UserRepository userRepository, UserListMapper userListMapper) {
-        this.userRepository = userRepository;
-        this.userListMapper = userListMapper;
-    }
+    private final UserRepository userRepository;
+    private final UserListMapper userListMapper;
 
     public Long countUsers() {
         return userRepository.count();
