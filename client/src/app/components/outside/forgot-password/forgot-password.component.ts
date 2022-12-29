@@ -45,8 +45,4 @@ export class ForgotPasswordComponent {
         }
       });
   }
-
-  goBackToLogin() {
-    this.router.navigateByUrl('login');
-  }
 }

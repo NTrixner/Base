@@ -24,8 +24,7 @@ export class AuthService {
     return this.api.loginUser({username, password}, 'response')
       .pipe(tap((response: HttpResponse<any>) => {
           const authorization = response.headers.get('Authorization');
-          console.log(authorization);
-          if (response.ok && authorization) {
+          if (response.ok && !!authorization) {
             const token = authorization.replace('Bearer ', '');
             this.setTokenAndLoadUserData(token).add(() => {
               this.router.navigateByUrl(returnUrl);

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../../services/auth/auth.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {catchError} from 'rxjs/operators';
 import {of} from 'rxjs';
 
@@ -20,8 +20,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router
+    private route: ActivatedRoute
   ) {
   }
 
@@ -41,21 +40,12 @@ export class LoginComponent implements OnInit {
       this.authService
         .login(this.username, this.password, this.returnUrl)
         .pipe(
-          catchError((err) => {
+          catchError(() => {
             this.loginFailureText = 'Login failed, please check the inputs';
             return of(null);
           })
         )
         .subscribe();
     }
-  }
-
-  register() {
-    this.router.navigateByUrl('register');
-  }
-
-
-  forgotPassword() {
-    this.router.navigateByUrl('forgotPassword');
   }
 }

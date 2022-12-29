@@ -1,18 +1,13 @@
 package eu.trixner.base.server.auth.filters;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -23,13 +18,15 @@ import java.io.IOException;
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
+    private final JwtUtils jwtUtils;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
 
-        String token = JwtUtils.getToken(request);
+        String token = jwtUtils.getToken(request);
 
-        if (token != null && JwtUtils.isExpired(token)) {
+        if (token != null && jwtUtils.isExpired(token)) {
             TokenHandler.getBlackList().remove(token);
         }
 
@@ -41,11 +38,16 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         if (token != null) {
-            UsernamePasswordAuthenticationToken auth = JwtUtils.getAuthentication(request);
+            UsernamePasswordAuthenticationToken auth = jwtUtils.getAuthentication(request);
             if (auth != null) {
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
+                if (jwtUtils.shouldRefresh(token)) {
+                    log.info("Refreshing token");
+                    response.setHeader("Authorization", jwtUtils.refreshToken(request));
+                    TokenHandler.getBlackList().add(token);
+                }
                 log.info("Successful authentication try from username {}, IP Address is {}",
                   auth.getName(),
                   request.getRemoteAddr());
