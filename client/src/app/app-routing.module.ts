@@ -36,11 +36,16 @@ const routes: Routes = [
   {path: 'resetPassword', component: ResetPasswordComponent},
   {path: 'resetPassword/success', component: ResetPasswordSuccessComponent},
   {path: 'resetPassword/error', component: ResetPasswordErrorComponent},
-  {path: 'base', component: BaseComponent, canActivate: [AuthGuard], children: [
+  {
+    path: 'base',
+    component: BaseComponent,
+    canActivate: [AuthGuard],
+    children: [
       {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
       {path: 'userlist', component: UserListComponent, canActivate: [AuthGuard]},
       {path: 'user', component: UserComponent, canActivate: [AuthGuard]}
-    ]},
+    ]
+  },
   // otherwise redirect to home
   {path: '**', redirectTo: ''},
 ];

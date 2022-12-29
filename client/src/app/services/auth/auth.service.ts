@@ -37,17 +37,32 @@ export class AuthService {
       );
   }
 
+  public getCurrentUser(): UserDto | null {
+    let userJson = localStorage.getItem('user');
+    if (!!userJson) {
+      let parsed = JSON.parse(userJson) as UserDto;
+      if (!!parsed) {
+        return parsed;
+      }
+    }
+    return null;
+  }
+
   public setTokenAndLoadUserData(token: string): Subscription {
     this.api.configuration.credentials['auth'] = 'Bearer ' + token;
-    window.sessionStorage.setItem('userToken', token);
-    return this.api.getCurrentUser('body').subscribe((userDto: UserDto) => {
+    localStorage.setItem('userToken', token);
+    return this.api.getCurrentUser('body').subscribe({
+      next: (userDto: UserDto) => {
         if (userDto) {
+          console.log("setting user to " + userDto.username);
           this.user = userDto;
+          localStorage.setItem('user', JSON.stringify(userDto));
         }
       },
-      () => {
+      error: () => {
         this.router.navigate(['login'], {queryParams: {message: 'You have been logged out. Please try again'}});
-      });
+      }
+    });
   }
 
   public logout(): void {
@@ -57,7 +72,8 @@ export class AuthService {
         tap(() => {
           this.api.configuration.credentials = {};
           this.user = null;
-          window.sessionStorage.removeItem('userToken');
+          localStorage.removeItem('userToken');
+          localStorage.removeItem('user');
           this.router.navigateByUrl('/login');
         })
       )
@@ -65,7 +81,7 @@ export class AuthService {
   }
 
   public hasRight(right: string): boolean {
-    return !!this.user?.rights?.includes(right).valueOf() || false;
+    return !!this.getCurrentUser()?.rights?.includes(right).valueOf() || false;
   }
 
   public canEdit(userId: string): boolean {
@@ -84,7 +100,7 @@ export class AuthService {
   }
 
   public isCurrentUser(userId: string): boolean {
-    return (!!this.user?.id || '') == userId;
+    return (!!this.getCurrentUser()?.id || '') == userId;
   }
 
   public showRightsError(): void {

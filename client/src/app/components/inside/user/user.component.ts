@@ -49,6 +49,7 @@ export class UserComponent implements OnInit {
   ngOnInit(): void {
     let userId: string = this.route.snapshot.queryParams['user'] || null;
     if (!userId) {
+
       //Create mode, check if we can do this
       if (!this.auth.hasRight(RightsConstants.ROLE_USER_CAN_CREATE_USER)) {
         this.auth.showRightsError();
