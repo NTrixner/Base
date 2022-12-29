@@ -16,7 +16,14 @@ tags:
     -   name: Userlist
         description: Methods used for the Userlist
 servers:
-    -   url: 'http://localhost:8080/api'
+    -   url: 'http://{host}:{port}/api'
+        variables:
+            host:
+                default: 'localhost'
+                description: the host address of the application
+            port:
+                default: '8080'
+                description: the port of the application
 security:
     -   auth: []
 paths:

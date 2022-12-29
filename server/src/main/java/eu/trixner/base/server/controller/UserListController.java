@@ -4,6 +4,7 @@ import eu.trixner.base.dto.UserListDto;
 import eu.trixner.base.server.service.UserListService;
 import eu.trixner.base.server.utils.PaginationUtils;
 import eu.trixner.base.user.UserlistApi;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import jakarta.annotation.Nullable;
@@ -18,16 +20,13 @@ import java.util.Optional;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
+@RequestMapping("api")
 public class UserListController implements UserlistApi
 {
 
-    UserListService userListService;
+    private final UserListService userListService;
 
-    @Autowired
-    public UserListController(UserListService userListService)
-    {
-        this.userListService = userListService;
-    }
 
     @Override
     public Optional<NativeWebRequest> getRequest()

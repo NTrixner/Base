@@ -7,7 +7,7 @@ import { ApiModule, Configuration, ConfigurationParameters } from '../api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginComponent } from './components/outside/login/login.component';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './components/inside/home/home.component';
 import { RegisterComponent } from './components/outside/register/register.component';
 import { ForgotPasswordComponent } from './components/outside/forgot-password/forgot-password.component';
 import { environment } from '../environments/environment';
@@ -31,6 +31,10 @@ import {
 import {
   ResetPasswordErrorComponent
 } from './components/outside/reset-password/reset-password-error-component/reset-password-error.component';
+import { UserListComponent } from './components/inside/user-list/user-list.component';
+import { BaseComponent } from './components/inside/base/base.component';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -52,7 +56,9 @@ export function apiConfigFactory(): Configuration {
     ForgotPasswordErrorComponent,
     ResetPasswordComponent,
     ResetPasswordSuccessComponent,
-    ResetPasswordErrorComponent
+    ResetPasswordErrorComponent,
+    UserListComponent,
+    BaseComponent
   ],
   imports: [
     ApiModule,
@@ -71,6 +77,8 @@ export function apiConfigFactory(): Configuration {
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
+    MatSidenavModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

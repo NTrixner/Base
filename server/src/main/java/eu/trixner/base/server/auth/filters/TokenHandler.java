@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TokenHandler {
 
-    private static List<String> blackList = new ArrayList<>();
+    private static final List<String> blackList = new ArrayList<>();
 
     public static List<String> getBlackList() {
         return blackList;

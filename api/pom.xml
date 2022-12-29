@@ -104,6 +104,7 @@
                                 <library>spring-boot</library>
                                 <openApiNullable>false</openApiNullable>
                                 <useSpringBoot3>true</useSpringBoot3>
+
                             </configOptions>
 
                         </configuration>

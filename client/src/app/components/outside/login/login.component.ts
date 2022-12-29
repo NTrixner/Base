@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   password = '';
   username = '';
   returnUrl = '';
+  message = null;
   loginFailureText = '';
   confirmationRegistration = false;
 
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'base/home';
+    this.message = this.route.snapshot.queryParams['message'] || null;
     this.confirmationRegistration =
       this.route.snapshot.queryParams['confirmationRegistration'] === 'true' || false;
   }

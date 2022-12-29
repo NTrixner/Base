@@ -36,8 +36,8 @@
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <frontend-maven-plugin.version>1.10.0</frontend-maven-plugin.version>
-        <frontend-maven-plugin.nodeVersion>v18.7.0</frontend-maven-plugin.nodeVersion>
-        <frontend-maven-plugin.npmVersion>8.18.0</frontend-maven-plugin.npmVersion>
+        <frontend-maven-plugin.nodeVersion>v19.3.0</frontend-maven-plugin.nodeVersion>
+        <frontend-maven-plugin.npmVersion>9.2.0</frontend-maven-plugin.npmVersion>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-resources-plugin.version>3.3.0</maven-resources-plugin.version>
         <slf4j-api.version>2.0.5</slf4j-api.version>
