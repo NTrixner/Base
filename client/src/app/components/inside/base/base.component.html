@@ -1,0 +1,22 @@
+<mat-sidenav-container class="nav-container">
+  <mat-sidenav mode="side" opened fixedInViewport>
+    <mat-action-list>
+      <mat-list-item [routerLink]="['home']">Home</mat-list-item>
+      <mat-list-item [routerLink]="['userlist']"
+                     *ngIf="authService.hasRight(RightsConstants.ROLE_USER_CAN_WATCH_USERLIST)">Userlist
+      </mat-list-item>
+      <mat-list-item>
+        <button
+          mat-raised-button
+          color="primary"
+          type="button"
+          (click)="logout()">
+          Logout
+        </button>
+      </mat-list-item>
+    </mat-action-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="homeWrapper">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
