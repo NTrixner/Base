@@ -3,16 +3,34 @@
   min-height: 100%;
 }
 
-.homeWrapper {
+mat-sidenav {
+  width: 150px;
   display: flex;
   align-items: center;
-  height: 100%;
-  margin-left: auto;
-  margin-right: auto;
+  justify-content: center;
+}
+
+.homeWrapper {
+  align-items: center;
+  height: 100vh;
+  overflow: auto;
+  padding: 10pt;
 }
 
 md-sidenav.md-locked-open {
   width: 250px;
   min-width: 250px;
   max-width: 250px;
+}
+
+button {
+}
+
+.bottomStick { /*border-top:1px solid green;border-bottom:1px solid green;*/
+  position: absolute;
+  bottom: 0
+}
+
+.bottomRelative {
+  position: relative;
 }

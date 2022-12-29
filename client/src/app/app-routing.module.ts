@@ -22,6 +22,7 @@ import {
 } from './components/outside/reset-password/reset-password-error-component/reset-password-error.component';
 import {UserListComponent} from './components/inside/user-list/user-list.component';
 import {BaseComponent} from './components/inside/base/base.component';
+import {UserComponent} from './components/inside/user/user.component';
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
@@ -38,6 +39,7 @@ const routes: Routes = [
   {path: 'base', component: BaseComponent, canActivate: [AuthGuard], children: [
       {path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
       {path: 'userlist', component: UserListComponent, canActivate: [AuthGuard]},
+      {path: 'user', component: UserComponent, canActivate: [AuthGuard]}
     ]},
   // otherwise redirect to home
   {path: '**', redirectTo: ''},

@@ -5,6 +5,7 @@ import eu.trixner.base.dto.UserDto;
 import eu.trixner.base.server.model.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -13,4 +14,6 @@ public interface UserMapper {
     @Mapping(target = "isActivated", constant = "false")
     @Mapping(target = "userType", constant = "USER")
     User userRegistrationDtoToUser(RegistrationDto dto);
+
+    void update(@MappingTarget User target, UserDto dto);
 }

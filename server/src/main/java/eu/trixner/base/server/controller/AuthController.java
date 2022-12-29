@@ -4,6 +4,7 @@ import eu.trixner.base.dto.LoginDto;
 import eu.trixner.base.server.auth.SecurityConstants;
 import eu.trixner.base.server.auth.filters.JwtUtils;
 import eu.trixner.base.server.auth.filters.TokenHandler;
+import eu.trixner.base.server.exceptions.UserNotAuthenticatedException;
 import eu.trixner.base.user.AuthApi;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -43,41 +44,35 @@ public class AuthController implements AuthApi {
 
     @Override
     public ResponseEntity<Void> loginUser(@Valid @RequestBody(required = false) LoginDto loginDto) {
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
 
-            log.info("Login try from IP {} with username {}", request.getRemoteAddr(), loginDto.getUsername());
+        log.info("Login try from IP {} with username {}", request.getRemoteAddr(), loginDto.getUsername());
 
-            UserDetails user = userDetailsService.loadUserByUsername(loginDto.getUsername());
-            if (user != null) {
-                byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
+        UserDetails user = userDetailsService.loadUserByUsername(loginDto.getUsername());
+        byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
 
-                List<String> roles = user.getAuthorities()
-                  .stream()
-                  .map(GrantedAuthority::getAuthority)
-                  .collect(Collectors.toList());
+        List<String> roles = user.getAuthorities()
+          .stream()
+          .map(GrantedAuthority::getAuthority)
+          .collect(Collectors.toList());
 
-                String token = Jwts.builder()
-                  .signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
-                  .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
-                  .setIssuer(SecurityConstants.TOKEN_ISSUER)
-                  .setAudience(SecurityConstants.TOKEN_AUDIENCE)
-                  .setSubject(user.getUsername())
-                  .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.JWT_TOKEN_EXPIRATION))
-                  .setId(UUID.randomUUID().toString())
-                  .claim("rol", roles)
-                  .compact();
+        String token = Jwts.builder()
+          .signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
+          .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
+          .setIssuer(SecurityConstants.TOKEN_ISSUER)
+          .setAudience(SecurityConstants.TOKEN_AUDIENCE)
+          .setSubject(user.getUsername())
+          .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.JWT_TOKEN_EXPIRATION))
+          .setId(UUID.randomUUID().toString())
+          .claim("rol", roles)
+          .compact();
 
-                return ResponseEntity
-                  .ok()
-                  .header(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token)
-                  .build();
-            }
-            return ResponseEntity.status(401).build();
-        } catch (Exception e) {
-            log.error("Error when trying to log in", e);
-            return ResponseEntity.status(401).build();
-        }
+        return ResponseEntity
+          .ok()
+          .header(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token)
+          .build();
+
+
     }
 
     @Override
@@ -87,7 +82,7 @@ public class AuthController implements AuthApi {
         Authentication auth = JwtUtils.getAuthentication(request);
         if (TokenHandler.getBlackList().contains(token) || auth == null) {
             //Either user is already blacklisted, or the token can not be parsed anyways
-            return ResponseEntity.status(401).build();
+            throw new UserNotAuthenticatedException();
         }
         log.info("Logging user {} out", auth.getName());
         TokenHandler.getBlackList().add(token);

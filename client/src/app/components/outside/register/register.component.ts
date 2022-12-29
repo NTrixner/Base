@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
 import {RegistrationDto, UserService} from '../../../../api';
 import {Router} from '@angular/router';
-import {AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators,} from '@angular/forms';
+import {AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, Validators,} from '@angular/forms';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
+import {UserUtils} from '../../../services/utils/user-utils';
 
 @Component({
   selector: 'app-register',
@@ -38,7 +39,7 @@ export class RegisterComponent {
       ]),
       passwordMatch: new FormControl('', [Validators.required]),
     },
-    this.passwordCheckValidator()
+    UserUtils.passwordCheckValidator()
   );
 
   constructor(private userService: UserService, public router: Router) {
@@ -61,38 +62,18 @@ export class RegisterComponent {
       });
   }
 
-  passwordCheckValidator(): ValidatorFn {
-    return (fg: FormGroup) => {
-      const passwordA = fg.get('password');
-      const passwordB = fg.get('passwordMatch');
-      if (!!passwordA && !!passwordB) {
-        if (passwordA.value !== passwordB.value) {
-          passwordB.setErrors({...passwordB.errors, notEquivalent: true});
-        } else if (!!passwordB.errors) {
-          passwordB.setErrors({...passwordB.errors});
-        } else {
-          passwordB.setErrors(null);
-        }
-        return passwordB.errors;
-      } else {
-        return null;
-      }
-    };
-  }
-
-  emailValidator(): AsyncValidatorFn {
+  private emailValidator(): AsyncValidatorFn {
     return (fc: FormControl): Observable<ValidationErrors | null> => {
-      return this.userService
-        .isEmailAvailable(fc.value, 'body')
+      return this.userService.isEmailAvailable(fc.value, [''], 'body')
         .pipe(map((isAvailable) => (!isAvailable ? {used: true} : null)));
     };
   }
 
-  usernameValidator(): AsyncValidatorFn {
+  private usernameValidator(): AsyncValidatorFn {
     return (fc: FormControl): Observable<ValidationErrors | null> => {
-      return this.userService
-        .isUsernameAvailable(fc.value, 'body')
+      return this.userService.isUsernameAvailable(fc.value, [''], 'body')
         .pipe(map((isAvailable) => (!isAvailable ? {used: true} : null)));
     };
   }
+
 }

@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {UserDto, UserService} from '../../../api';
-import {HttpHeaders, HttpResponse} from '@angular/common/http';
+import {HttpResponse} from '@angular/common/http';
 import {tap} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
 import {Router} from '@angular/router';
+import {RightsConstants} from '../../constants/rights-constants';
 
 @Injectable({
   providedIn: 'root',
@@ -44,7 +45,7 @@ export class AuthService {
           this.user = userDto;
         }
       },
-      error => {
+      () => {
         this.router.navigate(['login'], {queryParams: {message: 'You have been logged out. Please try again'}});
       });
   }
@@ -65,5 +66,28 @@ export class AuthService {
 
   public hasRight(right: string): boolean {
     return !!this.user?.rights?.includes(right).valueOf() || false;
+  }
+
+  public canEdit(userId: string): boolean {
+    return this.hasRight(RightsConstants.ROLE_USER_CAN_CREATE_USER)
+      || this.isCurrentUser(userId) && this.hasRight(RightsConstants.ROLE_USER_CAN_SEE_SELF);
+  }
+
+  public canView(userId: string): boolean {
+    return this.hasRight(RightsConstants.ROLE_USER_CAN_GET_USER_BY_ID)
+      || this.isCurrentUser(userId) && this.hasRight(RightsConstants.ROLE_USER_CAN_SEE_SELF)
+  }
+
+  public canChangePassword(userId: string): boolean {
+    return this.hasRight(RightsConstants.ROLE_USER_CAN_CHANGE_PASSWORD)
+      || this.isCurrentUser(userId) && this.hasRight(RightsConstants.ROLE_USER_CAN_SEE_SELF)
+  }
+
+  public isCurrentUser(userId: string): boolean {
+    return (!!this.user?.id || '') == userId;
+  }
+
+  public showRightsError(): void {
+    this.router.navigate(['error'], {queryParams: {message: 'rightError'}})
   }
 }
