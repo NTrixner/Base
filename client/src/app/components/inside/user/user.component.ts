@@ -78,15 +78,38 @@ export class UserComponent implements OnInit {
         this.canEdit = this.auth.canEdit(userId);
       }
 
-      this.service.getUserById(userId)
-        .subscribe(user => {
-          this.user = user;
-          this.copyFormControl();
-        });
+      this.loadUser(userId);
     }
   }
 
+  isOwnUser() {
+    return this.auth.getCurrentUser()?.id == this.user.id;
+  }
+
   public onSave(): void {
+    this.service.changeUser({
+      username: this.userForm.get('username')?.value!,
+      email: this.userForm.get('email')?.value!,
+      id: this.user.id,
+      rights: this.user.rights
+    }).subscribe({
+      next: () => {
+        this.changeMode(EditViewMode.EDIT, EditViewMode.VIEW);
+      },
+      error: () => {
+      }
+    });
+  }
+
+  public changeMode(before: EditViewMode, after: EditViewMode): void {
+    if (before === EditViewMode.VIEW && after === EditViewMode.EDIT) {
+      this.copyFormControl();
+      this.mode = EditViewMode.EDIT;
+    }
+    if (before === EditViewMode.EDIT && after === EditViewMode.VIEW) {
+      this.mode = EditViewMode.VIEW;
+      this.loadUser(this.user?.id!);
+    }
   }
 
   public onReset(): void {
@@ -105,14 +128,12 @@ export class UserComponent implements OnInit {
     }
   }
 
-  public changeMode(before: EditViewMode, after: EditViewMode): void {
-    if (before === EditViewMode.VIEW && after === EditViewMode.EDIT) {
-      this.copyFormControl();
-      this.mode = EditViewMode.EDIT;
-    }
-    if (before === EditViewMode.EDIT && after === EditViewMode.VIEW) {
-      this.mode = EditViewMode.VIEW;
-    }
+  private loadUser(userId: string) {
+    this.service.getUserById(userId)
+      .subscribe(user => {
+        this.user = user;
+        this.copyFormControl();
+      });
   }
 
   public changePassword(): void {
@@ -133,6 +154,11 @@ export class UserComponent implements OnInit {
       username: this.user?.username ?? '',
       email: this.user?.email ?? ''
     })
+    if (this.isOwnUser()) {
+      this.userForm.controls.username.disable();
+    } else {
+      this.userForm.controls.username.enable();
+    }
   }
 
   private emailValidator(): AsyncValidatorFn {

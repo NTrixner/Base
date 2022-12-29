@@ -17,7 +17,8 @@
             autocomplete="username"
             formControlName="username"
             matInput
-            required/>
+            required
+          />
           <mat-error *ngIf="userForm.get('username')?.hasError('minlength')">Usernames must be at least 3 characters
             long!
           </mat-error>

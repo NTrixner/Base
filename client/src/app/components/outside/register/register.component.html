@@ -100,7 +100,7 @@
           [disabled]="userForm.invalid">
           Register
         </button>
-        <button mat-raised-button color="primary" (click)="router.navigateByUrl('login')">
+        <button [routerLink]="['/login']" color="primary" mat-raised-button>
           Cancel
         </button>
       </mat-card-actions>

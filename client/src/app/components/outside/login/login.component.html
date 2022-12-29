@@ -41,7 +41,7 @@
           <mat-error *ngIf="!password">You must enter a password</mat-error>
         </mat-form-field>
         <br />
-        <a (click)="forgotPassword()">Forgot Password?</a>
+        <a [routerLink]="['/forgotPassword']">Forgot Password?</a>
         <br />
       </mat-card-content>
 
@@ -54,7 +54,7 @@
         >
           Login
         </button>
-        <button mat-raised-button color="primary" (click)="register()">
+        <button [routerLink]="['/register']" color="primary" mat-raised-button>
           Register
         </button>
       </mat-card-actions>

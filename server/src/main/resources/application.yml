@@ -14,11 +14,6 @@ email:
           enable: true
   username: yourUser
 
-jwt:
-  token:
-    expiration: 900000
-    removeStaleTokenRate: 60000
-
 logging:
   level:
     eu:
@@ -30,9 +25,6 @@ logging:
       springframework:
         security: DEBUG
         web: INFO
-
-hashids:
-  salt: this is some hash id salt
 
 spring:
   datasource:
@@ -62,3 +54,15 @@ user:
   registration:
     requestCleanupRate: 300000
     requestExpiration: 86400000
+
+jwt:
+  #Signing key for HS512 algorithm
+  #You can use the page http://www.allkeysgenerator.com/ to generate all kinds of keys
+  secret: n2r5u8x/A%D*G-KaPdSgVkYp3s6v9y$B&E(H+MbQeThWmZq4t7w!z%C*F-J@NcRf
+  token:
+    expiration: 900000
+    #The period of milliseconds until expiration, where we refresh the token on any successful call
+    #If 0, tokens don't get refreshed
+    #If larger than expiration, tokens never expire
+    refresh: 840000
+    removeStaleTokenRate: 60000

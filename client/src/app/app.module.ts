@@ -5,7 +5,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ApiModule, Configuration, ConfigurationParameters} from '../api';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {LoginComponent} from './components/outside/login/login.component';
 import {HomeComponent} from './components/inside/home/home.component';
 import {RegisterComponent} from './components/outside/register/register.component';
@@ -48,6 +48,7 @@ import {
   UserDeleteConfirmDialogComponent
 } from './components/inside/user-list/user-delete-confirm-dialog/user-delete-confirm-dialog.component';
 import {MatMenuModule} from '@angular/material/menu';
+import {AuthInterceptor} from './ínterceptors/auth.interceptor';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -98,7 +99,7 @@ export function apiConfigFactory(): Configuration {
     MatDialogModule,
     MatMenuModule
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent],
 })
 export class AppModule {

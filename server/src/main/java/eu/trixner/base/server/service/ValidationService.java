@@ -5,6 +5,7 @@ import eu.trixner.base.server.exceptions.UserNotAuthorizedException;
 import eu.trixner.base.server.model.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.security.InvalidParameterException;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class ValidationService {
-    UserService userService;
+    private final UserService userService;
 
     public void validateUserChange(UserDto userDto) {
         if (userDto.getId() == null) {
@@ -24,6 +25,10 @@ public class ValidationService {
         UserDto currentUser = userService.getCurrentUser();
         if (currentUser == null) {
             throw new UserNotAuthorizedException();
+        }
+        if (!StringUtils.equals(currentUser.getUsername(), userDto.getUsername())
+          && Objects.equals(userDto.getId(), currentUser.getId())) {
+            throw new InvalidParameterException("You shall not change your own username!");
         }
         if (!(currentUser.getRights().contains(Role.ROLE_USER_CAN_CREATE_USER.getAuthority())
           || (currentUser.getRights().contains(Role.ROLE_USER_CAN_SEE_SELF.getAuthority())
