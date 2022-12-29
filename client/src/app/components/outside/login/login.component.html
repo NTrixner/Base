@@ -13,13 +13,13 @@
         <p [hidden]="!message">{{ message }}</p>
         <p [hidden]="!loginFailureText">{{ loginFailureText }}</p>
         <br />
-        <mat-form-field appearance="legacy">
+        <mat-form-field appearance="outline">
           <mat-label>Username</mat-label>
           <input matInput [(ngModel)]="username" required name="username" />
           <mat-error *ngIf="!username">You must enter a username</mat-error>
         </mat-form-field>
         <br />
-        <mat-form-field appearance="legacy">
+        <mat-form-field appearance="outline">
           <mat-label>Password</mat-label>
           <input
             matInput
