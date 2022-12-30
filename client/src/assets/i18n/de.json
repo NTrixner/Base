@@ -12,15 +12,41 @@
     "repeatPassword": "Passwort wiederholen",
     "email": "E-Mail",
     "submit": "Senden",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "return": "Zurück"
   },
   "validations": {
     "username": {
-      "required": "Du musst einen Benutzernamen eingeben!"
+      "required": "Du musst einen Benutzernamen eingeben!",
+      "length": "Der Benutzername muss mindestens {{amount}} Zeichen lang sein!",
+      "used": "Dieser Benutzername ist bereits vergeben!"
+    },
+    "email": {
+      "required": "Du musst eine E-Mail-Addresse eingeben!",
+      "format": "Dieser Text ist keine gültige E-Mail Addresse!",
+      "used": "Diese E-Mail Addresse ist bereits vergeben!"
+    },
+    "password": {
+      "required": "Du musst ein Passwort eingeben!",
+      "length": "Das Passwort muss mindestens {{amount}} Zeichen lang sein!",
+      "unequal": "Die beiden Passwörter müssen übereinstimmen!"
     }
   },
   "messages": {
     "registerSuccess": "Die Registrierung war erfolgreich! Du kannst dich jetzt einloggen.",
-    "rightsError": "Du hast nicht das Recht, diese Seite zu besuchen."
+    "rightsError": "Du hast nicht das Recht, diese Seite zu besuchen.",
+    "logout": "Du wurdest automatisch abgemeldet. Bitte versuche es erneut."
+  },
+  "pages": {
+    "forgotPassword": {
+      "title": "Passwort vergessen",
+      "error": "Es gab einen Fehler. Bitte kontaktiere einen Administrator",
+      "success": "Erfolgreich! Bitte überprüfe deine Mails auf eine Bestätigungsnachricht."
+    },
+    "register": {
+      "title": "Registrieren",
+      "error": "Es gab einen Fehler. Bitte kontaktiere einen Administrator",
+      "success": "Erfolgreich! Bitte überprüfe deine Mails auf eine Bestätigungsnachricht."
+    }
   }
 }
