@@ -2,7 +2,7 @@
 *.lst
 *.jar
 */target/
-/output
+base.tar
 server/src/main/resources/application-local.properties
 server/src/main/resources/application-local.yaml
 
