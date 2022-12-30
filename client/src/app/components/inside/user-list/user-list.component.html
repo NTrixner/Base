@@ -1,6 +1,6 @@
 <div>
   <mat-card style="text-align: center">
-    <mat-card-title> Users</mat-card-title>
+    <mat-card-title>{{'pages.userlist.title'|translate}}</mat-card-title>
     <mat-card-content>
       <div class="mat-elevation-z8" *ngIf="canSeeUsers()">
         <table
@@ -10,33 +10,33 @@
           (matSortChange)="loadUserList()">
           <!-- ID Column -->
           <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>UID</th>
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'general.uid'|translate}}</th>
             <td (click)="viewUser(element)" *matCellDef="let element" class="clickable" mat-cell>{{ element.id }}</td>
           </ng-container>
 
           <!-- Name Column -->
           <ng-container matColumnDef="username">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'general.username'|translate}}</th>
             <td (click)="viewUser(element)" *matCellDef="let element" class="clickable"
                 mat-cell>{{ element.username }}</td>
           </ng-container>
 
           <!-- Mail Column -->
           <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>E-Mail</th>
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'general.email'|translate}}</th>
             <td (click)="viewUser(element)" *matCellDef="let element" class="clickable"
                 mat-cell>{{ element.email }}</td>
           </ng-container>
 
           <!-- Type Column -->
           <ng-container matColumnDef="type">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>User Type</th>
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{'general.usertype'|translate}}</th>
             <td (click)="viewUser(element)" *matCellDef="let element" class="clickable"
-                mat-cell>{{ element.type.name }}</td>
+                mat-cell>{{ 'usertypes.' + element.type.name | translate }}</td>
           </ng-container>
 
           <ng-container matColumnDef="menu">
-            <th *matHeaderCellDef mat-header-cell>Options</th>
+            <th *matHeaderCellDef mat-header-cell>&nbsp;</th>
             <td *matCellDef="let element" mat-cell>
               <button [matMenuTriggerData]="{element: element}" [matMenuTriggerFor]="menu" mat-icon-button>
                 <mat-icon>more_vert</mat-icon>
@@ -57,7 +57,7 @@
 
     <mat-card-actions>
       <button (click)="createUser()" *ngIf="canCreateUsers" color="primary" mat-raised-button type="button">
-        Create
+        {{'pages.userlist.create'|translate}}
       </button>
     </mat-card-actions>
 
@@ -68,15 +68,15 @@
 <mat-menu #menu="matMenu">
   <ng-template let-element="element" matMenuContent>
     <button (click)="viewUser(element)" mat-menu-item>
-      <span>View</span>
+      <span>{{'general.open' | translate}}</span>
       <mat-icon>visibility</mat-icon>
     </button>
     <button (click)="editUser(element)" [disabled]="!canEditUser(element)" mat-menu-item>
-      <span>Edit</span>
+      <span>{{'general.edit' | translate}}</span>
       <mat-icon>edit</mat-icon>
     </button>
     <button (click)="deleteUser(element)" [disabled]="!canDeleteUser(element)" mat-menu-item>
-      <span>Delete</span>
+      <span>{{'general.delete' | translate}}</span>
       <mat-icon>delete</mat-icon>
     </button>
   </ng-template>

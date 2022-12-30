@@ -1,8 +1,8 @@
-<h1 mat-dialog-title>Warning!</h1>
+<h1 mat-dialog-title>{{'pages.userlist.deletedialog.title'|translate}}</h1>
 <div mat-dialog-content>
-  <p>Are you sure you want to delete this user? The action can not be reverted!</p>
+  <p>{{'pages.userlist.deletedialog.text'|translate}}</p>
 </div>
 <div mat-dialog-actions>
-  <button (click)="onNoClick()" mat-button>No</button>
-  <button (click)="onYesClick()" mat-button>Delete</button>
+  <button (click)="onNoClick()" color="primary" mat-button mat-raised-button>{{'general.cancel'|translate}}</button>
+  <button (click)="onYesClick()" color="warn" mat-button mat-raised-button>{{'general.delete'|translate}}</button>
 </div>
