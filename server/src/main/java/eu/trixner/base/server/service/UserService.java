@@ -169,6 +169,9 @@ public class UserService implements UserDetailsService {
     public void changePassword(UUID uid, String newPassword) {
         User user = userRepository.findById(uid).orElseThrow(NullPointerException::new);
         user.setPassword(passwordEncoder.encode(newPassword));
+        if (BooleanUtils.isFalse(user.getIsActivated())) {
+            user.setIsActivated(true);
+        }
         userRepository.saveAndFlush(user);
     }
 
