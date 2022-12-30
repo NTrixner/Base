@@ -1,6 +1,7 @@
 import {Component, HostBinding, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {OverlayContainer} from '@angular/cdk/overlay';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -16,8 +17,17 @@ export class AppComponent implements OnInit {
   darkClassName: string = 'darkMode';
   lightClassName: string = 'lightMode';
 
-  constructor(private overlay: OverlayContainer) {
+  languages = [{lang: 'EN', country: 'GB'}, {lang: 'DE', country: 'AT'}]
+
+  currentLanguage = {lang: 'EN', country: 'GB'};
+
+  constructor(private overlay: OverlayContainer, private translate: TranslateService) {
+
   }
+
+  public alphaToFlagAlpha = (a: string) => String.fromCodePoint(0x1f1a5 + a.toUpperCase().codePointAt(0)!);
+
+  public emojiFlag = (countryCode: string) => countryCode.slice(0, 2).split("").map(this.alphaToFlagAlpha).join("");
 
   ngOnInit(): void {
     this.className = localStorage.getItem('theme') ?? this.lightClassName;
@@ -29,6 +39,8 @@ export class AppComponent implements OnInit {
       this.className = darkMode ? this.darkClassName : this.lightClassName;
       this.updateClasses();
     });
+    this.currentLanguage = JSON.parse(localStorage.getItem('language') ?? JSON.stringify(this.currentLanguage)) ?? this.currentLanguage;
+    this.updateLanguage();
   }
 
   private updateClasses() {
@@ -40,5 +52,16 @@ export class AppComponent implements OnInit {
       this.overlay.getContainerElement().classList.remove(this.darkClassName);
       this.overlay.getContainerElement().classList.add(this.lightClassName);
     }
+  }
+
+  changeLanguage(language: { country: string; lang: string }) {
+    this.currentLanguage = language;
+    this.updateLanguage();
+  }
+
+  private updateLanguage() {
+    console.log("New language is: " + this.currentLanguage);
+    this.translate.setDefaultLang(this.currentLanguage.lang);
+    this.translate.use(this.currentLanguage.lang);
   }
 }

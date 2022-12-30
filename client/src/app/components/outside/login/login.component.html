@@ -2,25 +2,25 @@
   <ng-container *ngIf="!!confirmationRegistration">
     <mat-card class="alert" style="text-align: center">
       <mat-card-content>
-        Registration was successful! You can now log in.
+        {{'messages.registerSuccess' | translate}}
       </mat-card-content>
     </mat-card>
   </ng-container>
   <mat-card style="text-align: center">
-    <mat-card-title> Login </mat-card-title>
+    <mat-card-title> {{'general.login' | translate}} </mat-card-title>
     <form (ngSubmit)="login()">
       <mat-card-content>
-        <p [hidden]="!message">{{ message }}</p>
-        <p [hidden]="!loginFailureText">{{ loginFailureText }}</p>
-        <br />
-        <mat-form-field appearance="outline">
-          <mat-label>Username</mat-label>
-          <input matInput [(ngModel)]="username" required name="username" />
-          <mat-error *ngIf="!username">You must enter a username</mat-error>
+        <p [hidden]="!message">{{ message! | translate }}</p>
+        <p [hidden]="!loginFailureText">{{ "login.failed" | translate }}</p>
+        <br/>
+        <mat-form-field appearance="fill">
+          <mat-label>{{'general.username' | translate}}</mat-label>
+          <input [(ngModel)]="username" matInput name="username" required/>
+          <mat-error *ngIf="!username">{{'validations.username.required' |translate}}</mat-error>
         </mat-form-field>
-        <br />
-        <mat-form-field appearance="outline">
-          <mat-label>Password</mat-label>
+        <br/>
+        <mat-form-field appearance="fill">
+          <mat-label>{{'general.password' | translate}}</mat-label>
           <input
             matInput
             [type]="hide ? 'password' : 'text'"
@@ -38,11 +38,11 @@
           >
             <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
-          <mat-error *ngIf="!password">You must enter a password</mat-error>
+          <mat-error *ngIf="!password">{{'validations.password.required' | translate}}</mat-error>
         </mat-form-field>
-        <br />
-        <a [routerLink]="['/forgotPassword']">Forgot Password?</a>
-        <br />
+        <br/>
+        <a [routerLink]="['/forgotPassword']">{{'general.forgotPassword' | translate}}</a>
+        <br/>
       </mat-card-content>
 
       <mat-card-actions align="end">
@@ -52,14 +52,14 @@
           type="submit"
           [disabled]="!canLogin()"
         >
-          Login
+          {{'general.login' | translate}}
         </button>
         <button [routerLink]="['/register']" color="primary" mat-raised-button>
-          Register
+          {{'general.register' | translate}}
         </button>
       </mat-card-actions>
     </form>
 
-    <mat-card-footer> </mat-card-footer>
+    <mat-card-footer></mat-card-footer>
   </mat-card>
 </div>

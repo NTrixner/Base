@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   username = '';
   returnUrl = '';
   message = null;
-  loginFailureText = '';
+  loginFailureText = false;
   confirmationRegistration = false;
 
   constructor(
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
         .login(this.username, this.password, this.returnUrl)
         .pipe(
           catchError(() => {
-            this.loginFailureText = 'Login failed, please check the inputs';
+            this.loginFailureText = true;
             return of(null);
           })
         )

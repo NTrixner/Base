@@ -4,6 +4,20 @@
   <mat-slide-toggle [formControl]="toggleControl" class="mr-8">
   </mat-slide-toggle>
   <mat-icon>bedtime</mat-icon>
+  <button [matMenuTriggerFor]="langMenu" mat-button>
+        <span class="fi fi-{{currentLanguage.country.toLowerCase()}}">
+        </span>
+    {{'LANGUAGES.' + currentLanguage.lang | translate}}
+  </button>
+  <mat-menu #langMenu="matMenu">
+    <ng-container *ngFor="let language of languages">
+      <button (click)="changeLanguage(language)" mat-menu-item>
+        <span class="fi fi-{{language.country.toLowerCase()}}">
+        </span>
+        {{'LANGUAGES.' + language.lang | translate}}
+      </button>
+    </ng-container>
+  </mat-menu>
 </mat-toolbar>
 
 <div class="content mat-app-background" fxLayout="row" fxLayout.xs="column" fxLayoutGap="16px">

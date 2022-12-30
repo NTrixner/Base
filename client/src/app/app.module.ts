@@ -5,7 +5,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ApiModule, Configuration, ConfigurationParameters} from '../api';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {LoginComponent} from './components/outside/login/login.component';
 import {HomeComponent} from './components/inside/home/home.component';
 import {RegisterComponent} from './components/outside/register/register.component';
@@ -52,12 +52,19 @@ import {AuthInterceptor} from './ínterceptors/auth.interceptor';
 import {MatSelectModule} from '@angular/material/select';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
     basePath: environment.serverUrl,
   };
   return new Configuration(params);
+}
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
 }
 
 @NgModule({
@@ -103,7 +110,15 @@ export function apiConfigFactory(): Configuration {
     MatMenuModule,
     MatSelectModule,
     MatToolbarModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      },
+      defaultLanguage: 'en'
+    })
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent],

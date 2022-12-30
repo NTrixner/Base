@@ -1,6 +1,8 @@
 @use '@angular/material' as mat;
 
 @import "@angular/material/theming";
+@import "/node_modules/flag-icons/css/flag-icons.min.css";
+
 
 @include mat.core();
 

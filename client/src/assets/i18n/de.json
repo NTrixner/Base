@@ -1,0 +1,26 @@
+{
+  "LANGUAGES": {
+    "EN": "Englisch",
+    "DE": "Deutsch"
+  },
+  "general": {
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "forgotPassword": "Passwort vergessen?",
+    "repeatPassword": "Passwort wiederholen",
+    "email": "E-Mail",
+    "submit": "Senden",
+    "cancel": "Abbrechen"
+  },
+  "validations": {
+    "username": {
+      "required": "Du musst einen Benutzernamen eingeben!"
+    }
+  },
+  "messages": {
+    "registerSuccess": "Die Registrierung war erfolgreich! Du kannst dich jetzt einloggen.",
+    "rightsError": "Du hast nicht das Recht, diese Seite zu besuchen."
+  }
+}
