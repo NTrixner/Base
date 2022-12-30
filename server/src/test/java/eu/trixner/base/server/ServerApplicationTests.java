@@ -232,7 +232,7 @@ class ServerApplicationTests {
           .andExpect(status().isOk());
 
         ArgumentCaptor<String> tokenCapture = ArgumentCaptor.forClass(String.class);
-        verify(emailService, times(1)).sendUserRegistrationMessage(any(), tokenCapture.capture(), any());
+        verify(emailService, times(1)).sendUserRegistrationMessage(any(), tokenCapture.capture(), any(), any());
         String message = tokenCapture.getValue();
 
         assertThat(message).isNotNull();
@@ -256,7 +256,7 @@ class ServerApplicationTests {
           .andDo(print())
           .andExpect(status().isOk());
 
-        verify(emailService, times(1)).sendUserRegistrationMessage(any(), any(), any());
+        verify(emailService, times(1)).sendUserRegistrationMessage(any(), any(), any(), any());
     }
 
     @Test
@@ -270,7 +270,7 @@ class ServerApplicationTests {
           .andExpect(status().isOk());
 
         ArgumentCaptor<String> tokenCapture = ArgumentCaptor.forClass(String.class);
-        verify(emailService, times(1)).sendUserPasswordResetMessage(any(), tokenCapture.capture(), any());
+        verify(emailService, times(1)).sendUserPasswordResetMessage(any(), tokenCapture.capture(), any(), any());
         String message = tokenCapture.getValue();
         assertThat(message).isNotNull();
 

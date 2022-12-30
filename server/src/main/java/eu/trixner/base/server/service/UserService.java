@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -86,7 +87,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public UserRegistrationRequest registerUser(RegistrationDto registrationDto) {
+    public UserRegistrationRequest registerUser(RegistrationDto registrationDto, Locale locale) {
         User newUser = createUser(registrationDto);
 
         UserRegistrationRequest newRequest = new UserRegistrationRequest();
@@ -96,7 +97,7 @@ public class UserService implements UserDetailsService {
 
         newRequest = this.userRegistrationRequestRepository.save(newRequest);
 
-        emailService.sendUserRegistrationMessage(newUser.getUsername(), newRequest.getId().toString(), newUser.getEmail());
+        emailService.sendUserRegistrationMessage(newUser.getUsername(), newRequest.getId().toString(), newUser.getEmail(), locale);
         return newRequest;
     }
 
@@ -129,7 +130,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public PasswordResetRequest requestPasswordReset(String username, String email) {
+    public PasswordResetRequest requestPasswordReset(String username, String email, Locale locale) {
         User user = userRepository.findByUsernameIgnoreCaseAndEmailIgnoreCase(username, email);
         if (user == null) {
             throw new NullPointerException();
@@ -140,7 +141,7 @@ public class UserService implements UserDetailsService {
         request.setMailSent(false);
 
         request = passwordResetRequestRepository.save(request);
-        emailService.sendUserPasswordResetMessage(user.getUsername(), request.getId().toString(), user.getEmail());
+        emailService.sendUserPasswordResetMessage(user.getUsername(), request.getId().toString(), user.getEmail(), locale);
         return request;
     }
 

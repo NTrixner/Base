@@ -10,6 +10,9 @@ RegistrationDto:
     password:
       type: string
       format: password
+    lang:
+      type: string
+      default: 'en'
   required:
     - username
     - email
