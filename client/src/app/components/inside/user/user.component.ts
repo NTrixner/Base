@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EditViewMode} from '../../../enums/edit-view-mode';
 import {UserDto, UserService, UserTypeDto} from '../../../../api';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../../services/auth/auth.service';
 import {RightsConstants} from '../../../constants/rights-constants';
 import {AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
@@ -48,16 +48,18 @@ export class UserComponent implements OnInit {
   constructor(private service: UserService,
               private auth: AuthService,
               private route: ActivatedRoute,
+              private router: Router,
               public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     let userId: string = this.route.snapshot.queryParams['user'] || null;
     this.mode = this.route.snapshot.queryParams['mode'];
     this.service.getUserTypes().subscribe({
       next: types => {
         this.userTypes = types;
-        this.defaultType = types.find(t => t.isDefault === true)!
+        this.defaultType = types.find(t => t.isDefault)!
       },
       error: () => {
       }
@@ -194,7 +196,7 @@ export class UserComponent implements OnInit {
     this.userForm.setValue({
       username: this.user?.username ?? '',
       email: this.user?.email ?? '',
-      type: this.user?.type?.id ?? this.defaultType.id
+      type: this.user?.type?.id ?? this.defaultType?.id ?? 0
     })
     if (this.isOwnUser()) {
       this.userForm.controls.username.disable();
