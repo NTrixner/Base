@@ -50,6 +50,8 @@ import {
 import {MatMenuModule} from '@angular/material/menu';
 import {AuthInterceptor} from './ínterceptors/auth.interceptor';
 import {MatSelectModule} from '@angular/material/select';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -99,7 +101,9 @@ export function apiConfigFactory(): Configuration {
     MatListModule,
     MatDialogModule,
     MatMenuModule,
-    MatSelectModule
+    MatSelectModule,
+    MatToolbarModule,
+    MatSlideToggleModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent],
