@@ -19,6 +19,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -57,7 +58,7 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<Void> registerUser(@Valid RegistrationDto registrationDto) {
-        UserRegistrationRequest answer = userService.registerUser(registrationDto);
+        UserRegistrationRequest answer = userService.registerUser(registrationDto, getLocale(registrationDto.getLang()));
         ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentContextPath();
         String uri = builder.build().toUriString();
         log.info("Registered new user, activate under {}/user/registration/confirmRegistration/{}",
@@ -78,7 +79,7 @@ public class UserController implements UserApi {
     @Override
     public ResponseEntity<Void> forgotPassword(@Valid ForgotPasswordDto forgotPasswordDto) {
         PasswordResetRequest req = userService.requestPasswordReset(forgotPasswordDto.getUsername(),
-          forgotPasswordDto.getEmail());
+          forgotPasswordDto.getEmail(), getLocale(forgotPasswordDto.getLang()));
         String uri = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         log.info(
           "Password reset request sent, reset password under {}/user/forgotPassword/resetPassword with " +
@@ -124,5 +125,17 @@ public class UserController implements UserApi {
         validationService.validateUserCreate(userDto);
         UUID result = userService.createUser(userDto);
         return ResponseEntity.ok(result);
+    }
+
+    private Locale getLocale(String language) {
+        try {
+            Locale l = Locale.forLanguageTag(language);
+            if (l != null) {
+                return l;
+            }
+        } catch (NullPointerException e) {
+            log.error("Tried to get a null language ", e);
+        }
+        return Locale.ENGLISH;
     }
 }

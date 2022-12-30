@@ -8,6 +8,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -34,10 +37,14 @@ public class EmailService {
     public static final String APPLICATION_NAME = "applicationName";
     public static final String URL = "url";
     public static final String TOKEN = "token";
+    public static final String PASSWORD_RESET_SUBJECT = "mail.passwordReset.subject";
+    public static final String REGISTER_SUBJECT = "mail.register.subject";
 
     private final JavaMailSenderImpl emailSender = new JavaMailSenderImpl();
 
     private final FreeMarkerConfigurer freeMarkerConfigurer;
+
+    private final ResourceBundleMessageSource messageSource;
 
     @Value("${email.sender}")
     private String senderAddress;
@@ -77,15 +84,15 @@ public class EmailService {
         properties.put("mail.debug", "true");
     }
 
-    public void sendUserRegistrationMessage(String username, String token, String address) {
+    public void sendUserRegistrationMessage(String username, String token, String address, Locale locale) {
         Map<String, Object> templateModel = setUserManagementMailData(username, token, REGISTRATION_SUB_URI);
-        createAndSendMessage(address, REGISTER_TPL, "Registration at " + applicationName, templateModel);
+        createAndSendMessage(address, Path.of(locale.getLanguage(), REGISTER_TPL), messageSource.getMessage(REGISTER_SUBJECT, new Object[]{applicationName}, locale), templateModel);
     }
 
-    public void sendUserPasswordResetMessage(String username, String token, String address) {
+    public void sendUserPasswordResetMessage(String username, String token, String address, Locale locale) {
         Map<String, Object> templateModel = setUserManagementMailData(username, token, PW_RESET_SUB_URI);
 
-        createAndSendMessage(address, PW_RESET_TPL, "Password reset at " + applicationName, templateModel);
+        createAndSendMessage(address, Path.of(locale.getLanguage(), PW_RESET_TPL), messageSource.getMessage(PASSWORD_RESET_SUBJECT, new Object[]{applicationName}, locale), templateModel);
     }
 
     private Map<String, Object> setUserManagementMailData(String username, String token, String registrationSubUri) {
@@ -101,11 +108,11 @@ public class EmailService {
     }
 
     private void createAndSendMessage(String address,
-                                      String templateLocation,
+                                      Path templateLocation,
                                       String subject,
                                       Map<String, Object> templateModel) {
         try {
-            Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templateLocation);
+            Template template = freeMarkerConfigurer.getConfiguration().getTemplate(templateLocation.toString());
             String htmlBody = FreeMarkerTemplateUtils.processTemplateIntoString(template, templateModel);
             sendHtmlMessage(address, subject, htmlBody);
         } catch (IOException | TemplateException e) {

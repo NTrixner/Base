@@ -5,6 +5,7 @@ import {AsyncValidatorFn, FormControl, FormGroup, ValidationErrors, Validators,}
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {UserUtils} from '../../../services/utils/user-utils';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +17,7 @@ export class RegisterComponent {
     email: '',
     password: '',
     username: '',
+    lang: 'en'
   };
   hideA = true;
   hideB = true;
@@ -42,7 +44,7 @@ export class RegisterComponent {
     UserUtils.passwordCheckValidator()
   );
 
-  constructor(private userService: UserService, public router: Router) {
+  constructor(private userService: UserService, public router: Router, private translate: TranslateService) {
   }
 
   register() {
@@ -50,6 +52,7 @@ export class RegisterComponent {
       username: this.userForm.get('username')?.value || '',
       password: this.userForm.get('password')?.value || '',
       email: this.userForm.get('email')?.value || '',
+      lang: this.translate.currentLang
     };
     this.userService
       .registerUser(registrationDto, 'response')

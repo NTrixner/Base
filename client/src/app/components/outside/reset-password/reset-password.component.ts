@@ -13,7 +13,7 @@ export class ResetPasswordComponent implements OnInit {
 
   forgotPasswordDto: PasswordResetDto = {
     uuid: '',
-    newPassword: '',
+    newPassword: ''
   };
   hideA = true;
   hideB = true;
