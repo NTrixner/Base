@@ -4,7 +4,7 @@
     <form id="userForm" (ngSubmit)="register()" [formGroup]="userForm">
       <mat-card-content>
         <br/>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>{{'general.username' | translate}}</mat-label>
           <input
             matInput
@@ -23,7 +23,7 @@
         <br/>
         <br/>
         <br/>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>{{'general.email' | translate}}</mat-label>
           <input
             type="email"
@@ -42,7 +42,7 @@
         <br/>
         <br/>
         <br/>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>{{'general.password' | translate}}</mat-label>
           <input
             matInput
@@ -69,7 +69,7 @@
         <br/>
         <br/>
         <br/>
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="fill">
           <mat-label>{{'general.repeatPassword' | translate}}</mat-label>
           <input
             matInput
