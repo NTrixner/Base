@@ -21,7 +21,7 @@ jobs:
       - name: Create Docker file
         run: mvn --projects server -DskipTests spring-boot:build-image -DSpring-boot.build-image.imageName=ntrixner/base
       - name: Get docker file
-        run: docker save ./output/base.tar
+        run: docker save ./output/base.tar eu.trixner/base:latest
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1.0.0
