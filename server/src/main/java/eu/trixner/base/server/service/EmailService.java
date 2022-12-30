@@ -7,7 +7,6 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -25,10 +24,10 @@ import java.util.Properties;
 @Component
 @RequiredArgsConstructor
 public class EmailService {
-    public static final String REGISTRATION_SUB_URI = "/user/registration/confirmRegistration";
+    public static final String REGISTRATION_SUB_URI = "/api/user/registration/confirmRegistration";
     public static final String REGISTER_TPL = "register.ftlh";
 
-    public static final String PW_RESET_SUB_URI = "/resetPassword";
+    public static final String PW_RESET_SUB_URI = "/api/resetPassword";
 
     public static final String PW_RESET_TPL = "pwReset.ftlh";
     public static final String USERNAME = "username";
