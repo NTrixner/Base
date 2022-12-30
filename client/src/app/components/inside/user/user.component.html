@@ -1,10 +1,10 @@
 <mat-card>
   <mat-card-title>
     <div *ngIf="!!user.id">
-      User {{user.username}}
+      {{'pages.user.title' | translate: {username: user.username} }}
     </div>
     <div *ngIf="!user.id">
-      New User
+      {{'pages.user.new' | translate}}
     </div>
   </mat-card-title>
   <!-- Create and edit mode -->
@@ -12,24 +12,26 @@
     <form (ngSubmit)="onSave()" [formGroup]="userForm">
       <mat-card-content>
         <mat-form-field>
-          <mat-label>Username</mat-label>
+          <mat-label>{{'general.username'|translate}}</mat-label>
           <input
             autocomplete="username"
             [formControl]="userForm.controls.username"
             matInput
             required
           />
-          <mat-error *ngIf="userForm.get('username')?.hasError('minlength')">Usernames must be at least 3 characters
-            long!
+          <mat-error
+            *ngIf="userForm.get('username')?.hasError('minlength')">{{'validations.username.length'|translate:{amount: userForm.controls.username.errors?.minlength.requiredLength!} }}
           </mat-error>
-          <mat-error *ngIf="userForm.get('username')?.hasError('required')">You must enter a username</mat-error>
-          <mat-error *ngIf="userForm.get('username')?.hasError('used')">This username is already in use</mat-error>
+          <mat-error
+            *ngIf="userForm.get('username')?.hasError('required')">{{'validations.username.required'|translate}}</mat-error>
+          <mat-error
+            *ngIf="userForm.get('username')?.hasError('used')">{{'validations.username.used'|translate}}</mat-error>
         </mat-form-field>
         <br/>
         <br/>
         <br/>
         <mat-form-field appearance="outline">
-          <mat-label>EMail</mat-label>
+          <mat-label>{{'general.email'|translate}}</mat-label>
           <input
             autocomplete="email"
             email="true"
@@ -37,36 +39,40 @@
             matInput
             required
             type="email"/>
-          <mat-error *ngIf="userForm.get('email')?.hasError('required')">You must enter a email</mat-error>
-          <mat-error *ngIf="userForm.get('email')?.hasError('used')">This email is already in use</mat-error>
-          <mat-error *ngIf="userForm.get('email')?.hasError('email')">The entered email is invalid</mat-error>
+          <mat-error
+            *ngIf="userForm.get('email')?.hasError('required')">{{'validations.email.required'|translate}}</mat-error>
+          <mat-error *ngIf="userForm.get('email')?.hasError('used')">{{'validations.email.used'|translate}}</mat-error>
+          <mat-error
+            *ngIf="userForm.get('email')?.hasError('email')">{{'validations.email.format'|translate}}</mat-error>
         </mat-form-field>
         <br/>
         <br/>
         <br/>
         <mat-form-field appearance="fill">
-          <mat-label>User Type</mat-label>
+          <mat-label>{{'general.usertype'|translate}}</mat-label>
           <mat-select
             [formControl]="userForm.controls.type"
             required>
-            <mat-option *ngFor="let type of userTypes" [value]="type.id">{{type.name}}</mat-option>
-            <mat-error *ngIf="userForm.get('type')?.hasError('required')">You must set a user type</mat-error>
+            <mat-option *ngFor="let type of userTypes"
+                        [value]="type.id">{{'usertypes.' + type.name | translate}}</mat-option>
+            <mat-error
+              *ngIf="userForm.get('type')?.hasError('required')">{{'validations.usertype.required'|translate}}</mat-error>
           </mat-select>
         </mat-form-field>
         <ng-container *ngIf="mode == EditViewMode.CREATE">
-          <p>The user will be created with a random password, please change it immediately!</p>
+          <p>{{'pages.user.nopasswordwarning'|translate}}</p>
         </ng-container>
       </mat-card-content>
       <mat-card-actions>
-        <button [disabled]="userForm.invalid" color="primary" mat-raised-button type="submit">
-          Save
+        <button [disabled]="userForm.invalid" color="accent" mat-raised-button type="submit">
+          {{'general.submit'|translate}}
         </button>
         <button (click)="onReset()" color="primary" mat-raised-button type="button">
-          Reset
+          {{'general.reset'|translate}}
         </button>
         <button (click)="changeMode(EditViewMode.EDIT, EditViewMode.VIEW)" *ngIf="mode == EditViewMode.EDIT"
                 color="primary" mat-raised-button type="button">
-          Cancel
+          {{'general.cancel'|translate}}
         </button>
       </mat-card-actions>
     </form>
@@ -75,17 +81,17 @@
   <!-- View mode -->
   <ng-container *ngIf="mode == EditViewMode.VIEW">
     <mat-card-content>
-      <p>Username: {{user.username}}</p>
-      <p>EMail: {{user.email}}</p>
-      <p>Type: {{user.type?.name ?? ''}}</p>
+      <p>{{'general.username'|translate}}: {{user.username}}</p>
+      <p>{{'general.email'|translate}}: {{user.email}}</p>
+      <p>{{'general.usertype'|translate}}: {{'usertypes.' + user.type?.name! | translate}}</p>
     </mat-card-content>
     <mat-card-actions>
       <button (click)="changeMode(EditViewMode.VIEW, EditViewMode.EDIT)" *ngIf="canEdit" color="primary"
               mat-raised-button type="button">
-        Edit
+        {{'general.edit'|translate}}
       </button>
       <button (click)="changePassword()" *ngIf="canChangePassword" color="primary" mat-raised-button type="button">
-        Change Password
+        {{'general.changePassword'|translate}}
       </button>
     </mat-card-actions>
   </ng-container>

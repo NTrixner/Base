@@ -18,7 +18,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
 import {MatSortModule} from '@angular/material/sort';
 import {MatDialogModule} from '@angular/material/dialog';
 import {RegisterSuccessComponent} from './components/outside/register/register-success/register-success.component';
@@ -48,13 +48,14 @@ import {
   UserDeleteConfirmDialogComponent
 } from './components/inside/user-list/user-delete-confirm-dialog/user-delete-confirm-dialog.component';
 import {MatMenuModule} from '@angular/material/menu';
-import {AuthInterceptor} from './ínterceptors/auth.interceptor';
+import {AuthInterceptor} from './interceptors/auth.interceptor';
 import {MatSelectModule} from '@angular/material/select';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {TranslatedMatPaginatorIntl} from './injectables/translated-mat-paginator-intl';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -122,7 +123,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     MatGridListModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true
+    },
+    {
+      provide: MatPaginatorIntl,
+      useClass: TranslatedMatPaginatorIntl
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {

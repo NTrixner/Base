@@ -6,14 +6,31 @@
   "general": {
     "login": "Anmelden",
     "register": "Registrieren",
+    "uid": "UUID",
     "username": "Benutzername",
     "password": "Passwort",
+    "usertype": "Benutzertyp",
     "forgotPassword": "Passwort vergessen?",
     "repeatPassword": "Passwort wiederholen",
+    "changePassword": "Passwort ändern",
     "email": "E-Mail",
     "submit": "Senden",
     "cancel": "Abbrechen",
-    "return": "Zurück"
+    "return": "Zurück",
+    "reset": "Zurücksetzen",
+    "open": "Öffnen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen"
+  },
+  "usertypes": {
+    "ADMIN": "Administrator",
+    "USER": "Benutzer"
+  },
+  "menu": {
+    "home": "Startseite",
+    "userlist": "Benutzer",
+    "user": "Profil",
+    "logout": "Abmelden"
   },
   "validations": {
     "username": {
@@ -30,6 +47,9 @@
       "required": "Du musst ein Passwort eingeben!",
       "length": "Das Passwort muss mindestens {{amount}} Zeichen lang sein!",
       "unequal": "Die beiden Passwörter müssen übereinstimmen!"
+    },
+    "usertype": {
+      "required": "Du musst einen Benutzertyp auswählen!"
     }
   },
   "messages": {
@@ -54,6 +74,31 @@
       "nouuiderror": "Es wurde keine UUID angegeben. Bitte verlasse diese Seite",
       "error": "Es gab einen Fehler. Bitte kontaktiere einen Administrator",
       "success": "Erfolgreich! Du solltest dich jetzt einloggen können"
+    },
+    "home": {
+      "title": "Willkommen",
+      "message": "Hallo, {{user}}"
+    },
+    "user": {
+      "title": "Benutzer \"{{username}}\"",
+      "new": "Neuer Benutzer",
+      "nopasswordwarning": "Der Benutzer wird ohne Passwort erstellt, er wird erst aktiviert wenn du das Passwort änderst!"
+    },
+    "userlist": {
+      "title": "Benutzer-Übersicht",
+      "create": "Neuer Benutzer",
+      "deletedialog": {
+        "text": "Bist du sicher, dass du diesen Benutzer löschen willst? Das kann nicht rückgängig gemacht werden!",
+        "title": "Warnung!"
+      }
     }
+  },
+  "paginator": {
+    "ipp": "Elemente pro Seite",
+    "first": "Erste Seite",
+    "last": "Letzte Seite",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "of": "von"
   }
 }

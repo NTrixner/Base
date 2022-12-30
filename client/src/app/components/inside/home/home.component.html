@@ -1,8 +1,8 @@
 <div>
   <mat-card style="text-align: center">
-    <mat-card-title> Welcome </mat-card-title>
+    <mat-card-title> {{'pages.home.title' | translate}} </mat-card-title>
     <mat-card-content>
-      <p>Hello {{ getUsername() }}</p>
+      <p>{{'pages.home.message' | translate: {user: getUsername()} }}</p>
     </mat-card-content>
   </mat-card>
 </div>
