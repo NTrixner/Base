@@ -2,13 +2,8 @@ package eu.trixner.base.server.config;
 
 import eu.trixner.base.server.auth.SecurityConstants;
 import eu.trixner.base.server.auth.filters.JwtAuthorizationFilter;
-import eu.trixner.base.server.controller.MainController;
 import eu.trixner.base.server.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.security.StaticResourceLocation;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -19,12 +14,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,8 +26,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SecurityConfig.class);
-
     private static final String[] AUTH_WHITELIST = {
       // -- swagger ui
       "/h2-console/**",
@@ -65,6 +55,9 @@ public class SecurityConfig {
           .addFilterAfter(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
           .userDetailsService(userService)
           .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+          .headers(h ->
+            //needed for the iframes of h2
+            h.frameOptions().disable())
           .build();
     }
 
