@@ -1,0 +1,26 @@
+{
+  "LANGUAGES": {
+    "EN": "English",
+    "DE": "German"
+  },
+  "general": {
+    "login": "Login",
+    "register": "Register",
+    "username": "Username",
+    "password": "Password",
+    "forgotPassword": "Forgot Password?",
+    "repeatPassword": "Repeat Password",
+    "email": "E-Mail",
+    "submit": "Send",
+    "cancel": "Cancel"
+  },
+  "validations": {
+    "username": {
+      "required": "You have to enter a username!"
+    }
+  },
+  "messages": {
+    "registerSuccess": "The registration was successful! You can now log in",
+    "rightsError": "You are not allowed to view this page"
+  }
+}
