@@ -1,28 +1,30 @@
 package eu.trixner.base.server.model;
 
-import java.util.Arrays;
-import java.util.List;
-
 public enum UserType {
-    ADMIN(
-            Role.values() //GRANT ALL THE ROLES
-    ),
+
     USER(
-            Role.ROLE_USER_CAN_SEE_SELF,
-            Role.ROLE_USER_CAN_CHANGE_PASSWORD
+      true,
+      Role.ROLE_USER_CAN_SEE_SELF,
+      Role.ROLE_USER_CAN_CHANGE_PASSWORD
+    ),
+    ADMIN(
+      false,
+      Role.values() //GRANT ALL THE ROLES
     );
 
     private final Role[] roles;
+    private final boolean isDefault;
 
-    UserType(Role... roles) {
+    UserType(boolean isDefault, Role... roles) {
         this.roles = roles;
-    }
-
-    public List<String> getRolesStrings() {
-        return Arrays.stream(roles).map(Role::getAuthority).toList();
+        this.isDefault = isDefault;
     }
 
     public Role[] getRoles() {
         return roles;
+    }
+
+    public boolean isDefault() {
+        return this.isDefault;
     }
 }

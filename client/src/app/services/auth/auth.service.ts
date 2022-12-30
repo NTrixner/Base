@@ -99,7 +99,7 @@ export class AuthService {
   }
 
   public isCurrentUser(userId: string): boolean {
-    return (!!this.getCurrentUser()?.id || '') == userId;
+    return (this.getCurrentUser()?.id ?? '') == userId;
   }
 
   public showRightsError(): void {

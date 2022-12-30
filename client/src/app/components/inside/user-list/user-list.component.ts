@@ -19,7 +19,7 @@ import {DialogResultStatus} from '../../../enums/dialog-result-status';
 })
 export class UserListComponent implements AfterViewInit {
   public RightsConstants = RightsConstants;
-  displayedColumns: string[] = ['id', 'username', 'email', 'menu'];
+  displayedColumns: string[] = ['id', 'username', 'email', 'type', 'menu'];
   dataSource = new MatTableDataSource<UserDto>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator | null = null;

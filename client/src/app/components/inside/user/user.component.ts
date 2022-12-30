@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EditViewMode} from '../../../enums/edit-view-mode';
-import {UserDto, UserService} from '../../../../api';
+import {UserDto, UserService, UserTypeDto} from '../../../../api';
 import {ActivatedRoute} from '@angular/router';
 import {AuthService} from '../../../services/auth/auth.service';
 import {RightsConstants} from '../../../constants/rights-constants';
@@ -24,6 +24,8 @@ export class UserComponent implements OnInit {
   public canEdit: boolean = false;
   public canChangePassword: boolean = false;
   public user: UserDto = {};
+  public userTypes: UserTypeDto[] = [];
+  public defaultType: UserTypeDto = {id: 0, name: 'USER', rights: [], isDefault: true};
 
   userForm = new FormGroup(
     {
@@ -37,6 +39,9 @@ export class UserComponent implements OnInit {
         [Validators.required, Validators.email],
         [this.emailValidator()]
       ),
+      type: new FormControl(0, [
+        Validators.required
+      ])
     }
   );
 
@@ -48,57 +53,86 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     let userId: string = this.route.snapshot.queryParams['user'] || null;
+    this.mode = this.route.snapshot.queryParams['mode'];
+    this.service.getUserTypes().subscribe({
+      next: types => {
+        this.userTypes = types;
+        this.defaultType = types.find(t => t.isDefault === true)!
+      },
+      error: () => {
+      }
+    })
     if (!userId) {
+      this.user = {};
+      this.mode = EditViewMode.CREATE;
+      this.checkRights();
+    } else {
+      this.loadUser(userId);
+    }
+  }
 
+  checkRights(): void {
+    if (!this.user.id) {
       //Create mode, check if we can do this
       if (!this.auth.hasRight(RightsConstants.ROLE_USER_CAN_CREATE_USER)) {
         this.auth.showRightsError();
         return;
       }
-      this.user = {};
-      this.mode = EditViewMode.CREATE;
     } else {
       //View or Edit mode, check for the mode
-      this.mode = this.route.snapshot.queryParams['mode'];
-      this.canChangePassword = this.auth.canChangePassword(userId);
+      this.canChangePassword = this.auth.canChangePassword(this.user.id);
       if (this.mode == EditViewMode.EDIT) {
         //Edit mode, check if we're allowed to do this
-        if (!this.auth.canEdit(userId)) {
+        if (!this.auth.canEdit(this.user.id)) {
           this.auth.showRightsError();
           return;
         }
         this.canEdit = true;
-
       } else {
         //View mode, check if we're allowed to do this
-        if (!this.auth.canView(userId)) {
+        if (!this.auth.canView(this.user.id)) {
           this.auth.showRightsError();
           return;
         }
-        this.canEdit = this.auth.canEdit(userId);
+        this.canEdit = this.auth.canEdit(this.user.id);
       }
-
-      this.loadUser(userId);
     }
   }
 
-  isOwnUser() {
+  isOwnUser(): boolean {
     return this.auth.getCurrentUser()?.id == this.user.id;
   }
 
   public onSave(): void {
-    this.service.changeUser({
-      username: this.userForm.get('username')?.value!,
-      email: this.userForm.get('email')?.value!,
+    let userDto = {
+      username: this.userForm.controls.username.value!,
+      email: this.userForm.controls.email.value!,
       id: this.user.id,
-      rights: this.user.rights
-    }).subscribe({
-      next: () => {
-        this.changeMode(EditViewMode.EDIT, EditViewMode.VIEW);
-      },
-      error: () => {
-      }
-    });
+      rights: (this.getUserType(this.userForm.controls.type.value ?? 0)).rights,
+      type: this.getUserType(this.userForm.controls.type.value ?? 0)
+    };
+    if (this.mode == EditViewMode.EDIT) {
+      this.service.changeUser(userDto).subscribe({
+        next: () => {
+          this.changeMode(EditViewMode.EDIT, EditViewMode.VIEW);
+        },
+        error: () => {
+        }
+      });
+    } else if (this.mode == EditViewMode.CREATE) {
+      this.service.createUser(userDto).subscribe({
+        next: (uuid: string) => {
+          this.user.id = uuid;
+          this.changeMode(EditViewMode.CREATE, EditViewMode.VIEW);
+        },
+        error: () => {
+        }
+      });
+    }
+  }
+
+  getUserType(id: number = 0): UserTypeDto {
+    return this.userTypes.find(t => t.id === id)!;
   }
 
   public changeMode(before: EditViewMode, after: EditViewMode): void {
@@ -110,30 +144,18 @@ export class UserComponent implements OnInit {
       this.mode = EditViewMode.VIEW;
       this.loadUser(this.user?.id!);
     }
+    if (before === EditViewMode.CREATE && after === EditViewMode.VIEW) {
+      this.mode = EditViewMode.VIEW;
+      this.loadUser(this.user?.id!);
+    }
   }
 
   public onReset(): void {
     this.copyFormControl();
   }
 
-
-  public getSubmitButtonText(): string {
-    switch (this.mode) {
-      case EditViewMode.CREATE:
-        return 'Create';
-      case EditViewMode.EDIT:
-        return 'Save';
-      case EditViewMode.VIEW:
-        return '';
-    }
-  }
-
-  private loadUser(userId: string) {
-    this.service.getUserById(userId)
-      .subscribe(user => {
-        this.user = user;
-        this.copyFormControl();
-      });
+  public canChangeType(): boolean {
+    return this.auth.hasRight(RightsConstants.ROLE_USER_CAN_PROMOTE_USERS) && !this.isOwnUser();
   }
 
   public changePassword(): void {
@@ -149,15 +171,40 @@ export class UserComponent implements OnInit {
     });
   }
 
+  private loadUser(userId: string) {
+    if (this.auth.isCurrentUser(userId)) {
+      this.user = this.auth.user!;
+      this.copyFormControl();
+      this.checkRights();
+    } else if (this.auth.hasRight(RightsConstants.ROLE_USER_CAN_GET_USER_BY_ID)) {
+      this.service.getUserById(userId)
+        .subscribe({
+          next: user => {
+            this.user = user;
+            this.copyFormControl();
+            this.checkRights();
+          },
+          error: () => {
+          }
+        });
+    }
+  }
+
   private copyFormControl(): void {
     this.userForm.setValue({
       username: this.user?.username ?? '',
-      email: this.user?.email ?? ''
+      email: this.user?.email ?? '',
+      type: this.user?.type?.id ?? this.defaultType.id
     })
     if (this.isOwnUser()) {
       this.userForm.controls.username.disable();
     } else {
       this.userForm.controls.username.enable();
+    }
+    if (!this.canChangeType()) {
+      this.userForm.controls.type.disable();
+    } else {
+      this.userForm.controls.type.enable();
     }
   }
 

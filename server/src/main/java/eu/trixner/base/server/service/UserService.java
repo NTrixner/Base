@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.GrantedAuthority;
@@ -73,6 +74,15 @@ public class UserService implements UserDetailsService {
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         newUser = this.userRepository.save(newUser);
         return newUser;
+    }
+
+    @Transactional
+    public UUID createUser(UserDto dto) {
+        User newUser = userMapper.userDtoToUser(dto);
+        newUser.setPassword(RandomStringUtils.randomAlphanumeric(12));
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        newUser = this.userRepository.save(newUser);
+        return newUser.getId();
     }
 
     @Transactional
@@ -183,7 +193,7 @@ public class UserService implements UserDetailsService {
 
     public void changeUser(UserDto userDto) {
         User byId = userRepository.findById(userDto.getId()).orElseThrow(NullPointerException::new);
-        userMapper.update(byId, userDto);
+        userMapper.updateUser(byId, userDto);
         userRepository.save(byId);
     }
 

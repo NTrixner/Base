@@ -104,6 +104,7 @@ public class UserController implements UserApi {
         return ResponseEntity.ok(userService.isUsernameAvailable(username, ignores));
     }
 
+
     @Override
     public ResponseEntity<Void> changeUser(UserDto userDto) {
         validationService.validateUserChange(userDto);
@@ -116,5 +117,12 @@ public class UserController implements UserApi {
         validationService.validateUserDelete(uuid);
         userService.deleteUser(uuid);
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<UUID> createUser(UserDto userDto) {
+        validationService.validateUserCreate(userDto);
+        UUID result = userService.createUser(userDto);
+        return ResponseEntity.ok(result);
     }
 }

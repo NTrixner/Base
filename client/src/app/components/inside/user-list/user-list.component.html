@@ -8,22 +8,31 @@
           [dataSource]="dataSource"
           matSort
           (matSortChange)="loadUserList()">
-          <!-- Position Column -->
+          <!-- ID Column -->
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>UID</th>
-            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+            <td (click)="viewUser(element)" *matCellDef="let element" class="clickable" mat-cell>{{ element.id }}</td>
           </ng-container>
 
           <!-- Name Column -->
           <ng-container matColumnDef="username">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
-            <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+            <td (click)="viewUser(element)" *matCellDef="let element" class="clickable"
+                mat-cell>{{ element.username }}</td>
           </ng-container>
 
-          <!-- Weight Column -->
+          <!-- Mail Column -->
           <ng-container matColumnDef="email">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>E-Mail</th>
-            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+            <td (click)="viewUser(element)" *matCellDef="let element" class="clickable"
+                mat-cell>{{ element.email }}</td>
+          </ng-container>
+
+          <!-- Type Column -->
+          <ng-container matColumnDef="type">
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>User Type</th>
+            <td (click)="viewUser(element)" *matCellDef="let element" class="clickable"
+                mat-cell>{{ element.type.name }}</td>
           </ng-container>
 
           <ng-container matColumnDef="menu">
