@@ -1,0 +1,27 @@
+get:
+  summary: Your GET endpoint
+  tags:
+    - User
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: boolean
+  description: Checks if a username is available. Can add a list of ignored values
+  operationId: isUsernameAvailable
+  security: [ ]
+  parameters:
+    - schema:
+        type: string
+      name: username
+      in: path
+      required: true
+    - schema:
+        type: array
+        items:
+          type: string
+      name: ignores
+      in: query
+      required: false

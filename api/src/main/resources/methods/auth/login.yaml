@@ -1,0 +1,22 @@
+post:
+  tags:
+    - User
+  summary: ''
+  responses:
+    '202':
+      description: Accepted
+      headers:
+        Authorization:
+          schema:
+            type: string
+    '401':
+      description: Unauthorized
+  operationId: loginUser
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../../model/loginDto.yaml#/LoginDto'
+  description: Logs a user in with username and password
+  parameters: [ ]
+  security: [ ]

@@ -1,0 +1,27 @@
+get:
+  summary: Your GET endpoint
+  tags:
+    - User
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: boolean
+  description: Checks if a email is available. Can add a list of ignored values
+  operationId: isEmailAvailable
+  security: [ ]
+  parameters:
+    - schema:
+        type: string
+      name: email
+      in: path
+      required: true
+    - schema:
+        type: array
+        items:
+          type: string
+      name: ignores
+      in: query
+      required: false
