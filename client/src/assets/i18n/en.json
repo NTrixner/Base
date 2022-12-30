@@ -35,7 +35,8 @@
   "messages": {
     "registerSuccess": "The registration was successful! You can now log in!",
     "rightsError": "You are not allowed to view this page",
-    "logout": "You were automatically logged out. Please try again."
+    "logout": "You were automatically logged out. Please try again.",
+    "loginfail": "The login data was wrong, please try again or reset the password"
   },
   "pages": {
     "forgotPassword": {
@@ -47,6 +48,12 @@
       "title": "Register",
       "error": "There was an error. Please contact an Administrator.",
       "success": "Success! Please check your E-Mails for a confirmation link!"
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "nouuiderror": "There was no UUID provided. Please exit this page.",
+      "error": "There was an error. Please contact an Administrator.",
+      "success": "Success! You should be able to login now!"
     }
   }
 }

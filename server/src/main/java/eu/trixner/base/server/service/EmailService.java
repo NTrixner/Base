@@ -27,7 +27,7 @@ public class EmailService {
     public static final String REGISTRATION_SUB_URI = "/api/user/registration/confirmRegistration";
     public static final String REGISTER_TPL = "register.ftlh";
 
-    public static final String PW_RESET_SUB_URI = "/api/resetPassword";
+    public static final String PW_RESET_SUB_URI = "/resetPassword";
 
     public static final String PW_RESET_TPL = "pwReset.ftlh";
     public static final String USERNAME = "username";

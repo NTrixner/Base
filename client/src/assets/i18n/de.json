@@ -35,7 +35,8 @@
   "messages": {
     "registerSuccess": "Die Registrierung war erfolgreich! Du kannst dich jetzt einloggen.",
     "rightsError": "Du hast nicht das Recht, diese Seite zu besuchen.",
-    "logout": "Du wurdest automatisch abgemeldet. Bitte versuche es erneut."
+    "logout": "Du wurdest automatisch abgemeldet. Bitte versuche es erneut.",
+    "loginfail": "Die eingebenen Daten waren falsch. Bitte versuche es erneut oder setze dein Passwort zurück."
   },
   "pages": {
     "forgotPassword": {
@@ -47,6 +48,12 @@
       "title": "Registrieren",
       "error": "Es gab einen Fehler. Bitte kontaktiere einen Administrator",
       "success": "Erfolgreich! Bitte überprüfe deine Mails auf eine Bestätigungsnachricht."
+    },
+    "resetPassword": {
+      "title": "Passwort wiederherstellen",
+      "nouuiderror": "Es wurde keine UUID angegeben. Bitte verlasse diese Seite",
+      "error": "Es gab einen Fehler. Bitte kontaktiere einen Administrator",
+      "success": "Erfolgreich! Du solltest dich jetzt einloggen können"
     }
   }
 }
