@@ -22,6 +22,24 @@ public class ValidationService {
         if (userDto.getId() == null) {
             throw new InvalidParameterException();
         }
+        validateUserBase(userDto);
+    }
+
+    public void validateUserCreate(UserDto userDto) {
+        if (userDto.getId() != null) {
+            throw new InvalidParameterException();
+        }
+    }
+
+    public void validateUserDelete(String uuid) {
+        UserDto user = userService.findUser(UUID.fromString(uuid));
+        if (user == null) {
+            throw new NullPointerException();
+        }
+        validateUserChange(user);
+    }
+
+    public void validateUserBase(UserDto userDto) {
         UserDto currentUser = userService.getCurrentUser();
         if (currentUser == null) {
             throw new UserNotAuthorizedException();
@@ -35,13 +53,5 @@ public class ValidationService {
           && Objects.equals(currentUser.getId(), userDto.getId())))) {
             throw new UserNotAuthorizedException();
         }
-    }
-
-    public void validateUserDelete(String uuid) {
-        UserDto user = userService.findUser(UUID.fromString(uuid));
-        if (user == null) {
-            throw new NullPointerException();
-        }
-        validateUserChange(user);
     }
 }

@@ -49,6 +49,7 @@ import {
 } from './components/inside/user-list/user-delete-confirm-dialog/user-delete-confirm-dialog.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {AuthInterceptor} from './ínterceptors/auth.interceptor';
+import {MatSelectModule} from '@angular/material/select';
 
 export function apiConfigFactory(): Configuration {
   const params: ConfigurationParameters = {
@@ -97,7 +98,8 @@ export function apiConfigFactory(): Configuration {
     MatSidenavModule,
     MatListModule,
     MatDialogModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSelectModule
   ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent],

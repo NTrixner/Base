@@ -7,7 +7,9 @@ public enum Role implements GrantedAuthority {
     ROLE_USER_CAN_CHANGE_PASSWORD,
     ROLE_USER_CAN_WATCH_USERLIST,
     ROLE_USER_CAN_CREATE_USER,
-    ROLE_USER_CAN_GET_USER_BY_ID;
+    ROLE_USER_CAN_GET_USER_BY_ID,
+
+    ROLE_USER_CAN_PROMOTE_USERS;
 
     @Override
     public String getAuthority() {

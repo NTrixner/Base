@@ -62,6 +62,21 @@ paths:
           description: Unauthorized
       operationId: logoutUser
       description: Logs the current user out and destroys the current session
+  /auth/userTypes:
+    get:
+      tags:
+        - User
+      summary: Returns the list of user types
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserTypeDto'
+      operationId: getUserTypes
   '/user/{userId}':
     get:
       tags:
@@ -219,6 +234,31 @@ paths:
               $ref: '#/components/schemas/UserDto'
       description: Changes an existing User
       operationId: changeUser
+    parameters: [ ]
+  /user/create:
+    put:
+      tags:
+        - User
+      summary: ''
+      responses:
+        '201':
+          description: Created, return new UUID
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+        '403':
+          description: User doesn't have the right to create a user
+        '400':
+          description: Bad request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDto'
+      description: Saves a new User
+      operationId: createUser
     parameters: [ ]
   /user/delete/{uuid}:
     delete:
@@ -394,6 +434,8 @@ components:
           type: array
           items:
             type: string
+        type:
+          $ref: '#/components/schemas/UserTypeDto'
     RegistrationDto:
       title: RegistrationDto
       type: object
@@ -445,6 +487,25 @@ components:
       required:
         - newPassword
         - userId
+    UserTypeDto:
+      title: UserGroupDto
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        rights:
+          type: array
+          items:
+            type: string
+        isDefault:
+          type: boolean
+          default: false
+      required:
+        - id
+        - name
+        - rights
     UserListDto:
       title: UserListDto
       type: object

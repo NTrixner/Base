@@ -1,10 +1,12 @@
 package eu.trixner.base.server.controller;
 
 import eu.trixner.base.dto.LoginDto;
+import eu.trixner.base.dto.UserTypeDto;
 import eu.trixner.base.server.auth.SecurityConstants;
 import eu.trixner.base.server.auth.filters.JwtUtils;
 import eu.trixner.base.server.auth.filters.TokenHandler;
 import eu.trixner.base.server.exceptions.UserNotAuthenticatedException;
+import eu.trixner.base.server.service.AuthService;
 import eu.trixner.base.user.AuthApi;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @Controller
@@ -30,6 +34,7 @@ public class AuthController implements AuthApi {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
+    private final AuthService authService;
 
     @Autowired
     private HttpServletRequest request;
@@ -63,5 +68,10 @@ public class AuthController implements AuthApi {
         log.info("Logging user {} out", auth.getName());
         TokenHandler.getBlackList().add(token);
         return ResponseEntity.status(204).build();
+    }
+
+    @Override
+    public ResponseEntity<List<UserTypeDto>> getUserTypes() {
+        return ResponseEntity.ok(authService.getUserTypes());
     }
 }
