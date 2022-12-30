@@ -12,15 +12,41 @@
     "repeatPassword": "Repeat Password",
     "email": "E-Mail",
     "submit": "Send",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "return": "Back"
   },
   "validations": {
     "username": {
-      "required": "You have to enter a username!"
+      "required": "You must enter a username!",
+      "length": "Usernames must be at least {{amount}} characters long!",
+      "used": "This username is already in use"
+    },
+    "email": {
+      "required": "You must enter an email!",
+      "format": "The text you have entered is not a valid email!",
+      "used": "This email is already in use!"
+    },
+    "password": {
+      "required": "You must enter a password!",
+      "length": "The password must be at least {{amount}} characters long!",
+      "unequal": "The two passwords must match!"
     }
   },
   "messages": {
-    "registerSuccess": "The registration was successful! You can now log in",
-    "rightsError": "You are not allowed to view this page"
+    "registerSuccess": "The registration was successful! You can now log in!",
+    "rightsError": "You are not allowed to view this page",
+    "logout": "You were automatically logged out. Please try again."
+  },
+  "pages": {
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "error": "There was an error. Please contact an Administrator.",
+      "success": "Success! Please check your E-Mails for a confirmation link!"
+    },
+    "register": {
+      "title": "Register",
+      "error": "There was an error. Please contact an Administrator.",
+      "success": "Success! Please check your E-Mails for a confirmation link!"
+    }
   }
 }

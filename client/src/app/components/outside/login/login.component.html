@@ -1,11 +1,9 @@
-<div id="loginWrapper">
-  <ng-container *ngIf="!!confirmationRegistration">
-    <mat-card class="alert" style="text-align: center">
-      <mat-card-content>
-        {{'messages.registerSuccess' | translate}}
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
+<div class="outsideWrapper">
+  <mat-card *ngIf="!!confirmationRegistration" class="alert" style="text-align: center">
+    <mat-card-content>
+      {{'messages.registerSuccess' | translate}}
+    </mat-card-content>
+  </mat-card>
   <mat-card style="text-align: center">
     <mat-card-title> {{'general.login' | translate}} </mat-card-title>
     <form (ngSubmit)="login()">

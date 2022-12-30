@@ -53,13 +53,12 @@ export class AuthService {
     return this.api.getCurrentUser('body').subscribe({
       next: (userDto: UserDto) => {
         if (userDto) {
-          console.log("setting user to " + userDto.username);
           this.user = userDto;
           localStorage.setItem('user', JSON.stringify(userDto));
         }
       },
       error: () => {
-        this.router.navigate(['login'], {queryParams: {message: 'You have been logged out. Please try again'}});
+        this.router.navigate(['login'], {queryParams: {message: 'messages.logout'}});
       }
     });
   }
