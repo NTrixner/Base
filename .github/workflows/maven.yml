@@ -20,3 +20,25 @@ jobs:
         run: mvn -B clean install --file pom.xml
       - name: Create Docker file
         run: mvn --projects server -DskipTests spring-boot:build-image -DSpring-boot.build-image.imageName=ntrixner/base
+      - name: Get docker file
+        run: docker save ./output/base.tar
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+      - name: Upload Release Asset main file
+          id: upload-release-asset-mainfile
+          uses: actions/upload-release-asset@v1.0.1
+          env:
+            GITHUB_TOKEN: ${{github.token}}
+          with:
+            upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+            asset_path: ./output/base.tar
+            asset_name: base.tar
+            asset_content_type: application/x-tar
