@@ -1,0 +1,19 @@
+get:
+  tags:
+    - User
+  summary: ''
+  responses:
+    '302':
+      description: Found and confirmed, will redirect to other location
+    '400':
+      description: Bad Request
+  operationId: confirmRegistration
+  description: Confirms the registration of a new user by activating via a link that was sent via email.
+  security: [ ]
+parameters:
+  - schema:
+      type: string
+    name: uuid
+    in: path
+    required: true
+    description: "The registration request id that was sent via mail to the new user's address"

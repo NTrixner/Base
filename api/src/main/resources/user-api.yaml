@@ -28,495 +28,59 @@ security:
   - auth: [ ]
 paths:
   /auth/login:
-    post:
-      tags:
-        - User
-      summary: ''
-      responses:
-        '202':
-          description: Accepted
-          headers:
-            Authorization:
-              schema:
-                type: string
-        '401':
-          description: Unauthorized
-      operationId: loginUser
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/LoginDto'
-      description: Logs a user in with username and password
-      parameters: [ ]
-      security: [ ]
-  /auth/logout:
-    post:
-      tags:
-        - User
-      summary: ''
-      responses:
-        '302':
-          description: Logged out
-        '403':
-          description: Unauthorized
-      operationId: logoutUser
-      description: Logs the current user out and destroys the current session
-  /auth/userTypes:
-    get:
-      tags:
-        - User
-      summary: Returns the list of user types
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/UserTypeDto'
-      operationId: getUserTypes
-  '/user/{userId}':
-    get:
-      tags:
-        - User
-      summary: Get a specific user
-      responses:
-        '200':
-          description: OK
-          headers: { }
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDto'
-              examples: { }
-        '403':
-          description: Not authorized
-        '404':
-          description: User not found
-      description: Returns a specific user
-      operationId: getUserById
-    parameters:
-      - schema:
-          type: string
-        name: userId
-        in: path
-        description: 'The user ID of the user, or null for the currently logged in user'
-        required: true
-  /user/registration/register:
-    post:
-      tags:
-        - User
-      summary: ''
-      responses:
-        '201':
-          description: Created
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegistrationDto'
-      description: 'Registers a new user by putting in username, email and password'
-      operationId: registerUser
-      security: [ ]
-    parameters: [ ]
-  '/user/registration/confirmRegistration/{uuid}':
-    get:
-      tags:
-        - User
-      summary: ''
-      responses:
-        '302':
-          description: Found and confirmed, will redirect to other location
-        '400':
-          description: Bad Request
-      operationId: confirmRegistration
-      description: Confirms the registration of a new user by activating via a link that was sent via email.
-      security: [ ]
-    parameters:
-      - schema:
-          type: string
-        name: uuid
-        in: path
-        required: true
-        description: "The registration request id that was sent via mail to the new user's address"
-  /user:
-    get:
-      summary: Your GET endpoint
-      tags:
-        - User
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDto'
-        '403':
-          description: Unauthorized
-      description: Returns the current user
-      operationId: getCurrentUser
-  /user/available/username/{username}:
-    get:
-      summary: Your GET endpoint
-      tags:
-        - User
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: boolean
-      description: Checks if a username is available. Can add a list of ignored values
-      operationId: isUsernameAvailable
-      security: [ ]
-      parameters:
-        - schema:
-            type: string
-          name: username
-          in: path
-          required: true
-        - schema:
-            type: array
-            items:
-              type: string
-          name: ignores
-          in: query
-          required: false
-  /user/available/email/{email}:
-    get:
-      summary: Your GET endpoint
-      tags:
-        - User
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: boolean
-      description: Checks if a email is available. Can add a list of ignored values
-      operationId: isEmailAvailable
-      security: [ ]
-      parameters:
-        - schema:
-            type: string
-          name: email
-          in: path
-          required: true
-        - schema:
-            type: array
-            items:
-              type: string
-          name: ignores
-          in: query
-          required: false
-  /user/change/save:
-    post:
-      tags:
-        - User
-      summary: ''
-      responses:
-        '201':
-          description: Created
-        '404':
-          description: User not found
-        '403':
-          description: User doesn't have the right to change this user
-        '400':
-          description: Bad request
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserDto'
-      description: Changes an existing User
-      operationId: changeUser
-    parameters: [ ]
-  /user/create:
-    put:
-      tags:
-        - User
-      summary: ''
-      responses:
-        '201':
-          description: Created, return new UUID
-          content:
-            application/json:
-              schema:
-                type: string
-                format: uuid
-        '403':
-          description: User doesn't have the right to create a user
-        '400':
-          description: Bad request
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserDto'
-      description: Saves a new User
-      operationId: createUser
-    parameters: [ ]
-  /user/delete/{uuid}:
-    delete:
-      tags:
-        - User
-      summary: 'Deletes a user'
-      responses:
-        '200':
-          description: User was deleted
-        '404':
-          description: User was not found
-        '403':
-          description: User not authorized to delete other users
-        '400':
-          description: Bad Request, probably tried to delete himself
-      operationId: deleteUser
-      parameters:
-        - schema:
-            type: string
-          name: uuid
-          in: path
-          required: true
-  /user/change/changePassword:
-    post:
-      tags:
-        - User
-      summary: ''
-      responses:
-        '200':
-          description: Password was changed
-        '400':
-          description: Bad Request, old password was most likely wrong
-      description: Call to change the user's password
-      operationId: changePassword
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ChangePasswordDto'
-    parameters: [ ]
-  /user/forgotPassword:
-    post:
-      tags:
-        - User
-      summary: Your POST endpoint
-      responses:
-        '200':
-          description: Mail was sent
-        '404':
-          description: User/Mail combination not found
-      description: Call if the user forgot their password and want to get sent a mail with a password change link
-      operationId: forgotPassword
-      security: [ ]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ForgotPasswordDto'
-  /user/forgotPassword/resetPassword:
-    post:
-      summary: Your GET endpoint
-      tags:
-        - User
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Bad Request
-        '404':
-          description: Not Found
-      description: Resets a password based on a password reset request
-      operationId: resetPasswordRequest
-      security: [ ]
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PasswordResetDto'
-    parameters: [ ]
-  /userlist:
-    get:
-      tags:
-        - Userlist
-      summary: Your GET endpoint
-      responses:
-        '200':
-          description: OK
-          headers: { }
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserListDto'
-              examples: { }
-        '403':
-          description: Unauthorized
-      description: 'Return a paginated list of all users. If the provided pagination is not correct, the first 20 users will be returned instead.'
-      parameters:
-        - in: query
-          name: page
-          required: false
-          schema:
-            type: integer
-          description: The current page index
-        - in: query
-          name: pageSize
-          required: false
-          schema:
-            type: integer
-          description: The size of the page
-        - in: query
-          name: orderField
-          required: false
-          schema:
-            type: string
-          description: The field to be ordered by
-        - in: query
-          name: orderDirection
-          required: false
-          schema:
-            type: string
-          description: The direction to be sorted in. Either asc or desc
+    $ref: './methods/auth/login.yaml'
 
-      operationId: listUsers
-    parameters: [ ]
+  /auth/logout:
+    $ref: './methods/auth/logout.yaml'
+
+  /auth/userTypes:
+    $ref: './methods/auth/userTypes.yaml'
+
+  '/user/{userId}':
+    $ref: './methods/user/byId.yaml'
+
+  /user/registration/register:
+    $ref: './methods/user/register.yaml'
+
+  '/user/registration/confirmRegistration/{uuid}':
+    $ref: './methods/user/registerConfirm.yaml'
+
+  /user:
+    $ref: './methods/user/current.yaml'
+
+  /user/available/username/{username}:
+    $ref: './methods/user/nameAvailable.yaml'
+
+  /user/available/email/{email}:
+    $ref: './methods/user/mailAvailable.yaml'
+
+  /user/change/save:
+    $ref: './methods/user/change.yaml'
+
+  /user/create:
+    $ref: './methods/user/create.yaml'
+
+  /user/delete/{uuid}:
+    $ref: './methods/user/delete.yaml'
+
+  /user/change/changePassword:
+    $ref: './methods/user/passwordChange.yaml'
+
+  /user/forgotPassword:
+    $ref: './methods/user/passwordForgot.yaml'
+
+  /user/forgotPassword/resetPassword:
+    $ref: './methods/user/passwordReset.yaml'
+
+  /userlist:
+    $ref: './methods/userlist/userlist.yaml'
+
   /userlist/num:
-    get:
-      tags:
-        - Userlist
-      summary: Your GET endpoint
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: integer
-        '403':
-          description: Unauthorized
-      operationId: getUserCount
-      description: Returns the amount of users that currently exist.
-    parameters: [ ]
+    $ref: './methods/userlist/amount.yaml'
+
 components:
   securitySchemes:
     auth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  schemas:
-    LoginDto:
-      title: LoginDto
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-      required:
-        - username
-        - password
-    UserDto:
-      title: UserDto
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        username:
-          type: string
-        email:
-          type: string
-          format: email
-        rights:
-          type: array
-          items:
-            type: string
-        type:
-          $ref: '#/components/schemas/UserTypeDto'
-    RegistrationDto:
-      title: RegistrationDto
-      type: object
-      properties:
-        username:
-          type: string
-        email:
-          type: string
-          format: email
-        password:
-          type: string
-          format: password
-      required:
-        - username
-        - email
-        - password
-    ForgotPasswordDto:
-      title: ForgotPasswordDto
-      type: object
-      properties:
-        username:
-          type: string
-        email:
-          type: string
-          format: email
-      required:
-        - username
-        - email
-    PasswordResetDto:
-      title: PasswordResetDto
-      type: object
-      properties:
-        newPassword:
-          type: string
-        uuid:
-          type: string
-      required:
-        - newPassword
-        - requestId
-    ChangePasswordDto:
-      title: ChangePasswordDto
-      type: object
-      properties:
-        newPassword:
-          type: string
-        userId:
-          type: string
-          format: uuid
-      required:
-        - newPassword
-        - userId
-    UserTypeDto:
-      title: UserGroupDto
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        rights:
-          type: array
-          items:
-            type: string
-        isDefault:
-          type: boolean
-          default: false
-      required:
-        - id
-        - name
-        - rights
-    UserListDto:
-      title: UserListDto
-      type: object
-      properties:
-        pageSize:
-          type: integer
-        pagePos:
-          type: integer
-        ordering:
-          type: string
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserDto'

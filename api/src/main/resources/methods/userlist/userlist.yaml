@@ -1,0 +1,44 @@
+get:
+  tags:
+    - Userlist
+  summary: Your GET endpoint
+  responses:
+    '200':
+      description: OK
+      headers: { }
+      content:
+        application/json:
+          schema:
+            $ref: '../../model/userListDto.yaml#/UserListDto'
+          examples: { }
+    '403':
+      description: Unauthorized
+  description: 'Return a paginated list of all users. If the provided pagination is not correct, the first 20 users will be returned instead.'
+  parameters:
+    - in: query
+      name: page
+      required: false
+      schema:
+        type: integer
+      description: The current page index
+    - in: query
+      name: pageSize
+      required: false
+      schema:
+        type: integer
+      description: The size of the page
+    - in: query
+      name: orderField
+      required: false
+      schema:
+        type: string
+      description: The field to be ordered by
+    - in: query
+      name: orderDirection
+      required: false
+      schema:
+        type: string
+      description: The direction to be sorted in. Either asc or desc
+
+  operationId: listUsers
+parameters: [ ]

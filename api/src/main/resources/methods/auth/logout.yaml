@@ -1,0 +1,11 @@
+post:
+  tags:
+    - User
+  summary: ''
+  responses:
+    '302':
+      description: Logged out
+    '403':
+      description: Unauthorized
+  operationId: logoutUser
+  description: Logs the current user out and destroys the current session

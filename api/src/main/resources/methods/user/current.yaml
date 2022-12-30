@@ -1,0 +1,15 @@
+get:
+  summary: Your GET endpoint
+  tags:
+    - User
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '../../model/userDto.yaml#/UserDto'
+    '403':
+      description: Unauthorized
+  description: Returns the current user
+  operationId: getCurrentUser

@@ -1,0 +1,16 @@
+post:
+  tags:
+    - User
+  summary: ''
+  responses:
+    '201':
+      description: Created
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../../model/registrationDto.yaml#/RegistrationDto'
+  description: 'Registers a new user by putting in username, email and password'
+  operationId: registerUser
+  security: [ ]
+parameters: [ ]

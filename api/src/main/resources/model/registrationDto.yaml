@@ -1,0 +1,16 @@
+RegistrationDto:
+  title: RegistrationDto
+  type: object
+  properties:
+    username:
+      type: string
+    email:
+      type: string
+      format: email
+    password:
+      type: string
+      format: password
+  required:
+    - username
+    - email
+    - password

@@ -1,0 +1,14 @@
+UserListDto:
+  title: UserListDto
+  type: object
+  properties:
+    pageSize:
+      type: integer
+    pagePos:
+      type: integer
+    ordering:
+      type: string
+    items:
+      type: array
+      items:
+        $ref: './userDto.yaml#/UserDto'

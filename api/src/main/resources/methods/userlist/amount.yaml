@@ -1,0 +1,16 @@
+get:
+  tags:
+    - Userlist
+  summary: Your GET endpoint
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: integer
+    '403':
+      description: Unauthorized
+  operationId: getUserCount
+  description: Returns the amount of users that currently exist.
+parameters: [ ]

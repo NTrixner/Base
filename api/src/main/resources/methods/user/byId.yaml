@@ -1,0 +1,26 @@
+get:
+  tags:
+    - User
+  summary: Get a specific user
+  responses:
+    '200':
+      description: OK
+      headers: { }
+      content:
+        application/json:
+          schema:
+            $ref: '../../model/userDto.yaml#/UserDto'
+          examples: { }
+    '403':
+      description: Not authorized
+    '404':
+      description: User not found
+  description: Returns a specific user
+  operationId: getUserById
+  parameters:
+    - schema:
+        type: string
+      name: userId
+      in: path
+      description: 'The user ID of the user, or null for the currently logged in user'
+      required: true

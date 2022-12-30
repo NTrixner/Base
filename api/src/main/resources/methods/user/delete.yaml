@@ -1,0 +1,20 @@
+delete:
+  tags:
+    - User
+  summary: 'Deletes a user'
+  responses:
+    '200':
+      description: User was deleted
+    '404':
+      description: User was not found
+    '403':
+      description: User not authorized to delete other users
+    '400':
+      description: Bad Request, probably tried to delete himself
+  operationId: deleteUser
+  parameters:
+    - schema:
+        type: string
+      name: uuid
+      in: path
+      required: true

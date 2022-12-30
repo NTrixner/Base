@@ -1,0 +1,21 @@
+post:
+  tags:
+    - User
+  summary: ''
+  responses:
+    '201':
+      description: Created
+    '404':
+      description: User not found
+    '403':
+      description: User doesn't have the right to change this user
+    '400':
+      description: Bad request
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../../model/userDto.yaml#/UserDto'
+  description: Changes an existing User
+  operationId: changeUser
+parameters: [ ]

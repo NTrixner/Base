@@ -1,0 +1,19 @@
+UserTypeDto:
+  title: UserGroupDto
+  type: object
+  properties:
+    id:
+      type: integer
+    name:
+      type: string
+    rights:
+      type: array
+      items:
+        type: string
+    isDefault:
+      type: boolean
+      default: false
+  required:
+    - id
+    - name
+    - rights
