@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   returnUrl = '';
   message = null;
   loginFailureText = false;
-  confirmationRegistration = true;
+  confirmationRegistration = false;
 
   constructor(
     private authService: AuthService,
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || 'base/home';
     this.message = this.route.snapshot.queryParams['message'] || null;
     this.confirmationRegistration =
-      this.route.snapshot.queryParams['confirmationRegistration'] === 'true' || true;
+      this.route.snapshot.queryParams['confirmationRegistration'] === 'true' || false;
   }
 
   canLogin(): boolean {

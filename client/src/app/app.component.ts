@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
   }
 
   private updateLanguage() {
-    console.log("New language is: " + this.currentLanguage);
+    localStorage.setItem('language', JSON.stringify(this.currentLanguage));
     this.translate.setDefaultLang(this.currentLanguage.lang);
     this.translate.use(this.currentLanguage.lang);
   }

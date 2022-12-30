@@ -5,13 +5,13 @@
         <mat-icon style="color: green">error</mat-icon>
       </div>
     </mat-card-header>
-    <mat-card-title> Register</mat-card-title>
+    <mat-card-title>{{'pages.register.title'|translate}}</mat-card-title>
     <mat-card-content>
-      Success! Please check your E-Mails for a confirmation link!
+      {{'pages.register.success'|translate}}
     </mat-card-content>
     <mat-card-actions align="end">
       <button [routerLink]="['/login']" color="primary" mat-raised-button>
-        Return
+        {{'general.return'|translate}}
       </button>
     </mat-card-actions>
   </mat-card>

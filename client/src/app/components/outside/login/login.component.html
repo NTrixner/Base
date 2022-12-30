@@ -9,7 +9,7 @@
     <form (ngSubmit)="login()">
       <mat-card-content>
         <p [hidden]="!message">{{ message! | translate }}</p>
-        <p [hidden]="!loginFailureText">{{ "login.failed" | translate }}</p>
+        <p [hidden]="!loginFailureText">{{ 'messages.loginfail' | translate }}</p>
         <br/>
         <mat-form-field appearance="fill">
           <mat-label>{{'general.username' | translate}}</mat-label>
